@@ -1,7 +1,15 @@
+Jame is a thin Java layer on top of SDL, giving an object oriented API to low level graphics and sound etc.
+The aim is to allow writing high performance, cross platform, 2D games in Java.
 
-======================
-To Compile from Source
-======================
+It does not include any 3D or GL support, and there are no plans to ever support 3D.
+
+Jame is NOT a game engine, it is only thin layer. However, the reason that I created Jame was to use within my
+own Java 2D game engine, called Itchy. So if you want to write 2D games, check out Itchy!
+
+
+===========================
+Linux : Compile from Source
+===========================
 
 You'll need a JDK (I used openjdk-7-jdk) and ant, and the development libraries for SDL :
 
@@ -15,6 +23,50 @@ Then building should be easy :
 
     ant clean
     ant
+
+This should compile the java and the native C code.
+
+=======
+Windows
+=======
+
+I'm a linux programmer, and have developed this code almost 100% in linux. I have compiled it using Windows,
+and it works fine. However, I don't know the best way to set up the build environment, or how to include dependent
+dlls. Linux is much better in this regard, because the package manager does all this for you, but it seems that
+you have to do all this by hand when using Windows - please tell me that I'm wrong!
+
+So at the moment, if you are unlucky enough to be stuck without linux, you'll have to assemble the dependencies manually.
+The version numbers below are the ones I used when I last compiled the code under Windows, feel free to try later
+versions if available.
+
+To build Jame you need the following source code packages in src/native/win32-dependencies :
+
+SDL-1.2.15
+SDL_gfx-2.0.24
+SDL_image-1.2.12
+SDL_mixer-1.2.12
+SDL_ttf-2.0.11
+
+To use Jame under windows you need the following dlls in native/win32 :
+
+libFLAC-8.dll
+libfreetype-6.dll
+libjpeg-8.dll
+libmikmod-2.dll
+libogg-0.dll
+libpng15-15.dll
+libtiff-5.dll
+libvorbis-0.dll
+libvorbisfile-3.dll
+libwebp-2.dll
+SDL.dll
+SDL_gfx.dll
+SDL_image.dll
+SDL_mixer.dll
+SDL_ttf.dll
+smpeg.dll
+zlib1.dll
+
 
 ============================
 Running the Test Application

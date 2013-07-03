@@ -113,4 +113,10 @@ public class Video
     }
     private static native void video_setWindowIcon( String filename );
 
+    public static void showMousePointer( boolean value )
+    {
+        video_showMousePointer( value ? 1 : 0 );
+    }
+    private static native void video_showMousePointer( int value );
+    
 }
