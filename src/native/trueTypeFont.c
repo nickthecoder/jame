@@ -81,7 +81,7 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_TrueTypeFont_trueTypeFont_1s
     int height;
 
     TTF_Font *font = (TTF_Font*) (intptr_t) pFont;
-    TTF_SizeText( font, text, &width, &height );
+    TTF_SizeUTF8( font, text, &width, &height );
 
     (*env)->ReleaseStringUTFChars(env, jtext, text);
     return width;

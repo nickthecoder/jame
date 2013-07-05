@@ -34,7 +34,7 @@ public class TrueTypeFont
     /**
      * Get the maximum pixel height of all glyphs of the loaded font. You may use this height for
      * rendering text as close together vertically as possible, though adding at least one pixel
-     * height to it will space it so they can't touch. Remember that SDL_ttf doesn't handle
+     * height to it will space it so they can't touch. Remember that this class doesn't handle
      * multiline printing, so you are responsible for line spacing, see the getLineHeight as well.
      */
     public int getHeight()
@@ -46,9 +46,7 @@ public class TrueTypeFont
 
     /**
      * Get the maximum pixel ascent of all glyphs of the loaded font. This can also be interpreted
-     * as the distance from the top of the font to the baseline. It could be used when drawing an
-     * individual glyph relative to a top point, by combining it with the glyph's maxy metric to
-     * resolve the top of the rectangle used when blitting the glyph on the screen.
+     * as the distance from the top of the font to the baseline.
      */
     public int getAscent()
     {
@@ -70,7 +68,7 @@ public class TrueTypeFont
 
     /**
      * Get the recommended pixel height of a rendered line of text of the loaded font. This is
-     * usually larger than the getHeight().
+     * usually larger than getHeight().
      */
     public int getLineHeight()
     {
@@ -79,10 +77,21 @@ public class TrueTypeFont
 
     private native int trueTypeFont_getLineHeight( long pFont );
 
+    /**
+     * Calculate the resulting surface width of the text rendered using font. No actual rendering is
+     * done, however correct kerning is done to get the actual width. As with all methods in the
+     * class, this does NOT handle multi-line text, it does not expect to see line breaks in the
+     * text.
+     * 
+     * @param text
+     *        A single line of text
+     * @return The width of the text if it were rendered.
+     */
     public int sizeText( String text )
     {
         return trueTypeFont_sizeText(this.pFont, text);
     }
+
     private native int trueTypeFont_sizeText( long pFont, String text );
 
     public Surface renderSolid( String text, RGBA color ) throws JameRuntimeException
