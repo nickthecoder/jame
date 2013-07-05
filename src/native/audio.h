@@ -15,6 +15,22 @@ extern "C" {
 JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Audio_audio_1open
   (JNIEnv *, jclass, jint, jint, jint, jint);
 
+/*
+ * Class:     uk_co_nickthecoder_jame_Audio
+ * Method:    audio_setMixChannels
+ * Signature: (I)I
+ */
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Audio_audio_1setMixChannels
+  (JNIEnv *, jclass, jint);
+
+/*
+ * Class:     uk_co_nickthecoder_jame_Audio
+ * Method:    audio_isPlaying
+ * Signature: (I)I
+ */
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Audio_audio_1isPlaying
+  (JNIEnv *, jclass, jint);
+
 #ifdef __cplusplus
 }
 #endif

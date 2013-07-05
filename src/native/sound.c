@@ -28,7 +28,6 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Sound_sound_1load
     (*env)->ReleaseStringUTFChars(env, jfilename, filename);
 
     return chunk == 0;
-
 }
 
 
@@ -44,7 +43,7 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Sound_sound_1play
 {
     Mix_Chunk *chunk = (Mix_Chunk*) (intptr_t) pSound;
 
-    Mix_PlayChannel( -1, chunk, 0 );
+    return Mix_PlayChannel( -1, chunk, 0 );
 }
 
 

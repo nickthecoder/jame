@@ -1,5 +1,7 @@
 package uk.co.nickthecoder.jame;
 
+import java.util.ArrayList;
+
 public class Audio
 {
 	
@@ -30,6 +32,8 @@ public class Audio
 		}
 	}
     
+	static ArrayList<MixChannel> mixChannels = null;
+	
     public static void init()
         throws JameException
     {
@@ -44,8 +48,36 @@ public class Audio
     public static void open( int frequency, SampleFormat format, int channels, int chunkSize )
     {
         audio_open( frequency, format.code, channels, chunkSize );
+        setMixChannels( 8 );
     }
 
     private static native int audio_open( int frequency, int format, int channels, int chunkSize );
 
+    public static void setMixChannels( int required )
+    {
+        int actual = audio_setMixChannels( required );
+        ArrayList<MixChannel> previous = mixChannels;
+        
+        mixChannels = new ArrayList<MixChannel>( actual );
+        for ( int i = 0; i < actual; i ++ ) {
+            if ( (previous != null) && ( i < previous.size() ) ) {
+                mixChannels.add( previous.get( i ) );
+            } else {
+                MixChannel mixChannel = new MixChannel( i );
+                mixChannels.add( mixChannel );
+            }
+        }
+    }
+    
+    private static native int audio_setMixChannels( int mixChannels );
+
+    public static boolean isPlaying( int mixChannelNumber ) 
+    {
+        if ( (mixChannelNumber < 0) || ( mixChannelNumber > mixChannels.size()) ) {
+            return false;
+        }
+        return audio_isPlaying( mixChannelNumber ) == 1;
+    }
+    private static native int audio_isPlaying( int mixChannelNumber );
+    
 }
