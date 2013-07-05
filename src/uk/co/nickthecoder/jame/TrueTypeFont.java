@@ -12,15 +12,15 @@ public class TrueTypeFont
 
     public TrueTypeFont( String filename, int pointSize ) throws JameException
     {
-        Jame.checkStatus( this.trueTypeFont_open( filename, pointSize ) );
+        Jame.checkStatus(this.trueTypeFont_open(filename, pointSize));
     }
 
     private native int trueTypeFont_open( String filename, int pointSize );
 
     public void close()
     {
-        if ( this.pFont != 0 ) {
-            this.trueTypeFont_close( this.pFont );
+        if (this.pFont != 0) {
+            this.trueTypeFont_close(this.pFont);
         }
     }
 
@@ -31,54 +31,107 @@ public class TrueTypeFont
         this.close();
     }
 
-    public Surface renderSolid( String text, RGBA color )
-        throws JameRuntimeException
+    /**
+     * Get the maximum pixel height of all glyphs of the loaded font. You may use this height for
+     * rendering text as close together vertically as possible, though adding at least one pixel
+     * height to it will space it so they can't touch. Remember that SDL_ttf doesn't handle
+     * multiline printing, so you are responsible for line spacing, see the getLineHeight as well.
+     */
+    public int getHeight()
     {
-        if ( text.equals( "" ) ) {
+        return trueTypeFont_getHeight(this.pFont);
+    }
+
+    private native int trueTypeFont_getHeight( long pFont );
+
+    /**
+     * Get the maximum pixel ascent of all glyphs of the loaded font. This can also be interpreted
+     * as the distance from the top of the font to the baseline. It could be used when drawing an
+     * individual glyph relative to a top point, by combining it with the glyph's maxy metric to
+     * resolve the top of the rectangle used when blitting the glyph on the screen.
+     */
+    public int getAscent()
+    {
+        return trueTypeFont_getAscent(this.pFont);
+    }
+
+    private native int trueTypeFont_getAscent( long pFont );
+
+    /**
+     * Get the maximum pixel descent of all glyphs of the loaded font. This can also be interpreted
+     * as the distance from the baseline to the bottom of the font.
+     */
+    public int getDescent()
+    {
+        return trueTypeFont_getDescent(this.pFont);
+    }
+
+    private native int trueTypeFont_getDescent( long pFont );
+
+    /**
+     * Get the recommended pixel height of a rendered line of text of the loaded font. This is
+     * usually larger than the getHeight().
+     */
+    public int getLineHeight()
+    {
+        return trueTypeFont_getLineHeight(this.pFont);
+    }
+
+    private native int trueTypeFont_getLineHeight( long pFont );
+
+    public int sizeText( String text )
+    {
+        return trueTypeFont_sizeText(this.pFont, text);
+    }
+    private native int trueTypeFont_sizeText( long pFont, String text );
+
+    public Surface renderSolid( String text, RGBA color ) throws JameRuntimeException
+    {
+        if (text.equals("")) {
             return this.createEmpty();
         }
         Surface surface = new Surface();
-        Jame.checkRuntimeStatus( this.trueTypeFont_renderSolid( this.pFont, surface, text, color.r, color.g, color.b ) );
+        Jame.checkRuntimeStatus(this.trueTypeFont_renderSolid(this.pFont, surface, text, color.r,
+                color.g, color.b));
         return surface;
     }
 
-    private native int trueTypeFont_renderSolid( long pFont, Surface surface, String text, int red, int green, int blue );
+    private native int trueTypeFont_renderSolid( long pFont, Surface surface, String text, int red,
+            int green, int blue );
 
-    public Surface renderBlended( String text, RGBA color )
-        throws JameRuntimeException
+    public Surface renderBlended( String text, RGBA color ) throws JameRuntimeException
     {
-        if ( text.equals( "" ) ) {
+        if (text.equals("")) {
             return this.createEmpty();
         }
         Surface surface = new Surface();
-        Jame.checkRuntimeStatus( this.trueTypeFont_renderBlended( this.pFont, surface, text, color.r, color.g, color.b ) );
+        Jame.checkRuntimeStatus(this.trueTypeFont_renderBlended(this.pFont, surface, text, color.r,
+                color.g, color.b));
         return surface;
     }
 
-    private native int trueTypeFont_renderBlended( long pFont, Surface surface, String text, int red, int green,
-        int blue );
+    private native int trueTypeFont_renderBlended( long pFont, Surface surface, String text,
+            int red, int green, int blue );
 
-    public Surface renderShaded( String text, RGBA fg, RGBA bg )
-        throws JameRuntimeException
+    public Surface renderShaded( String text, RGBA fg, RGBA bg ) throws JameRuntimeException
     {
-        if ( text.equals( "" ) ) {
+        if (text.equals("")) {
             return this.createEmpty();
         }
         Surface surface = new Surface();
-        Jame.checkRuntimeStatus( this
-            .trueTypeFont_renderShaded( this.pFont, surface, text, fg.r, fg.g, fg.b, bg.r, bg.g, bg.b ) );
+        Jame.checkRuntimeStatus(this.trueTypeFont_renderShaded(this.pFont, surface, text, fg.r,
+                fg.g, fg.b, bg.r, bg.g, bg.b));
         return surface;
     }
 
-    private native int trueTypeFont_renderShaded( long pFont, Surface surface, String text, int fgr, int fgg, int fgb,
-        int bgr, int bgg, int bgb );
+    private native int trueTypeFont_renderShaded( long pFont, Surface surface, String text,
+            int fgr, int fgg, int fgb, int bgr, int bgg, int bgb );
 
-    private Surface createEmpty()
-        throws JameRuntimeException
+    private Surface createEmpty() throws JameRuntimeException
     {
         Surface surface = new Surface();
-        Jame.checkRuntimeStatus( this.trueTypeFont_renderSolid( this.pFont, surface, "X", 0, 0, 0 ) );
-        Surface result = new Surface( 1, surface.getHeight(), true );
+        Jame.checkRuntimeStatus(this.trueTypeFont_renderSolid(this.pFont, surface, "X", 0, 0, 0));
+        Surface result = new Surface(1, surface.getHeight(), true);
         surface.free();
 
         return result;

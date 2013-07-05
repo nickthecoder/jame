@@ -1,0 +1,38 @@
+CC=C:\MinGW\bin\gcc
+
+CFLAGS=
+
+ARCH=win32
+
+# Set by the calling ant build
+JAVA_INCLUDE=
+
+SDL_INCLUDE=win32-dependencies\SDL-1.2.15\include\SDL
+SDL_IMAGE_INCLUDE=win32-dependencies\SDL_image-1.2.12
+SDL_GFX_INCLUDE=win32-dependencies\SDL_gfx-2.0.24
+SDL_TTF_INCLUDE=win32-dependencies\SDL_ttf-2.0.11
+SDL_MIXER_INCLUDE=win32-dependencies\SDL_mixer-1.2.12
+
+INCLUDE=-I. -I"$(JAVA_INCLUDE)" -I"$(JAVA_INCLUDE)\win32" -I"$(SDL_INCLUDE)" -I"$(SDL_IMAGE_INCLUDE)" -I"$(SDL_GFX_INCLUDE)" -I"$(SDL_TTF_INCLUDE)" -I"$(SDL_MIXER_INCLUDE)"
+
+LIB_DIR=..\..\native\win32
+LIBS=${LIB_DIR}\SDL.dll $(LIB_DIR)\SDL_image.dll $(LIB_DIR)\SDL_ttf.dll $(LIB_DIR)\SDL_mixer.dll $(LIB_DIR)\SDL_gfx.dll
+
+JAME_OBJ=jame.o video.o surface.o trueTypeFont.o events.o audio.o sound.o softBlitPyGame.o
+
+allFromScratch : clean all
+
+all:	jame.dll copy
+
+%.o: %.c
+	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
+
+jame.dll: $(JAME_OBJ)
+	$(CC) -shared -o jame.dll ${JAME_OBJ} -Wl,--add-stdcall-alias $(LIBS)
+
+clean:
+	-del *.o jame.dll
+
+copy:
+	copy jame.dll ..\..\native\$(ARCH)\
+
