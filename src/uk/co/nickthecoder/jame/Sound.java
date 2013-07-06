@@ -42,7 +42,7 @@ public class Sound
     public boolean play()
     {
         int result = this.sound_play(this.pSound);
-        if ( result > 0 ) {
+        if ( result >= 0 ) {
             this.latestMixChannel = result;
             Audio.mixChannels.get(this.latestMixChannel).sound = this;
             return true;
