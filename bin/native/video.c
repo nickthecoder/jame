@@ -43,5 +43,9 @@ JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Video_video_1setWindowIcon
 
    (*env)->ReleaseStringUTFChars(env, jfilename, filename);
 }
-
+JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Video_video_1showMousePointer
+  (JNIEnv *env, jclass jvideo, jint jvalue)
+{
+    SDL_ShowCursor( jvalue );
+}
 

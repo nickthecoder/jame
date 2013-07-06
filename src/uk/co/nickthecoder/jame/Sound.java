@@ -31,17 +31,23 @@ public class Sound
     /**
      * If already playing, then nothing happens, otherwise the sound is played in the normal manner.
      */
-    public void playOnce()
+    public boolean playOnce()
     {
         if ( ! this.isPlaying() ) {
-            this.play();
+            return this.play();
         }
+        return false;
     }
     
-    public void play()
+    public boolean play()
     {
-        this.latestMixChannel = this.sound_play(this.pSound);
-        Audio.mixChannels.get(this.latestMixChannel).sound = this;
+        int result = this.sound_play(this.pSound);
+        if ( result > 0 ) {
+            this.latestMixChannel = result;
+            Audio.mixChannels.get(this.latestMixChannel).sound = this;
+            return true;
+        }
+        return false;
     }
 
     private native int sound_play( long pSound );

@@ -40,6 +40,53 @@ JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_TrueTypeFont_trueTypeFont_1c
     TTF_CloseFont( font );
 }
 
+// getHeight
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_TrueTypeFont_trueTypeFont_1getHeight
+  (JNIEnv *env, jobject jfont, jlong pFont) 
+{
+    TTF_Font *font = (TTF_Font*) (intptr_t) pFont;
+    return TTF_FontHeight( font );
+}
+
+// getAscent
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_TrueTypeFont_trueTypeFont_1getAscent
+  (JNIEnv *env, jobject jfont, jlong pFont) 
+{
+    TTF_Font *font = (TTF_Font*) (intptr_t) pFont;
+    return TTF_FontAscent( font );    
+}
+
+// getDescent
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_TrueTypeFont_trueTypeFont_1getDescent
+  (JNIEnv *env, jobject jfont, jlong pFont) 
+{
+    TTF_Font *font = (TTF_Font*) (intptr_t) pFont;
+    return TTF_FontDescent( font );    
+}
+
+// getLineHeight
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_TrueTypeFont_trueTypeFont_1getLineHeight
+  (JNIEnv *env, jobject jfont, jlong pFont) 
+{
+    TTF_Font *font = (TTF_Font*) (intptr_t) pFont;
+    return TTF_FontLineSkip( font );    
+}
+
+// sizeText
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_TrueTypeFont_trueTypeFont_1sizeText
+  (JNIEnv *env, jobject jfont, jlong pFont, jstring jtext)
+{
+    const char *text = (*env)->GetStringUTFChars(env, jtext, 0);
+    int width;
+    int height;
+
+    TTF_Font *font = (TTF_Font*) (intptr_t) pFont;
+    TTF_SizeUTF8( font, text, &width, &height );
+
+    (*env)->ReleaseStringUTFChars(env, jtext, text);
+    return width;
+}
+
 // renderSolid
 JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_TrueTypeFont_trueTypeFont_1renderSolid
   (JNIEnv *env, jobject jfont, jlong pFont, jobject jsurface, jstring jtext, jint red, jint green, jint blue )
