@@ -23,11 +23,11 @@
                 <include name="jame.jar" />
                 <include name="publish/jame-src.zip" />
                 <include name="publish/jame.zip" />
-                <include name="src/native/*.o" />
-                <include name="src/native/*.so" />
+                <include name="src-native/*.o" />
+                <include name="src-native/*.so" />
                 <include name="native/**/*.o" />
                 <include name="native/**/*.so" />
-                <include name="src/native/*.dll" />
+                <include name="src-native/*.dll" />
                 <include name="build/**" />
                 <exclude name="build" />
                 <include name="docs/api/**" />
@@ -56,10 +56,10 @@
     	
 	<!-- native -->
     <target name="native">
-	    <exec executable="/usr/bin/make" dir="src/native" osfamily="unix">
+	    <exec executable="/usr/bin/make" dir="src-native" osfamily="unix">
 		<arg value="JAVA_INCLUDE=${java.home}/../include"/>
 	    </exec>
-	    <exec executable="C:\MinGW\bin\mingw32-make" dir="src/native" osfamily="windows">
+	    <exec executable="C:\MinGW\bin\mingw32-make" dir="src-native" osfamily="windows">
 		<arg value="--file=Makefile-win32"/>
 		<arg value="JAVA_INCLUDE=${java.home}\..\include"/>
 	    </exec>
@@ -67,13 +67,13 @@
 
 	<!-- javah -->
 	<target name="javah" depends="java">
-	   <javah class="uk.co.nickthecoder.jame.Jame" outputFile="src/native/jame.h" classpathref="project.class.path"/>
-	   <javah class="uk.co.nickthecoder.jame.Video" outputFile="src/native/video.h" classpathref="project.class.path"/>
-       <javah class="uk.co.nickthecoder.jame.Surface" outputFile="src/native/surface.h" classpathref="project.class.path"/>
-       <javah class="uk.co.nickthecoder.jame.TrueTypeFont" outputFile="src/native/trueTypeFont.h" classpathref="project.class.path"/>
-       <javah class="uk.co.nickthecoder.jame.Events" outputFile="src/native/events.h" classpathref="project.class.path"/>
-       <javah class="uk.co.nickthecoder.jame.Audio" outputFile="src/native/audio.h" classpathref="project.class.path"/>
-	   <javah class="uk.co.nickthecoder.jame.Sound" outputFile="src/native/sound.h" classpathref="project.class.path"/>
+	   <javah class="uk.co.nickthecoder.jame.Jame" outputFile="src-native/jame.h" classpathref="project.class.path"/>
+	   <javah class="uk.co.nickthecoder.jame.Video" outputFile="src-native/video.h" classpathref="project.class.path"/>
+       <javah class="uk.co.nickthecoder.jame.Surface" outputFile="src-native/surface.h" classpathref="project.class.path"/>
+       <javah class="uk.co.nickthecoder.jame.TrueTypeFont" outputFile="src-native/trueTypeFont.h" classpathref="project.class.path"/>
+       <javah class="uk.co.nickthecoder.jame.Events" outputFile="src-native/events.h" classpathref="project.class.path"/>
+       <javah class="uk.co.nickthecoder.jame.Audio" outputFile="src-native/audio.h" classpathref="project.class.path"/>
+	   <javah class="uk.co.nickthecoder.jame.Sound" outputFile="src-native/sound.h" classpathref="project.class.path"/>
 	</target>
 	
 	<!-- creates a jar file of just the source code. -->
@@ -82,15 +82,15 @@
         <jar jarfile="publish/${srcjarfile}">
             <fileset dir=".">
                 <include name="src/**/*.java"/>
-                <include name="src/**/*.c"/>
-                <include name="src/**/*.h"/>
-                <include name="src/native/Makefile*"/>
+                <include name="src-native/**/*.c"/>
+                <include name="src-native/**/*.h"/>
+                <include name="src-native/Makefile*"/>
                 <include name="build.xml"/>
                 <include name="test.sh"/>
                 <include name="icon.bmp"/>
                 <include name="resources/**/*.png"/>
                 <include name="resources/**/*.ttf"/>
-                <exclude name="src/native/win-dependencies"/>
+                <exclude name="src-native/win-dependencies"/>
             </fileset>
         </jar>
 
