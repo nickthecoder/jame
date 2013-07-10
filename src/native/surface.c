@@ -344,6 +344,47 @@ JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1getPixelRGB
     //printf( "B : %d, %x, %d\n", (value & surface->format->Bmask) >> surface->format->Bshift, surface->format->Bmask, surface->format->Bshift );
 }
 
+// Set Pixel
+JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1setPixel__JIII
+  (JNIEnv *env, jobject jSurface, jlong pSurface, jint x, jint y, jint value)
+{
+   SDL_Surface *surface = (SDL_Surface*) (intptr_t) pSurface;    
+
+    if ( surface->format->BytesPerPixel != 4 ) {
+        return;
+    }
+
+    SDL_LockSurface( surface );
+    ((Uint32*) (surface->pixels))[ x + y * surface->pitch / 4 ] = value;
+    SDL_UnlockSurface( surface );
+}
+
+/*
+ * Class:     uk_co_nickthecoder_jame_Surface
+ * Method:    surface_setPixel
+ * Signature: (JIILuk/co/nickthecoder/jame/RGBA;)V
+ */
+JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1setPixel__JIIIIII
+  (JNIEnv *env, jobject jSurface, jlong pSurface, jint x, jint y, jint r, jint g, jint b, jint a )
+{
+    SDL_Surface *surface = (SDL_Surface*) (intptr_t) pSurface;
+    
+    if ( surface->format->BytesPerPixel != 4 ) {
+        return;
+    }
+    
+    Uint32 value =
+        ((r&255) << surface->format->Rshift) |
+        ((g&255) << surface->format->Gshift) |
+        ((b&255) << surface->format->Bshift) |
+        ((a&255) << surface->format->Ashift);
+
+    SDL_LockSurface( surface );
+    ((Uint32*) (surface->pixels))[ x + y * surface->pitch / 4 ] = value;
+    SDL_UnlockSurface( surface );
+        
+}
+
 
 
 

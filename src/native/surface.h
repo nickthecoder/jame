@@ -43,6 +43,38 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1setAlpha
 
 /*
  * Class:     uk_co_nickthecoder_jame_Surface
+ * Method:    surface_getPixelColor
+ * Signature: (JII)I
+ */
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1getPixelColor
+  (JNIEnv *, jobject, jlong, jint, jint);
+
+/*
+ * Class:     uk_co_nickthecoder_jame_Surface
+ * Method:    surface_getPixelRGBA
+ * Signature: (JLuk/co/nickthecoder/jame/RGBA;II)V
+ */
+JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1getPixelRGBA
+  (JNIEnv *, jobject, jlong, jobject, jint, jint);
+
+/*
+ * Class:     uk_co_nickthecoder_jame_Surface
+ * Method:    surface_setPixel
+ * Signature: (JIII)V
+ */
+JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1setPixel__JIII
+  (JNIEnv *, jobject, jlong, jint, jint, jint);
+
+/*
+ * Class:     uk_co_nickthecoder_jame_Surface
+ * Method:    surface_setPixel
+ * Signature: (JIIIIII)V
+ */
+JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1setPixel__JIIIIII
+  (JNIEnv *, jobject, jlong, jint, jint, jint, jint, jint, jint);
+
+/*
+ * Class:     uk_co_nickthecoder_jame_Surface
  * Method:    surface_fill
  * Signature: (JIIIII)I
  */
@@ -120,22 +152,6 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1rotoZoom
  */
 JNIEXPORT jboolean JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1overlaps
   (JNIEnv *, jobject, jlong, jlong, jint, jint, jint);
-
-/*
- * Class:     uk_co_nickthecoder_jame_Surface
- * Method:    surface_getPixelColor
- * Signature: (JII)I
- */
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1getPixelColor
-  (JNIEnv *, jobject, jlong, jint, jint);
-
-/*
- * Class:     uk_co_nickthecoder_jame_Surface
- * Method:    surface_getPixelRGBA
- * Signature: (JLuk/co/nickthecoder/jame/RGBA;II)V
- */
-JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1getPixelRGBA
-  (JNIEnv *, jobject, jlong, jobject, jint, jint);
 
 #ifdef __cplusplus
 }

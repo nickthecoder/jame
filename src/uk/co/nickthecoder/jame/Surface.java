@@ -45,7 +45,6 @@ public class Surface
      * We need to create blank Surface objects, which can then be filled in the
      * JNI calls such as surface_setMode.
      */
-
     Surface()
     {
     }
@@ -167,6 +166,51 @@ public class Surface
 
     private native int surface_setAlpha( long pSurface, int flags, int alpha );
 
+
+    /**
+     * Only works with 32 bit surfaces.
+     *
+     * @param x
+     * @param y
+     * @return The value of a single pixel, stored in a single int
+     */
+    public int getPixelColor( int x, int y )
+    {
+        return this.surface_getPixelColor( this.pSurface, x, y );
+    }
+
+    private native int surface_getPixelColor( long pSurface, int x, int y );
+
+    /**
+     * Only works with 32 bit surfaces.
+     *
+     * @param x
+     * @param y
+     * @return The value of a single pixel, as an RGBA object.
+     */
+    public RGBA getPixelRGBA( int x, int y )
+    {
+        RGBA result = new RGBA( 0, 0, 0 );
+        this.surface_getPixelRGBA( this.pSurface, result, x, y );
+        return result;
+    }
+
+    private native void surface_getPixelRGBA( long pSurface, RGBA result, int x, int y );
+
+    public void setPixel( int x, int y, int value )
+    {
+        this.surface_setPixel( this.pSurface, x, y, value );
+    }
+    
+    private native void surface_setPixel( long pSurface, int x, int y, int value );
+    
+    public void setPixel( int x, int y, RGBA color )
+    {
+        this.surface_setPixel( this.pSurface, x, y, color.r, color.g, color.b, color.a );
+    }
+    
+    private native void surface_setPixel( long pSurface, int x, int y, int r, int g, int b, int a );
+    
     public void fill( int color )
         throws JameRuntimeException
     {
@@ -311,36 +355,6 @@ public class Surface
     }
 
     private native boolean surface_overlaps( long pA, long pB, int dx, int dy, int threshold );
-
-    /**
-     * Only works with 32 bit surfaces.
-     *
-     * @param x
-     * @param y
-     * @return The value of a single pixel, stored in a single int
-     */
-    public int getPixelColor( int x, int y )
-    {
-        return this.surface_getPixelColor( this.pSurface, x, y );
-    }
-
-    private native int surface_getPixelColor( long pSurface, int x, int y );
-
-    /**
-     * Only works with 32 bit surfaces.
-     *
-     * @param x
-     * @param y
-     * @return The value of a single pixel, as an RGBA object.
-     */
-    public RGBA getPixelRGBA( int x, int y )
-    {
-        RGBA result = new RGBA( 0, 0, 0 );
-        this.surface_getPixelRGBA( this.pSurface, result, x, y );
-        return result;
-    }
-
-    private native void surface_getPixelRGBA( long pSurface, RGBA result, int x, int y );
 
     public String toString()
     {
