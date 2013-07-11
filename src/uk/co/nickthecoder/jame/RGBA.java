@@ -1,11 +1,11 @@
 package uk.co.nickthecoder.jame;
 
-public class RGBA
+public final class RGBA
 {
-    public int r;
-    public int g;
-    public int b;
-    public int a;
+    public final int r;
+    public final int g;
+    public final int b;
+    public final int a;
 
     /**
      * Parses colors in the form #rrggbbaa #rrggbb and #rgb
