@@ -28,6 +28,6 @@ clean:
 	-rm *.o *.so
 
 copy:
-	mkdir -p ../native/$(ARCH)
-	cp libjame.so ../native/$(ARCH)/
+	mkdir -p ../lib/native/$(ARCH)
+	cp libjame.so ../lib/native/$(ARCH)/
 

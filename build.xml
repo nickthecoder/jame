@@ -2,12 +2,12 @@
 <!DOCTYPE project>
 <project name="Jame" default="build" basedir=".">
 
-    <property name="jarfile" value="jame.jar" />
+    <property name="jarfile" value="lib/jame.jar" />
     <property name="srcjarfile" value="jame-src.zip" />
     <property name="zipfile" value="jame.zip" />
 
     <path id="project.class.path">
-        <fileset dir=".">
+        <fileset dir="lib">
             <include name="jame.jar"/>
         </fileset>
     </path>
@@ -20,7 +20,7 @@
     <target name="clean">
         <delete includeEmptyDirs="true">
             <fileset dir=".">
-                <include name="jame.jar" />
+                <include name="lib/jame.jar" />
                 <include name="publish/jame-src.zip" />
                 <include name="publish/jame.zip" />
                 <include name="src-native/*.o" />
@@ -101,7 +101,7 @@
     	<mkdir dir="publish"/>
         <jar jarfile="publish/${zipfile}">
             <fileset dir=".">
-                <include name="jame.jar"/>
+                <include name="lib/jame.jar"/>
                 <include name="native/**/*.so"/>
                 <include name="native/**/*.dll"/>
             	<exclude name="native/default/*"/>
