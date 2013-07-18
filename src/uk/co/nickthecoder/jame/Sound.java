@@ -1,9 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2013 Nick Robinson
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Public License v3.0
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/gpl.html
+ * Copyright (c) 2013 Nick Robinson All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU Public License v3.0 which accompanies this
+ * distribution, and is available at http://www.gnu.org/licenses/gpl.html
  ******************************************************************************/
 package uk.co.nickthecoder.jame;
 
@@ -40,16 +38,16 @@ public class Sound
      */
     public boolean playOnce()
     {
-        if ( ! this.isPlaying() ) {
+        if (!this.isPlaying()) {
             return this.play();
         }
         return false;
     }
-    
+
     public boolean play()
     {
         int result = this.sound_play(this.pSound);
-        if ( result >= 0 ) {
+        if (result >= 0) {
             this.latestMixChannel = result;
             Audio.mixChannels.get(this.latestMixChannel).sound = this;
             return true;
@@ -59,18 +57,48 @@ public class Sound
 
     private native int sound_play( long pSound );
 
+    public MixChannel getMixChannel()
+    {
+        if (this.latestMixChannel < 0) {
+            return null;
+        } else {
+            MixChannel result = Audio.mixChannels.get(this.latestMixChannel);
+            if (result.sound == this) {
+                return result;
+            } else {
+                this.latestMixChannel = -1;
+                return null;
+            }
+        }
+    }
+
     /**
      * @return true if the sound is currently playing.
      */
     public boolean isPlaying()
     {
-        if (this.latestMixChannel < 0) {
+        MixChannel mixChannel = getMixChannel();
+        if (mixChannel == null) {
             return false;
-        }
-        try {
-            return Audio.mixChannels.get(this.latestMixChannel).isPlaying(this);
-        } catch (Exception e) {
-            return false;
+        } else {
+            return Audio.isPlaying(mixChannel.getMixChannelNumber());
         }
     }
+
+    public void stop()
+    {
+        MixChannel mixChannel = getMixChannel();
+        if (mixChannel != null) {
+            mixChannel.stop();
+        }
+    }
+
+    public void fadeOut( int milliseconds )
+    {
+        MixChannel mixChannel = getMixChannel();
+        if (mixChannel != null) {
+            mixChannel.fadeOut(milliseconds);
+        }
+    }
+
 }

@@ -34,3 +34,18 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Audio_audio_1isPlaying
     return Mix_Playing( mixChannelNumber );
 }
 
+
+// stop
+JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Audio_audio_1stop
+  (JNIEnv *env, jclass jaudio, jint mixChannelNumber )
+{
+    Mix_HaltChannel( mixChannelNumber );
+}
+
+// fadeOut
+JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Audio_audio_1fadeOut
+  (JNIEnv *env, jclass jaudio, jint mixChannelNumber, jint millis)
+{
+    Mix_FadeOutChannel( mixChannelNumber, millis );
+}
+
