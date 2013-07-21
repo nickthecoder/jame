@@ -1,9 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2013 Nick Robinson
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Public License v3.0
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/gpl.html
+ * Copyright (c) 2013 Nick Robinson All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU Public License v3.0 which accompanies this
+ * distribution, and is available at http://www.gnu.org/licenses/gpl.html
  ******************************************************************************/
 package uk.co.nickthecoder.jame;
 
@@ -16,7 +14,7 @@ public final class RGBA
 
     /**
      * Parses colors in the form #rrggbbaa #rrggbb and #rgb
-     *
+     * 
      * @param str
      * @return
      * @throws JameException
@@ -26,30 +24,32 @@ public final class RGBA
     {
         str = str.trim().toUpperCase();
 
-        if ( str.startsWith( "#" ) ) {
-            if ( str.length() == 9 ) {
-                long color = Long.parseLong( str.substring( 1 ), 16 );
-                return new RGBA( (int) ((color & 0xff000000) >> 24), (int) ((color & 0x00ff0000 ) >> 16),
-                    (int) ((color & 0x0000ff00) >> 8), (int) (color & 0x000000ff) );
-            } else if ( str.length() == 7 ) {
-                int color = Integer.parseInt( str.substring( 1 ), 16 );
-                return new RGBA( ( color & 0xff0000 ) >> 16, ( color & 0x00ff00 ) >> 8, color & 0x0000ff );
-            } else if ( str.length() == 4 ) {
-                int color = Integer.parseInt( str.substring( 1 ), 16 );
-                return new RGBA( ( ( color & 0xf00 ) >> 8 ) * 17, ( ( color & 0x0f0 ) >> 4 ) * 17, ( color & 0xf ) * 17 );
+        if (str.startsWith("#")) {
+            if (str.length() == 9) {
+                long color = Long.parseLong(str.substring(1), 16);
+                return new RGBA((int) ((color & 0xff000000) >> 24),
+                    (int) ((color & 0x00ff0000) >> 16),
+                    (int) ((color & 0x0000ff00) >> 8), (int) (color & 0x000000ff));
+            } else if (str.length() == 7) {
+                int color = Integer.parseInt(str.substring(1), 16);
+                return new RGBA((color & 0xff0000) >> 16, (color & 0x00ff00) >> 8, color & 0x0000ff);
+            } else if (str.length() == 4) {
+                int color = Integer.parseInt(str.substring(1), 16);
+                return new RGBA(((color & 0xf00) >> 8) * 17, ((color & 0x0f0) >> 4) * 17,
+                    (color & 0xf) * 17);
             }
         }
-        throw new JameException( "Color parse failed : " + str );
+        throw new JameException("Color parse failed : " + str);
     }
 
     public RGBA( RGBA other )
     {
-        this( other.r, other.g, other.b, other.a );
+        this(other.r, other.g, other.b, other.a);
     }
 
     public RGBA( int red, int green, int blue )
     {
-        this( red, green, blue, 255 );
+        this(red, green, blue, 255);
     }
 
     public RGBA( int red, int green, int blue, int alpha )
@@ -62,19 +62,31 @@ public final class RGBA
 
     public String getRGBCode()
     {
-        return "#" + ( this.r < 16 ? "0" : "" ) + Integer.toHexString( this.r ) + ( this.g < 16 ? "0" : "" )
-                + Integer.toHexString( this.g ) + ( this.b < 16 ? "0" : "" ) + Integer.toHexString( this.b );
+        return "#" + (this.r < 16 ? "0" : "") + Integer.toHexString(this.r) +
+            (this.g < 16 ? "0" : "")
+            + Integer.toHexString(this.g) + (this.b < 16 ? "0" : "") + Integer.toHexString(this.b);
     }
 
     public String getRGBACode()
     {
-        return this.getRGBCode() + ( this.a < 16 ? "0" : "" ) + Integer.toHexString( this.a );
+        return this.getRGBCode() + (this.a < 16 ? "0" : "") + Integer.toHexString(this.a);
     }
 
     @Override
     public String toString()
     {
         return this.getRGBACode();
+    }
+
+    @Override
+    public boolean equals( Object obj )
+    {
+        if (obj instanceof RGBA) {
+            RGBA other = (RGBA) obj;
+            return (this.a == other.a) && (this.r == other.r) && (this.g == other.g) &&
+                (this.b == other.b);
+        }
+        return false;
     }
 
 }
