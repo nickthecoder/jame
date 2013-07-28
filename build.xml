@@ -38,6 +38,7 @@
 	<!-- java -->
     <target name="java">
         <mkdir dir="build"/>
+        <mkdir dir="lib"/>
         <javac
             srcdir="src"
             destdir="build"
