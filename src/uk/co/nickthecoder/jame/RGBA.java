@@ -7,6 +7,10 @@ package uk.co.nickthecoder.jame;
 
 public final class RGBA
 {
+    public static final RGBA WHITE = new RGBA(255,255,255,255);
+    public static final RGBA BLACK = new RGBA(0,0,0,255);
+    public static final RGBA TRANSPARENT = new RGBA(0,0,0,0);
+
     public final int r;
     public final int g;
     public final int b;

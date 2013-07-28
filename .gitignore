@@ -7,7 +7,7 @@
 /publish
 /native
 /build
-/lib
+/lib/*
 /bin
 /src-native/libjame.so
 /src-native/win32-dependencies/
