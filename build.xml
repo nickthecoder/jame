@@ -58,11 +58,11 @@
 	<!-- native -->
     <target name="native">
 	    <exec executable="/usr/bin/make" dir="src-native" osfamily="unix">
-		<arg value="JAVA_INCLUDE=${java.home}/../include"/>
+	    	  <arg value="JAVA_INCLUDE=-I ${java.home}/../include -I ${java.home}/../include/linux -I ${java.home}/include -I ${java.home}/include/linux"/>
 	    </exec>
 	    <exec executable="C:\MinGW\bin\mingw32-make" dir="src-native" osfamily="windows">
-		<arg value="--file=Makefile-win32"/>
-		<arg value="JAVA_INCLUDE=${java.home}\..\include"/>
+	        <arg value="--file=Makefile-win32"/>
+	    	<arg value="JAVA_INCLUDE=${java.home}\..\include"/>
 	    </exec>
     </target>
 
