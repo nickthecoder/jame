@@ -15,7 +15,7 @@ SDL_MIXER_INCLUDE=win32-dependencies\SDL_mixer-1.2.12
 
 INCLUDE=-I. -I"$(JAVA_INCLUDE)" -I"$(JAVA_INCLUDE)\win32" -I"$(SDL_INCLUDE)" -I"$(SDL_IMAGE_INCLUDE)" -I"$(SDL_GFX_INCLUDE)" -I"$(SDL_TTF_INCLUDE)" -I"$(SDL_MIXER_INCLUDE)"
 
-LIB_DIR=..\..\native\win32
+LIB_DIR=..\lib\native\win32
 LIBS=${LIB_DIR}\SDL.dll $(LIB_DIR)\SDL_image.dll $(LIB_DIR)\SDL_ttf.dll $(LIB_DIR)\SDL_mixer.dll $(LIB_DIR)\SDL_gfx.dll
 
 JAME_OBJ=jame.o video.o surface.o trueTypeFont.o events.o audio.o sound.o softBlitPyGame.o

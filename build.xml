@@ -5,18 +5,20 @@
     <property name="jarfile" value="lib/jame.jar" />
     <property name="srcjarfile" value="jame-src.zip" />
     <property name="zipfile" value="jame.zip" />
+    <property name="publish.dir" value="/gidea/documents/public/jame/" />
 
     <path id="project.class.path">
         <fileset dir="lib">
             <include name="jame.jar"/>
         </fileset>
     </path>
-		
+
 	<!-- build -->
 	<target name="build" depends="java,javah,native">
 	</target>
 
     <!-- Clean -->
+	<!-- Note, this does NOT remove .so or .dlls from /lib/native/ -->
     <target name="clean">
         <delete includeEmptyDirs="true">
             <fileset dir=".">
@@ -79,44 +81,13 @@
 	
 	<!-- creates a jar file of just the source code. -->
     <target name="src">
-    	<mkdir dir="publish"/>
-        <jar jarfile="publish/${srcjarfile}">
-            <fileset dir=".">
-                <include name="src/**/*.java"/>
-                <include name="src-native/**/*.c"/>
-                <include name="src-native/**/*.h"/>
-                <include name="src-native/Makefile*"/>
-                <include name="build.xml"/>
-                <include name="test.sh"/>
-                <include name="icon.bmp"/>
-                <include name="resources/**/*.png"/>
-                <include name="resources/**/*.ttf"/>
-                <exclude name="src-native/win-dependencies"/>
-            </fileset>
-        </jar>
+
 
     </target>
-    
-	<!-- Used to distribute a binary copy of jame -->
-    <target name="zip">
-    	<mkdir dir="publish"/>
-        <jar jarfile="publish/${zipfile}">
-            <fileset dir=".">
-                <include name="lib/jame.jar"/>
-                <include name="native/**/*.so"/>
-                <include name="native/**/*.dll"/>
-            	<exclude name="native/default/*"/>
-                <include name="test.sh"/>
-                <include name="icon.bmp"/>
-                <include name="resources/**/*.png"/>
-                <include name="resources/**/*.ttf"/>
-            </fileset>
-        </jar>
-
-    </target>
-
+	
 	<!-- Generate javadocs -->
     <target name="javadoc" depends="java">
+        <copy file="docs/stylesheet.css" todir="docs/api/"/>
         <javadoc sourcepath="src"
             classpathref="project.class.path"
             access="protected"
@@ -125,6 +96,9 @@
 
             <package name="uk.co.nickthecoder.jame"/>
             <package name="uk.co.nickthecoder.jame.event"/>
+
+            <link packagelistloc="http://docs.oracle.com/javase/7/docs/api/package-list" href="http://docs.oracle.com/javase/7/docs/api/"/>
+            
         </javadoc>
     </target>
 
@@ -145,6 +119,51 @@
         </junit>
     </target>
 		
+    <!-- publish : Used to create zip files of the source and binaries -->
+    <target name="publish" depends="clean,java,javadoc">
 
+        <mkdir dir="${publish.dir}"/>
+
+        <mkdir dir="publish"/>
+        <jar jarfile="${publish.dir}/${zipfile}">
+            <fileset dir=".">
+                <include name="lib/jame.jar"/>
+                <include name="lib/native/x86_64/libjame.so"/>
+                <include name="lib/native/win32/*.dll"/>
+                <include name="test.sh"/>
+                <include name="icon.bmp"/>
+                <include name="resources/**/*.png"/>
+                <include name="resources/**/*.ttf"/>
+            </fileset>
+        </jar>
+    	
+        <jar jarfile="${publish.dir}/${srcjarfile}">
+            <fileset dir=".">
+                 <include name="src/**/*.java"/>
+                 <include name="src-native/**/*.c"/>
+                 <include name="src-native/**/*.h"/>
+                 <include name="src-native/Makefile*"/>
+                 <include name="build.xml"/>
+                 <include name="test.sh"/>
+                 <include name="test.bat"/>
+                 <include name="icon.bmp"/>
+                 <include name="resources/**/*.png"/>
+                 <include name="resources/**/*.ttf"/>
+                 <exclude name="src-native/win-dependencies"/>
+            </fileset>
+        </jar>
+    	
+        <buildnumber/>
+        
+        <mkdir dir="${publish.dir}/builds/${build.number}/"/>
+
+        <copy file="${publish.dir}/${zipfile}" todir="${publish.dir}/builds/${build.number}/"/>        
+        <copy file="${publish.dir}/${srcjarfile}" todir="${publish.dir}/builds/${build.number}/"/>   
+        <copy todir="${publish.dir}/api/">
+            <fileset dir="docs/api"/>
+        </copy>
+
+    </target>
+    
 </project>
 

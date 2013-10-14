@@ -7,7 +7,7 @@
  ******************************************************************************/
 package uk.co.nickthecoder.jame;
 
-public class Jame
+class Jame
 {
     static {
         System.loadLibrary( "jame" );

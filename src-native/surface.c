@@ -33,8 +33,12 @@ void initialiseSurface( JNIEnv *env, jobject jsurface, SDL_Surface *surface )
         fid = (*env)->GetFieldID(env,clazz,"height","I");
         (*env)->SetIntField(env,jsurface,fid,surface->h);
 
+        fid = (*env)->GetFieldID(env,clazz,"flags","I");
+        (*env)->SetIntField(env,jsurface,fid,surface->flags);
+
         fid = (*env)->GetFieldID(env,clazz,"hasAlpha","Z");
         (*env)->SetBooleanField(env,jsurface,fid,surface->format->Amask != 0);
+
     }
 }
 
@@ -278,9 +282,9 @@ JNIEXPORT jboolean JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1overlap
         //printf( "row\n" );
         for ( x = 0; x < width; x ++ ) {
             int aAlpha =  aMask & (aStart[ x + y * aPitch ]);
-            if ( aAlpha >  aThresh ) {
+            if ( aAlpha >= aThresh ) {
                 int bAlpha = bMask & (bStart[ x + y * bPitch ]);
-                if ( bAlpha > bThresh ) {
+                if ( bAlpha >= bThresh ) {
                     if ( b != a ) {
                         SDL_UnlockSurface( b );
                     }

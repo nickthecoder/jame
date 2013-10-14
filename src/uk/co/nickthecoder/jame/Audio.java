@@ -7,9 +7,20 @@ package uk.co.nickthecoder.jame;
 
 import java.util.ArrayList;
 
+/**
+ * To play sounds, you first need to initialise Audio by calling {@link #init()}.
+ * <p>
+ * You can then optionally set the number of mixer channels using {@link #setMixChannels(int)}. This
+ * is the maximum number of sounds that can be played simultaneously. The default is 8.
+ * <p>
+ * To load and play sounds, see {@link Sound}.
+ * 
+ */
 public class Audio
 {
-
+    /**
+     * Defines the low-level storage mechanism for a sample within a Sound.
+     */
     public enum SampleFormat
     {
         U8(0x0008),
@@ -41,18 +52,43 @@ public class Audio
 
     static ArrayList<MixChannel> mixChannels = null;
 
+    /**
+     * Initialises the audio subsystem. This loads Jame's JNI shared object / dynamic linked
+     * library. This must be called before any other calls to Audio or Sound. After init, you still
+     * need to open the sound device using either of the {@link #open} methods.
+     * 
+     * @throws JameException
+     */
     public static void init()
         throws JameException
     {
         Jame.initSubsystem(Jame.Subsystem.AUDIO);
     }
 
+    /**
+     * Opens the audio device using default values : Frequency : 22050. Sample format : S16. Channels
+     * : 2 (stereo). ChunkSize : 2048
+     */
     public static void open()
     {
         open(22050, SampleFormat.S16, 2, 2048);
     }
 
-    static void open( int frequency, SampleFormat format, int channels, int chunkSize )
+    /**
+     * Opens the audio device with complete control over the details. In most cases the default
+     * values suitable, so use {@link #open()} instead.
+     * 
+     * @param frequency
+     *        The frequency of samples in (Hz).
+     * @param format
+     *        The storage type of each sample.
+     * @param channels
+     *        The number of channels (1 for mono, 2 for stereo).
+     * @param chunkSize
+     *        The size of the buffer. A small value may lower the latency, but will be more CPU
+     *        intensive.
+     */
+    public static void open( int frequency, SampleFormat format, int channels, int chunkSize )
     {
         audio_open(frequency, format.code, channels, chunkSize);
         setMixChannels(8);
@@ -60,9 +96,14 @@ public class Audio
 
     private static native int audio_open( int frequency, int format, int channels, int chunkSize );
 
-    public static void setMixChannels( int required )
+    /**
+     * Sets the maximum number of sounds that can be played simultaneously. The default is 8.
+     * A large count will be more CPU intensive.
+     * @param count The required number of mix channels.
+     */
+    public static void setMixChannels( int count )
     {
-        int actual = audio_setMixChannels(required);
+        int actual = audio_setMixChannels(count);
         ArrayList<MixChannel> previous = mixChannels;
 
         mixChannels = new ArrayList<MixChannel>(actual);
@@ -78,6 +119,10 @@ public class Audio
 
     private static native int audio_setMixChannels( int mixChannels );
 
+    /**
+     * Used internally from other Jame classes to call the JNI method,
+     * with simple bounds checking. 
+     */
     static boolean isPlaying( int mixChannelNumber )
     {
         if ((mixChannelNumber < 0) || (mixChannelNumber > mixChannels.size())) {
@@ -88,6 +133,9 @@ public class Audio
 
     private static native int audio_isPlaying( int mixChannelNumber );
 
+    /**
+     * Used internally from other Jame classes to call the JNI method. 
+     */
     static void stop( int mixChannelNumber )
     {
         audio_stop(mixChannelNumber);
@@ -95,10 +143,20 @@ public class Audio
 
     private static native void audio_stop( int mixChannelNumber );
 
+    /**
+     * Used internally from other Jame classes to call the JNI method. 
+     */
     static void fadeOut( int mixChannelNumber, int milliseconds )
     {
         audio_fadeOut(mixChannelNumber, milliseconds);
     }
 
     private static native void audio_fadeOut( int mixChannelNumber, int milliseconds );
+
+    /**
+     * Audio only contains static methods, so don't publish a constructor.
+     */
+    private Audio()
+    {
+    }
 }

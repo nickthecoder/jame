@@ -2,7 +2,7 @@ CC=gcc
 
 CFLAGS=-O3 -fPIC
 
-JAVA_INCLUDE=-I/usr/lib/jvm/java-6-openjdk-amd64/include
+JAVA_INCLUDE=-I/usr/lib/jvm/java-7-openjdk-amd64/include
 
 ARCH=`uname -m`
 

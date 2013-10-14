@@ -5,7 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
  ******************************************************************************/
-package uk.co.nickthecoder.jame;
+package uk.co.nickthecoder.jame.event;
 
 public interface Keys
 {

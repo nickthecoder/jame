@@ -7,9 +7,8 @@
  ******************************************************************************/
 package uk.co.nickthecoder.jame.event;
 
-import uk.co.nickthecoder.jame.ModifierKey;
 
-public class KeyboardEvent extends Event
+public class KeyboardEvent extends Event implements Keys
 {
     public int state;
     public int scanCode;
@@ -35,7 +34,7 @@ public class KeyboardEvent extends Event
     /**
      * Tests if the given ModifierKey is pressed. Note if modifier is NONE, then this returns true only if NO modifiers are pressed.
      * @param modifier
-     * @return
+     * @return true if the modifier key is pressed, false otherwise.
      */
     public boolean modifier( ModifierKey modifier )
     {

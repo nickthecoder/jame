@@ -1,5 +1,5 @@
-SET NATIVE_DIR=native\win32
-SET CLASSPATH=jame.jar
+SET NATIVE_DIR=lib\native\win32
+SET CLASSPATH=lib\jame.jar
 SET MAIN=uk.co.nickthecoder.jame.test.TestVideo
 
 #
@@ -10,4 +10,3 @@ SET MAIN=uk.co.nickthecoder.jame.test.TestVideo
 copy %NATIVE_DIR%\*.dll .
 
 java  -Djava.library.path="." -classpath "%CLASSPATH%" "%MAIN%"
-

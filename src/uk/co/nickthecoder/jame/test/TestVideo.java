@@ -124,7 +124,7 @@ public class TestVideo {
 		alien.blit(srcRect, alien2, 4,4, Surface.BlendMode.COMPOSITE);
 		alien2.blit(screen, 0, 200);
 
-		screen.flip();
+		Video.flip();
 
 		Events.enableKeyTranslation(true);
 
