@@ -111,7 +111,7 @@ public class TestVideo {
 		for (int y = -50; y < 50; y++) {
 			for (int x = -50; x < 50; x++) {
 				// System.out.println( "Testing x " + x );
-				if (!square.overlaps(alien, x, y, 64)) {
+				if (!square.pixelOverlap(alien, x, y, 64)) {
 					square.blit(screen, 350 + x, 200 + y);
 				}
 			}

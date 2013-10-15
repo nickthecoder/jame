@@ -205,7 +205,7 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1rotoZoom
     return dest == 0;
 }
 
-JNIEXPORT jboolean JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1overlaps
+JNIEXPORT jboolean JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1pixelOverlap
   (JNIEnv *env, jobject jsurface, jlong pA, jlong pB, jint dx, jint dy, jint alphaThreshold )
 {
     SDL_Surface *a = (SDL_Surface*) (intptr_t) pA;

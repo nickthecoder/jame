@@ -595,7 +595,7 @@ public final class Surface
 
     /**
      * Pixel based collision detection. Determines if any of a surface's non-transparent pixels
-     * overlap another surface's non-transparent pixels.
+     * touch another surface's non-transparent pixels.
      * <p>
      * Both Surfaces must be 32bits per pixel with alpha channels.
      * <p>
@@ -611,17 +611,22 @@ public final class Surface
      *        The Y offset for this surface. 0 would have the top edges of bother surfaces lined up.
      *        A positive number: other is higher than this.
      * @param alphaThreshold
-     *        A measure of how opaque the pixels have to be when considering if they overlap. A
-     *        value of 0 would skip even slightly transparent pixels. A value of 255 would treat
-     *        both Surfaces as if they were both solidly filled. A value around 60 works well.
-     * @return true if one or more sufficiently opaque pixels overlap.
+     *        A measure of how opaque the pixels have to be when considering if they touch. A value
+     *        of 0 would skip even slightly transparent pixels. A value of 255 would treat both
+     *        Surfaces as if they were both solidly filled. A value around 60 works well. The reason
+     *        for using an alphaTreshold is to avoid anti-aliased edges of objects causing a
+     *        collision with another anti-aliased edge, but the game player doesn't see that as
+     *        touching, they are still more than a pixel away. However, if you want to test for
+     *        collisions with very transparent objects - a soap bubble perhaps, then you might be
+     *        better off with a very low, or even zero alphaThreashold.
+     * @return true if one or more sufficiently opaque pixels touch.
      */
-    public boolean overlaps( Surface other, int dx, int dy, int alphaThreshold )
+    public boolean pixelOverlap( Surface other, int dx, int dy, int alphaThreshold )
     {
-        return this.surface_overlaps(this.pSurface, other.pSurface, dx, dy, alphaThreshold);
+        return this.surface_pixelOverlap(this.pSurface, other.pSurface, dx, dy, alphaThreshold);
     }
 
-    private native boolean surface_overlaps( long pA, long pB, int dx, int dy, int threshold );
+    private native boolean surface_pixelOverlap( long pA, long pB, int dx, int dy, int threshold );
 
     @Override
     public String toString()
