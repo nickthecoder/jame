@@ -133,6 +133,7 @@
                 <include name="test.sh"/>
                 <include name="icon.bmp"/>
                 <include name="resources/**/*.png"/>
+                <include name="resources/**/*.bmp"/>
                 <include name="resources/**/*.ttf"/>
             </fileset>
         </jar>
@@ -148,6 +149,7 @@
                  <include name="test.bat"/>
                  <include name="icon.bmp"/>
                  <include name="resources/**/*.png"/>
+                 <include name="resources/**/*.bmp"/>
                  <include name="resources/**/*.ttf"/>
                  <exclude name="src-native/win-dependencies"/>
             </fileset>

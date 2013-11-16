@@ -11,11 +11,17 @@ own Java 2D game engine, called Itchy. So if you want to write 2D games, check o
 Linux : Compile from Source
 ===========================
 
-You'll need a JDK (I used openjdk-7-jdk) and ant, and the development libraries for SDL :
+The package names listed here, are for Debian. Other distros may vary.
+
+You'll need a JDK (I used openjdk-7-jdk) and ant
+
+    aptitude install openjdk-7-jdk ant
+
+And the development libraries for SDL :
 
     aptitude install libsdl1.2-dev libsdl-image1.2-dev libsdl-gfx1.2-dev libsdl-ttf2.0-dev libsdl-mixer1.2-dev
 
-You'll also need the  build tools for the native c code :
+You'll also need the build tools for the native c code :
 
     aptitude install build-essential
 
@@ -24,7 +30,7 @@ Then building should be easy :
     ant clean
     ant
 
-This should compile the java and the native C code.
+This will compile the java and the native C code.
 
 =======
 Windows
@@ -47,7 +53,8 @@ SDL_image-1.2.12
 SDL_mixer-1.2.12
 SDL_ttf-2.0.11
 
-To use Jame under windows you need the following dlls in native/win32 :
+To use Jame under windows you need the following dlls in lib/native/win32 :
+(Use later versions when available).
 
 libFLAC-8.dll
 libfreetype-6.dll

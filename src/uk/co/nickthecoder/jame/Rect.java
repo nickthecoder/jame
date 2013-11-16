@@ -42,6 +42,16 @@ public class Rect
             this.height < y));
     }
 
+    public Rect intersection( Rect other )
+    {
+        int left = Math.max(this.x, other.x);
+        int right = Math.min(this.x + this.width, other.x + other.width);
+        int top = Math.max(this.y, other.y);
+        int bottom = Math.min(this.y + this.height, other.y + other.height);
+
+        return new Rect(left, top, right - left, bottom - top);
+    }
+
     @Override
     public String toString()
     {
