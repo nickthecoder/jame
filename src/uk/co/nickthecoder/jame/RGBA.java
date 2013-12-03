@@ -66,7 +66,7 @@ public final class RGBA
     public static RGBA parse( String str, boolean allowNull, boolean includeAlpha )
         throws JameException
     {
-        if (allowNull && (str == null) || ("".equals(str))) {
+        if (allowNull && ((str == null) || ("".equals(str)))) {
             return null;
         }
 
@@ -74,10 +74,12 @@ public final class RGBA
 
         if (str.startsWith("#")) {
             if (str.length() == 9) {
-                if (!includeAlpha) {
-                    throw new JameException("Cannot include an alpha value");
-                }
                 long color = Long.parseLong(str.substring(1), 16);
+                if (!includeAlpha) {
+                    if ((color & 0x000000ff) != 255) {
+                        throw new JameException("Cannot include an alpha value");
+                    }
+                }
                 return new RGBA((int) ((color & 0xff000000) >> 24),
                     (int) ((color & 0x00ff0000) >> 16),
                     (int) ((color & 0x0000ff00) >> 8), (int) (color & 0x000000ff));
