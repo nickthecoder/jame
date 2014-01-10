@@ -13,6 +13,7 @@ import uk.co.nickthecoder.jame.event.KeyboardEvent;
 import uk.co.nickthecoder.jame.event.MouseButtonEvent;
 import uk.co.nickthecoder.jame.event.MouseMotionEvent;
 import uk.co.nickthecoder.jame.event.QuitEvent;
+import uk.co.nickthecoder.jame.event.WindowEvent;
 
 public class TestVideo {
 	public static void main(String[] argv) throws Exception {
@@ -133,6 +134,12 @@ public class TestVideo {
 			if (event == null) {
 				continue;
 			}
+			
+			if (event instanceof WindowEvent) {
+			    WindowEvent we = (WindowEvent) event;
+			    System.out.println( "Window Event " + we.getType() + " : " + we.gain );
+			}
+			
 			if (event instanceof QuitEvent) {
 				System.out.println("Ok, I'll quit");
 				break;

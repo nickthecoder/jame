@@ -59,6 +59,10 @@ public final class Surface
 
     private int height;
 
+    private boolean alphaEnabled = true;
+    
+    private int alpha = 255;
+    
     private int flags;
 
     private boolean hasAlpha;
@@ -179,7 +183,19 @@ public final class Surface
     public Surface copy()
         throws JameRuntimeException
     {
-        return this.convert();
+        ensureNotFreed();
+        
+        Surface result = new Surface( getWidth(), getHeight(), hasAlphaChannel());
+        if ( hasAlphaChannel() ) {
+            //boolean alphaEn = getAlphaEnabled();
+            //setAlphaEnabled(false);
+            //blit(result);
+            //setAlphaEnabled(alphaEn);
+            blit(result,0,0,BlendMode.COMPOSITE);
+        } else {
+            blit(result);
+        }
+        return result;
     }
 
     /**
@@ -188,11 +204,13 @@ public final class Surface
      */
     public void free()
     {
-        totalExisting -= 1;
-        this.surface_free(this.pSurface);
-        this.pSurface = 0;
+        if ( this.pSurface != 0 ) {
+            totalExisting -= 1;
+            this.surface_free(this.pSurface);
+            this.pSurface = 0;
+        }
     }
-
+    
     private native int surface_free( long pSurface );
 
     /**
@@ -207,6 +225,13 @@ public final class Surface
         }
     }
 
+    private final void ensureNotFreed()
+    {
+        if ( this.pSurface == 0 ) {
+            throw new JameRuntimeException( "Surface has been freed" );
+        }
+    }
+    
     /**
      * @return The width in pixels of the Surface's bitmap image.
      */
@@ -242,8 +267,8 @@ public final class Surface
         if (this.hasAlpha) {
             throw new JameRuntimeException("Cannot setPerSurfaceAlpha on RGBA surfaces");
         } else {
-            Jame.checkRuntimeStatus(this.surface_setAlpha(this.pSurface, alpha == 255 ? 0
-                : SDL_SRCALPHA, alpha));
+            //Jame.checkRuntimeStatus(this.surface_setAlpha(this.pSurface, alpha == 255 ? 0 : SDL_SRCALPHA, alpha));
+            setAlpha( alpha != 255, alpha );
         }
     }
 
@@ -260,14 +285,24 @@ public final class Surface
         throws JameRuntimeException
     {
         if (this.hasAlpha) {
-            Jame.checkRuntimeStatus(this.surface_setAlpha(this.pSurface, value ? SDL_SRCALPHA : 0,
-                255));
+            //Jame.checkRuntimeStatus(this.surface_setAlpha(this.pSurface, value ? SDL_SRCALPHA : 0, 255));
+            setAlpha( value, 255 );
         } else {
             throw new JameRuntimeException(
                 "Cannot setAlphaEnabaled on RGB surfaces, only RGBA surfaces");
         }
     }
 
+    public int getPerSurfaceAlpha()
+    {
+        return this.alpha;
+    }
+    
+    public boolean getAlphaEnabled()
+    {
+        return this.alphaEnabled;
+    }
+    
     /**
      * Exposes SDL's setAlpha, but IMHO, it is clearer to use {@link #setPerSurfaceAlpha(int)} for RGB surfaces, and
      * {@link #setAlphaEnabled(boolean)} for RGBA surfaces.
@@ -278,10 +313,14 @@ public final class Surface
     public void setAlpha( boolean srcAlpha, int alpha )
         throws JameRuntimeException
     {
+        ensureNotFreed();
+
+        this.alphaEnabled = srcAlpha;
+        this.alpha = alpha;
         Jame.checkRuntimeStatus(this.surface_setAlpha(this.pSurface, srcAlpha ? SDL_SRCALPHA : 0,
             alpha));
     }
-
+    
     private native int surface_setAlpha( long pSurface, int flags, int alpha );
 
     /**
@@ -297,6 +336,8 @@ public final class Surface
      */
     public int getPixelColor( int x, int y )
     {
+        ensureNotFreed();
+        
         return this.surface_getPixelColor(this.pSurface, x, y);
     }
 
@@ -313,6 +354,8 @@ public final class Surface
      */
     public RGBA getPixelRGBA( int x, int y )
     {
+        ensureNotFreed();
+
         RGBA result = new RGBA(0, 0, 0);
         this.surface_getPixelRGBA(this.pSurface, result, x, y);
         return result;
@@ -333,6 +376,8 @@ public final class Surface
      */
     public void setPixel( int x, int y, int value )
     {
+        ensureNotFreed();
+
         this.surface_setPixel(this.pSurface, x, y, value);
     }
 
@@ -350,6 +395,8 @@ public final class Surface
      */
     public void setPixel( int x, int y, RGBA color )
     {
+        ensureNotFreed();
+
         this.surface_setPixel(this.pSurface, x, y, color.r, color.g, color.b, color.a);
     }
 
@@ -364,6 +411,8 @@ public final class Surface
     public void fill( int color )
         throws JameRuntimeException
     {
+        ensureNotFreed();
+
         Jame.checkRuntimeStatus(this.surface_fill(this.pSurface, 0, 0, this.width, this.height,
             color));
     }
@@ -379,6 +428,8 @@ public final class Surface
     public void fill( Rect rect, int color )
         throws JameRuntimeException
     {
+        ensureNotFreed();
+
         Jame.checkRuntimeStatus(this.surface_fill(this.pSurface, rect.x, rect.y, rect.width,
             rect.height, color));
     }
@@ -394,6 +445,8 @@ public final class Surface
     public void fill( RGBA color )
         throws JameRuntimeException
     {
+        ensureNotFreed();
+
         Jame.checkRuntimeStatus(this.surface_fill2(this.pSurface, 0, 0, this.width, this.height,
             color.r, color.g, color.b,
             color.a));
@@ -410,6 +463,8 @@ public final class Surface
     public void fill( Rect rect, RGBA color )
         throws JameRuntimeException
     {
+        ensureNotFreed();
+
         Jame.checkRuntimeStatus(this.surface_fill2(this.pSurface, rect.x, rect.y, rect.width,
             rect.height, color.r, color.g,
             color.b, color.a));
@@ -427,6 +482,8 @@ public final class Surface
     void flip()
         throws JameRuntimeException
     {
+        ensureNotFreed();
+
         Jame.checkRuntimeStatus(this.surface_flip(this.pSurface));
     }
 
@@ -476,6 +533,8 @@ public final class Surface
     public void blit( Surface dest, int x, int y, BlendMode blendMode )
         throws JameRuntimeException
     {
+        ensureNotFreed();
+
         if (blendMode == BlendMode.NONE) {
             Jame.checkRuntimeStatus(this.surface_blit(this.pSurface, dest.pSurface, x, y));
         } else {
@@ -497,6 +556,8 @@ public final class Surface
     public void blit( Rect srcRect, Surface dest, Rect destRect )
         throws JameRuntimeException
     {
+        ensureNotFreed();
+
         Jame.checkRuntimeStatus(this.surface_blit2(this.pSurface, srcRect.x, srcRect.y,
             srcRect.width, srcRect.height,
             dest.pSurface, destRect.x, destRect.y, destRect.width, destRect.height));
@@ -511,6 +572,8 @@ public final class Surface
     public void blit( Rect srcRect, Surface dest, int x, int y )
         throws JameRuntimeException
     {
+        ensureNotFreed();
+
         Jame.checkRuntimeStatus(this.surface_blit2(this.pSurface, srcRect.x, srcRect.y,
             srcRect.width, srcRect.height,
             dest.pSurface, x, y, srcRect.width, srcRect.height));
@@ -525,6 +588,8 @@ public final class Surface
     public void blit( Rect srcRect, Surface dest, int x, int y, BlendMode blendMode )
         throws JameRuntimeException
     {
+        ensureNotFreed();
+
         if (blendMode == BlendMode.NONE) {
             Jame.checkRuntimeStatus(this.surface_blit2(this.pSurface, srcRect.x, srcRect.y,
                 srcRect.width, srcRect.height,
@@ -556,6 +621,8 @@ public final class Surface
     public Surface convert()
         throws JameRuntimeException
     {
+        ensureNotFreed();
+
         Surface result = new Surface();
         Jame.checkRuntimeStatus(result.surface_displayFormat(this.pSurface));
         return result;
@@ -566,6 +633,8 @@ public final class Surface
     public Surface zoom( double zoomX, double zoomY, boolean smooth )
         throws JameRuntimeException
     {
+        ensureNotFreed();
+
         Surface result = new Surface();
 
         Jame.checkRuntimeStatus(this.surface_zoom(result, this.pSurface, zoomX, zoomY, smooth));
@@ -592,6 +661,8 @@ public final class Surface
     public Surface rotoZoom( double angle, double zoom, boolean smooth )
         throws JameRuntimeException
     {
+        ensureNotFreed();
+
         Surface result = new Surface();
 
         Jame.checkRuntimeStatus(this.surface_rotoZoom(result, this.pSurface, angle, zoom, smooth));
@@ -631,6 +702,8 @@ public final class Surface
      */
     public boolean pixelOverlap( Surface other, int dx, int dy, int alphaThreshold )
     {
+        ensureNotFreed();
+
         return this.surface_pixelOverlap(this.pSurface, other.pSurface, dx, dy, alphaThreshold);
     }
 

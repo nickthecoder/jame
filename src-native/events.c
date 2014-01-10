@@ -33,6 +33,23 @@ JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_events_1poll
             //printf( "Created instance %p\n", jevent );
             return jevent;
 
+        } else if ( type == SDL_ACTIVEEVENT ) {
+
+            jclass subClass = (*env)->FindClass( env, "uk/co/nickthecoder/jame/event/WindowEvent" );
+            //printf( "Found class %p\n", subClass );
+            jobject jevent = (*env)->AllocObject( env, subClass );
+            //printf( "Created instance %p\n", jevent );
+
+            jfieldID fid;
+
+            fid = (*env)->GetFieldID(env,subClass,"gain","I");
+            (*env)->SetIntField(env,jevent,fid, e.active.gain);
+
+            fid = (*env)->GetFieldID(env,subClass,"type","I");
+            (*env)->SetIntField(env,jevent,fid, e.active.state);
+
+            return jevent;
+
         } else if ( (type == SDL_KEYDOWN) || (type == SDL_KEYUP) ) {
             //printf( "Key up or down event\n" );
 

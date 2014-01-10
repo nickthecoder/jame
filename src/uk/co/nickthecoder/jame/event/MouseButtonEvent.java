@@ -9,7 +9,12 @@ package uk.co.nickthecoder.jame.event;
 
 public class MouseButtonEvent extends MouseEvent
 {
-
+    public static final int BUTTON_LEFT = 1;
+    public static final int BUTTON_MIDDLE = 2;
+    public static final int BUTTON_RIGHT = 3;
+    public static final int BUTTON_WHEELUP = 4;
+    public static final int BUTTON_WHEELDOWN = 5;
+    
     /**
      * The input device index
      */
