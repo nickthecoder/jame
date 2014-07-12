@@ -1,9 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2013 Nick Robinson
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Public License v3.0
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/gpl.html
+ * Copyright (c) 2013 Nick Robinson All rights reserved. This program and the accompanying materials are made available under the terms of
+ * the GNU Public License v3.0 which accompanies this distribution, and is available at http://www.gnu.org/licenses/gpl.html
  ******************************************************************************/
 package uk.co.nickthecoder.jame.event;
 
@@ -23,62 +20,61 @@ public enum ModifierKey
     NUM(0x1000),
     CAPS(0x2000),
     MODE(0x4000);
-    
-    public static final ModifierKeySet SHIFT = LSHIFT.or( RSHIFT );
-    public static final ModifierKeySet CTRL = LCTRL.or( RCTRL );
-    public static final ModifierKeySet ALT = LALT.or( RALT );
-    public static final ModifierKeySet META = LMETA.or( RMETA );
-    
+
+    public static final ModifierKeySet SHIFT = LSHIFT.or(RSHIFT);
+    public static final ModifierKeySet CTRL = LCTRL.or(RCTRL);
+    public static final ModifierKeySet ALT = LALT.or(RALT);
+    public static final ModifierKeySet META = LMETA.or(RMETA);
+
     public final int code;
-    
+
     ModifierKey( int code )
     {
-    	this.code = code;
-    }
-    
-    public boolean pressed( int flags )
-    {
-    	if ( this.code == 0 ){
-    		return flags == 0;
-    	} else {
-    	
-    		return (this.code & flags) != 0;
-    	
-    	}
-    }
-    
-    public ModifierKeySet or( ModifierKey other )
-    {
-    	return new ModifierKeySet( EnumSet.of( this, other ) );
+        this.code = code;
     }
 
-    
+    public boolean pressed( int flags )
+    {
+        if (this.code == 0) {
+            return flags == 0;
+        } else {
+
+            return (this.code & flags) != 0;
+
+        }
+    }
+
+    public ModifierKeySet or( ModifierKey other )
+    {
+        return new ModifierKeySet(EnumSet.of(this, other));
+    }
+
     public final class ModifierKeySet
     {
-    	private final int code;
-    	
-     	public ModifierKeySet( ModifierKey modifierKey )
-     	{
-     		this.code = modifierKey.code;
-     	}
-     	
-     	public ModifierKeySet( EnumSet<ModifierKey> modifierKeys )
-    	{
-     		int code = 0;
-     		for ( ModifierKey key : modifierKeys ) {
-     			code |= key.code;
-     		}
-     		this.code = code;
-    	}
-    	
-    	public int getCode() 
-    	{
-    		return this.code;
-    	}
-    	
+        private final int code;
+
+        public ModifierKeySet( ModifierKey modifierKey )
+        {
+            this.code = modifierKey.code;
+        }
+
+        public ModifierKeySet( EnumSet<ModifierKey> modifierKeys )
+        {
+            int code = 0;
+            for (ModifierKey key : modifierKeys) {
+                code |= key.code;
+            }
+            this.code = code;
+        }
+
+        public int getCode()
+        {
+            return this.code;
+        }
+
         public boolean pressed( int flags )
         {
-    		return (this.code & flags) != 0;
+            return (this.code & flags) != 0;
         }
     }
 }
