@@ -60,9 +60,9 @@ public final class Surface
     private int height;
 
     private boolean alphaEnabled = true;
-    
+
     private int alpha = 255;
-    
+
     private int flags;
 
     private boolean hasAlpha;
@@ -71,16 +71,17 @@ public final class Surface
     {
         return totalCreated;
     }
-    
+
     public static int totalExisting()
     {
         return totalExisting;
     }
-    
+
     public static int totalFreedByGC()
     {
         return totalFreedByGC;
     }
+
     /**
      * For internal use only. We need to create blank Surface objects, which can then be filled in by the JNI calls such as surface_setMode.
      */
@@ -184,14 +185,22 @@ public final class Surface
         throws JameRuntimeException
     {
         ensureNotFreed();
-        
-        Surface result = new Surface( getWidth(), getHeight(), hasAlphaChannel());
-        if ( hasAlphaChannel() ) {
-            //boolean alphaEn = getAlphaEnabled();
-            //setAlphaEnabled(false);
-            //blit(result);
-            //setAlphaEnabled(alphaEn);
-            blit(result,0,0,BlendMode.COMPOSITE);
+
+        Surface result = new Surface(getWidth(), getHeight(), hasAlphaChannel());
+        if (hasAlphaChannel()) {
+            /*
+            The following SHOULD work (and would be more efficient), but I sometimes get nasty crashes whenever I use this approach.
+            Othertimes, the blit just doesn't work.
+            I tried tracking down the bug, but my C debugging skills were no match for it!
+            I have a hunch the problem is in my version of SDL, but I can't be sure.
+            */
+            /*
+            boolean alphaEn = getAlphaEnabled();
+            setAlphaEnabled(false);
+            blit(result);
+            setAlphaEnabled(alphaEn);
+            */
+            blit(result, 0,0, BlendMode.COMPOSITE);
         } else {
             blit(result);
         }
@@ -204,13 +213,13 @@ public final class Surface
      */
     public void free()
     {
-        if ( this.pSurface != 0 ) {
+        if (this.pSurface != 0) {
             totalExisting -= 1;
             this.surface_free(this.pSurface);
             this.pSurface = 0;
         }
     }
-    
+
     private native int surface_free( long pSurface );
 
     /**
@@ -227,11 +236,11 @@ public final class Surface
 
     private final void ensureNotFreed()
     {
-        if ( this.pSurface == 0 ) {
-            throw new JameRuntimeException( "Surface has been freed" );
+        if (this.pSurface == 0) {
+            throw new JameRuntimeException("Surface has been freed");
         }
     }
-    
+
     /**
      * @return The width in pixels of the Surface's bitmap image.
      */
@@ -267,8 +276,8 @@ public final class Surface
         if (this.hasAlpha) {
             throw new JameRuntimeException("Cannot setPerSurfaceAlpha on RGBA surfaces");
         } else {
-            //Jame.checkRuntimeStatus(this.surface_setAlpha(this.pSurface, alpha == 255 ? 0 : SDL_SRCALPHA, alpha));
-            setAlpha( alpha != 255, alpha );
+            // Jame.checkRuntimeStatus(this.surface_setAlpha(this.pSurface, alpha == 255 ? 0 : SDL_SRCALPHA, alpha));
+            setAlpha(alpha != 255, alpha);
         }
     }
 
@@ -285,8 +294,7 @@ public final class Surface
         throws JameRuntimeException
     {
         if (this.hasAlpha) {
-            //Jame.checkRuntimeStatus(this.surface_setAlpha(this.pSurface, value ? SDL_SRCALPHA : 0, 255));
-            setAlpha( value, 255 );
+            Jame.checkRuntimeStatus(this.surface_setAlpha(this.pSurface, value ? SDL_SRCALPHA : 0, 255));
         } else {
             throw new JameRuntimeException(
                 "Cannot setAlphaEnabaled on RGB surfaces, only RGBA surfaces");
@@ -297,12 +305,12 @@ public final class Surface
     {
         return this.alpha;
     }
-    
+
     public boolean getAlphaEnabled()
     {
         return this.alphaEnabled;
     }
-    
+
     /**
      * Exposes SDL's setAlpha, but IMHO, it is clearer to use {@link #setPerSurfaceAlpha(int)} for RGB surfaces, and
      * {@link #setAlphaEnabled(boolean)} for RGBA surfaces.
@@ -317,10 +325,9 @@ public final class Surface
 
         this.alphaEnabled = srcAlpha;
         this.alpha = alpha;
-        Jame.checkRuntimeStatus(this.surface_setAlpha(this.pSurface, srcAlpha ? SDL_SRCALPHA : 0,
-            alpha));
+        Jame.checkRuntimeStatus(this.surface_setAlpha(this.pSurface, srcAlpha ? SDL_SRCALPHA : 0, alpha));
     }
-    
+
     private native int surface_setAlpha( long pSurface, int flags, int alpha );
 
     /**
@@ -337,7 +344,7 @@ public final class Surface
     public int getPixelColor( int x, int y )
     {
         ensureNotFreed();
-        
+
         return this.surface_getPixelColor(this.pSurface, x, y);
     }
 
@@ -664,7 +671,6 @@ public final class Surface
         ensureNotFreed();
 
         Surface result = new Surface();
-
         Jame.checkRuntimeStatus(this.surface_rotoZoom(result, this.pSurface, angle, zoom, smooth));
 
         return result;
@@ -712,6 +718,6 @@ public final class Surface
     @Override
     public String toString()
     {
-        return "Surface (" + getWidth() + "," + getHeight() + ")";
+        return "Surface (" + getWidth() + "," + getHeight() + ") " + this.hashCode() + " -> " + this.pSurface;
     }
 }
