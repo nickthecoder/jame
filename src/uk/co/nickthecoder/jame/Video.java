@@ -47,6 +47,12 @@ public final class Video
     public static final int FULLSCREEN = 0x80000000;
 
     /**
+     * Allow the window to be resized by the user. Will cause a ResizeEvent to be fired, during which Video.setMode should
+     * be called with the new width and height to actually make the window change size.
+     */
+    public static final int RESIZABLE = 0x00000010;
+
+    /**
      * Initialise the SDL Video subsystem
      */
     public static void init()
