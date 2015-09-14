@@ -115,6 +115,14 @@ public final class Surface
 
     private native int surface_load( String filename );
 
+    private native int surface_saveAsPNG( long pSurface, String filename );
+    
+    public void saveAsPNG( String filename )
+        throws JameException
+    {
+        Jame.checkStatus( this.surface_saveAsPNG( this.pSurface, filename ) );
+    }
+
     /**
      * Creates a blank surface of a given size.
      * 
@@ -714,4 +722,5 @@ public final class Surface
     {
         return "Surface (" + getWidth() + "," + getHeight() + ")";
     }
+    
 }
