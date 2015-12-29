@@ -8,7 +8,7 @@
 #include <jni.h>
 #include <SDL.h>
 #include <SDL_mixer.h>
-#include "audio.h"
+#include "include/uk_co_nickthecoder_jame_Audio.h"
 
 // open
 JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Audio_audio_1open

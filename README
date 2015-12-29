@@ -7,9 +7,22 @@ Jame is NOT a game engine, it is only thin layer. However, the reason that I cre
 own Java 2D game engine, called Itchy. So if you want to write 2D games, check out Itchy!
 
 
-===========================
-Linux : Compile from Source
-===========================
+Build Tool
+==========
+
+I usually use Gradle as my build tool instead of ant, but Gradle's support for C++ is flaky at the moment.
+I'm using Gradle 2.0, and there are massive differences between 2.0 and 2.1 in regard to C++ compilation.
+So I have chosen to stick with Ant for now.
+
+However, for the sake of my game engine project "Itchy", I want Jame to use gradle, so that I can easily
+install itchy.jar into my local cache, and use it as a dependency. Therefore there is also a gradle build
+script, but this can only handle the java part of Jame, and not the native code, or the "javah" target.
+
+Compile from Source
+===================
+
+Linux
+-----
 
 The package names listed here, are for Debian. Other distros may vary.
 
@@ -32,9 +45,8 @@ Then building should be easy :
 
 This will compile the java and the native C code.
 
-=======
 Windows
-=======
+-------
 
 I'm a linux programmer, and have developed this code almost 100% in linux. I have compiled it using Windows,
 and it works fine. However, I don't know the best way to set up the build environment, or how to include dependent
@@ -75,9 +87,14 @@ smpeg.dll
 zlib1.dll
 
 
-============================
 Running the Test Application
 ============================
 
+From linux :
+
 java -Djava.library.path=native/`uname -m` -cp jame.jar uk.co.nickthecoder.jame.test.TestVideo
+
+From Windows :
+
+java -Djava.library.path=native/win-32 -cp jame.jar uk.co.nickthecoder.jame.test.TestVideo
 

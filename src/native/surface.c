@@ -12,7 +12,7 @@
 #include <SDL_image.h>
 #include <SDL_rotozoom.h>
 
-#include "surface.h"
+#include "include/uk_co_nickthecoder_jame_Surface.h"
 
 SDL_Surface* Java_uk_co_nickthecoder_jame_Video_getExampleAlphaSurface( void );
 

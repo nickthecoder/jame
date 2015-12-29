@@ -8,7 +8,7 @@
 #include <jni.h>
 #include <SDL.h>
 #include <SDL_mixer.h>
-#include "sound.h"
+#include "include/uk_co_nickthecoder_jame_Sound.h"
 
 void initialiseSound( JNIEnv *env, jobject jsound, Mix_Chunk *chunk )
 {

@@ -1,0 +1,98 @@
+version = '1.1'
+group = 'uk.co.nickthecoder'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'eclipse'
+apply plugin: 'application'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+subprojects {
+
+    group = 'uk.co.nickthecoder'
+    version = '1.1'
+
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+    
+    apply plugin: 'java'
+    apply plugin: 'maven'
+}
+
+dependencies {
+}
+
+task generateJame_h(type:Exec) {
+    def classpath = sourceSets.main.output.classesDir
+    def nativeIncludes = "src/native/include"
+    commandLine "javah", "-d", "$nativeIncludes", "-classpath", "$classpath", "uk.co.nickthecoder.jame.Jame"
+}
+task generateSound_h(type:Exec) {
+    def classpath = sourceSets.main.output.classesDir
+    def nativeIncludes = "src/native/include"
+    commandLine "javah", "-d", "$nativeIncludes", "-classpath", "$classpath", "uk.co.nickthecoder.jame.Sound"
+}
+task generateVideo_h(type:Exec) {
+    def classpath = sourceSets.main.output.classesDir
+    def nativeIncludes = "src/native/include"
+    commandLine "javah", "-d", "$nativeIncludes", "-classpath", "$classpath", "uk.co.nickthecoder.jame.Video"
+}
+task generateSurface_h(type:Exec) {
+    def classpath = sourceSets.main.output.classesDir
+    def nativeIncludes = "src/native/include"
+    commandLine "javah", "-d", "$nativeIncludes", "-classpath", "$classpath", "uk.co.nickthecoder.jame.Surface"
+}
+task generateTrueTypeFont_h(type:Exec) {
+    def classpath = sourceSets.main.output.classesDir
+    def nativeIncludes = "src/native/include"
+    commandLine "javah", "-d", "$nativeIncludes", "-classpath", "$classpath", "uk.co.nickthecoder.jame.TrueTypeFont"
+}
+task generateEvents_h(type:Exec) {
+    def classpath = sourceSets.main.output.classesDir
+    def nativeIncludes = "src/native/include"
+    commandLine "javah", "-d", "$nativeIncludes", "-classpath", "$classpath", "uk.co.nickthecoder.jame.Events"
+}
+task generateAudio_h(type:Exec) {
+    def classpath = sourceSets.main.output.classesDir
+    def nativeIncludes = "src/native/include"
+    commandLine "javah", "-d", "$nativeIncludes", "-classpath", "$classpath", "uk.co.nickthecoder.jame.Audio"
+}
+
+task generateJNIHeaders {
+    dependsOn generateJame_h, generateVideo_h, generateSound_h, generateSurface_h, generateTrueTypeFont_h, generateEvents_h, generateAudio_h
+}
+
+task makeNativeLinux(type:Exec) {
+    def java_home=System.properties.'java.home'
+    workingDir "src/native"
+    commandLine "/usr/bin/make", "JAVA_INCLUDE=-I ${java_home}/../include -I ${java_home}/../include/linux -I ${java_home}/include -I ${java_home}/include/linux"
+
+    dependsOn generateJNIHeaders
+}
+
+project('jame-native-linux_x86_64')
+{
+    jar {
+        from "../build/libs/native/linux_x86_64"
+    }
+}
+
+/*
+project('jame-native-win32')
+{
+    jar {
+        from "../build/libs/native/win32"
+    }
+}
+
+*/
+

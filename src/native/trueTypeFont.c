@@ -8,7 +8,7 @@
 #include <jni.h>
 #include <SDL.h>
 #include <SDL_ttf.h>
-#include "trueTypeFont.h"
+#include "include/uk_co_nickthecoder_jame_TrueTypeFont.h"
 
 // init
 JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_TrueTypeFont_trueTypeFont_1init

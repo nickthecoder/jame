@@ -1,6 +1,7 @@
 *~
 *.o
 /jame.jar
+.gradle
 /.project
 /.classpath
 /.settings
@@ -9,13 +10,6 @@
 /build
 /lib/*
 /bin
-/src-native/libjame.so
-/src-native/win32-dependencies/
-/src-native/audio.h
-/src-native/events.h
-/src-native/jame.h
-/src-native/sound.h
-/src-native/surface.h
-/src-native/trueTypeFont.h
-/src-native/video.h
 /docs/api
+/src/native/include/
+/src/native/win32-dependencies/
