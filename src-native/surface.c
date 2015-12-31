@@ -14,8 +14,7 @@
 #include <png.h>
 
 #include "surface.h"
-
-static int png_save_surface(const char *filename, SDL_Surface *surf);
+#include "savepng.h"
 
 SDL_Surface* Java_uk_co_nickthecoder_jame_Video_getExampleAlphaSurface( void );
 
@@ -95,13 +94,13 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1load
     return surface == 0;
 }
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1savePNG
-  (JNIEnv *env, jlong pSurface, jstring jfilename)
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1saveAsPNG
+  (JNIEnv *env, jobject jSurface, jlong pSurface, jstring jfilename )
 {
     const char *filename = (*env)->GetStringUTFChars(env, jfilename, 0);
     struct SDL_Surface *surface = (SDL_Surface*) (intptr_t) pSurface;
 
-    int result = png_save_surface( filename, surface );
+    int result = SDL_SavePNG( surface, filename );
     (*env)->ReleaseStringUTFChars(env, jfilename, filename);
     return result;   
 }
@@ -409,92 +408,3 @@ JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1setPixel__J
     SDL_UnlockSurface( surface );
         
 }
-
-static int png_colortype_from_surface(SDL_Surface *surface)
-{
-    int colortype = PNG_COLOR_MASK_COLOR; /* grayscale not supported */
-
-    if (surface->format->palette)
-        colortype |= PNG_COLOR_MASK_PALETTE;
-    else if (surface->format->Amask)
-        colortype |= PNG_COLOR_MASK_ALPHA;
-        
-    return colortype;
-}
-
-static void png_user_warn(png_structp ctx, png_const_charp str)
-{
-    fprintf(stderr, "libpng: warning: %s\n", str);
-}
-
-static void png_user_error(png_structp ctx, png_const_charp str)
-{
-    fprintf(stderr, "libpng: error: %s\n", str);
-}
-/*
-   png_save_surface
-   Copyright (C) 2006 Angelo "Encelo" Theodorou
-   This is part of "Mars, Land of No Mercy" SDL examples, 
-   you can find other examples on http://marsnomercy.org
-*/
-static int png_save_surface(const char *filename, SDL_Surface *surf)
-{
-    FILE *fp;
-    png_structp png_ptr;
-    png_infop info_ptr;
-    int i, colortype;
-    png_bytep *row_pointers;
-
-    /* Opening output file */
-    fp = fopen(filename, "wb");
-    if (fp == NULL) {
-        perror("fopen error");
-        return -1;
-    }
-
-    /* Initializing png structures and callbacks */
-    png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, 
-        NULL, png_user_error, png_user_warn);
-    if (png_ptr == NULL) {
-        printf("png_create_write_struct error!\n");
-        return -1;
-    }
-
-    info_ptr = png_create_info_struct(png_ptr);
-    if (info_ptr == NULL) {
-        png_destroy_write_struct(&png_ptr, (png_infopp)NULL);
-        printf("png_create_info_struct error!\n");
-        exit(-1);
-    }
-
-    if (setjmp(png_jmpbuf(png_ptr))) {
-        png_destroy_write_struct(&png_ptr, &info_ptr);
-        fclose(fp);
-        exit(-1);
-    }
-
-    png_init_io(png_ptr, fp);
-
-    colortype = png_colortype_from_surface(surf);
-    png_set_IHDR(png_ptr, info_ptr, surf->w, surf->h, 8, colortype, PNG_INTERLACE_NONE, 
-        PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
-
-    /* Writing the image */
-    png_write_info(png_ptr, info_ptr);
-    png_set_packing(png_ptr);
-
-    row_pointers = (png_bytep*) malloc(sizeof(png_bytep)*surf->h);
-    for (i = 0; i < surf->h; i++)
-        row_pointers[i] = (png_bytep)(Uint8 *)surf->pixels + i*surf->pitch;
-    png_write_image(png_ptr, row_pointers);
-    png_write_end(png_ptr, info_ptr);
-
-    /* Cleaning out... */
-    free(row_pointers);
-    png_destroy_write_struct(&png_ptr, &info_ptr);
-    fclose(fp);
-
-    return 0;
-}
-
-
