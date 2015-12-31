@@ -12,6 +12,7 @@
 /bin
 /docs/api
 /.gradle
+/jame-native-linux_x86_64/
 /src/native/include/
 /src/native/win32-dependencies/
 
