@@ -8,8 +8,8 @@
 #include <jni.h>
 #include <SDL.h>
 #include <SDL_video.h>
-#include "video.h"
-#include "surface.h"
+#include "include/uk_co_nickthecoder_jame_Video.h"
+#include "include/uk_co_nickthecoder_jame_Surface.h"
 
 static SDL_Surface *exampleAlphaSurface;
 

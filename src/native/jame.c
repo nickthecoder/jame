@@ -8,7 +8,7 @@
 #include <jni.h>
 #include <SDL.h>
 #include <SDL_video.h>
-#include "jame.h"
+#include "include/uk_co_nickthecoder_jame_Jame.h"
 
 JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Jame_jame_1init
   (JNIEnv *env, jclass class )

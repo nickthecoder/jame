@@ -8,7 +8,7 @@
 #include <jni.h>
 #include <SDL.h>
 #include <SDL_events.h>
-#include "events.h"
+#include "include/uk_co_nickthecoder_jame_Events.h"
 
 
 JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_events_1poll
@@ -130,6 +130,22 @@ JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_events_1poll
 
             return jevent;
 
+        } else if ( type == SDL_VIDEORESIZE ) {
+
+            jclass subClass = (*env)->FindClass( env, "uk/co/nickthecoder/jame/event/ResizeEvent" );
+            //printf( "Found class %p\n", subClass );
+            jobject jevent = (*env)->AllocObject( env, subClass );
+            //printf( "Created instance %p\n", jevent );
+
+            jfieldID fid;
+
+            fid = (*env)->GetFieldID(env,subClass,"width","I");
+            (*env)->SetIntField(env,jevent,fid, e.resize.w);
+
+            fid = (*env)->GetFieldID(env,subClass,"height","I");
+            (*env)->SetIntField(env,jevent,fid, e.resize.h);
+
+            return jevent;
         }
     }
 }

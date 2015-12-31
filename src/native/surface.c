@@ -13,14 +13,13 @@
 #include <SDL_rotozoom.h>
 #include <png.h>
 
-#include "surface.h"
+#include "include/uk_co_nickthecoder_jame_Surface.h"
 #include "savepng.h"
 
 SDL_Surface* Java_uk_co_nickthecoder_jame_Video_getExampleAlphaSurface( void );
 
 void initialiseSurface( JNIEnv *env, jobject jsurface, SDL_Surface *surface )
 {
-    //printf( "Initialising surface %p - %i,%i\n", surface, surface->w, surface->h );
     if ( surface ) {
 
         jclass clazz = (*env)->GetObjectClass(env, jsurface);
@@ -44,12 +43,20 @@ void initialiseSurface( JNIEnv *env, jobject jsurface, SDL_Surface *surface )
     }
 }
 
-
+// In complex situations, this function seems to cause nasty crashes, but I haven't managed to
+// create a SIMPLE test case which still fails. My best guess is a bug in my version of SDL, but
+// I can't be sure.
 JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1setAlpha
   (JNIEnv *env, jobject jsurface, jlong pSurface, jint flags, jint alpha )
 {
     struct SDL_Surface *surface = (SDL_Surface*) (intptr_t) pSurface;
-    return SDL_SetAlpha( surface, flags, alpha );
+    
+    //int result = SDL_SetAlpha( surface, 0x10000, alpha ); // Works
+    //int result = SDL_SetAlpha( surface, 0, alpha ); // Fails
+    //int result = SDL_SetAlpha( surface, 0, 255 ); // Fails
+    //int result = SDL_SetAlpha( surface, 0, 0 ); // Fails
+    int result = SDL_SetAlpha( surface, flags, alpha );
+    return result;
 }
 
 
@@ -63,7 +70,6 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1free
 JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1create
   (JNIEnv *env, jobject jsurface, jint width, jint height, jboolean alpha, jboolean hardware)
 {
-    //printf( "Creating an empty surface %i, %i\n", width, height );
     Uint32 flags = ( hardware ? SDL_HWSURFACE : SDL_SWSURFACE);
 
     SDL_PixelFormat *fmt;
@@ -121,9 +127,7 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1fill2
 JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1fill
   (JNIEnv *env, jobject jsurface, jlong pSurface, jint x, jint y, jint width, jint height, jint color)
 {
-    // printf( "Surface to fill %p\n", pSurface );
     struct SDL_Surface *surface = (SDL_Surface*) (intptr_t) pSurface;
-    //printf( "Filling %d,%d, %d,%d with color %x %x\nLoad", x, y, width, height, color, surface->format->Amask );
     struct SDL_Rect rect = { .x=x, .y=y, .w=width, .h=height };
 
     return SDL_FillRect( surface, &rect, color );
@@ -172,14 +176,6 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1blit3
     struct SDL_Rect srcRect = { .x=sx, .y=sy, .w=swidth, .h=sheight };
     struct SDL_Rect destRect = { .x=dx, .y=dy, .w=dwidth, .h=dheight };
 
-    /*
-    printf( "C Blend %d : (%d,%d-%d,%d) %p (%d,%d-%d %d) %p\n\n",
-        flags,
-        srcRect.x, srcRect.y, srcRect.w, srcRect.h,
-        src,
-        destRect.x, destRect.x, destRect.w, destRect.h,
-        dest );
-    */
     return pygame_Blit( src, &srcRect, dest, &destRect, flags );
 }
 
@@ -211,7 +207,6 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1rotoZoom
   (JNIEnv *env, jobject jsrc, jobject jdest, jlong pSrc, jdouble angle, jdouble zoom, jboolean smooth )
 {
     SDL_Surface *src = (SDL_Surface*) (intptr_t) pSrc;
-
     SDL_Surface *dest = rotozoomSurface( src, angle, zoom, smooth );
     initialiseSurface( env, jdest, dest );
 
@@ -287,12 +282,8 @@ JNIEXPORT jboolean JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1pixelOv
     Uint32 *aStart = ( (Uint32*) a->pixels ) + ax + ay * aPitch;
     Uint32 *bStart = ( (Uint32*) b->pixels ) + bx + by * bPitch;
 
-    //printf( "a : pixels %p start %p\n", a->pixels, aStart );
-    //printf( "b : pixels %p start %p\n", b->pixels, bStart );
-
     int x, y;
     for ( y = 0; y < height; y ++ ) {
-        //printf( "row\n" );
         for ( x = 0; x < width; x ++ ) {
             int aAlpha =  aMask & (aStart[ x + y * aPitch ]);
             if ( aAlpha >= aThresh ) {
@@ -325,11 +316,9 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1getPixelCol
         return 0;
     }
     SDL_LockSurface( surface );
-    //printf( "Pixels location %p %d %d\n", surface->pixels, x, y );
     Uint32 value = ( (Uint32*) (surface->pixels) )[ x + y * surface->pitch / 4 ];
     SDL_UnlockSurface( surface );
 
-    //printf( "Pixel color : %x %x\n", value, surface->format->Amask );
     return value;
 }
 
@@ -342,11 +331,8 @@ JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1getPixelRGB
         return;
     }
     SDL_LockSurface( surface );
-    //printf( "Pixels location %p (%d,%d)\n", surface->pixels, x, y );
     Uint32 value = ( (Uint32*) (surface->pixels) )[ x + y * surface->pitch / 4 ];
     SDL_UnlockSurface( surface );
-
-    //printf( "Pixel color : %x\n", value );
 
     jclass clazz = (*env)->GetObjectClass(env, jrgba);
     jfieldID fid;
@@ -363,9 +349,6 @@ JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1getPixelRGB
     fid = (*env)->GetFieldID(env,clazz,"a","I");
     (*env)->SetIntField(env,jrgba,fid, (value & surface->format->Amask) >> surface->format->Ashift );
 
-    //printf( "R : %d, %x, %d\n", (value & surface->format->Rmask) >> surface->format->Rshift, surface->format->Rmask, surface->format->Rshift );
-    //printf( "G : %d, %x, %d\n", (value & surface->format->Gmask) >> surface->format->Gshift, surface->format->Gmask, surface->format->Gshift );
-    //printf( "B : %d, %x, %d\n", (value & surface->format->Bmask) >> surface->format->Bshift, surface->format->Bmask, surface->format->Bshift );
 }
 
 // Set Pixel

@@ -124,6 +124,10 @@ public class TestVideo
         alien.blit(srcRect, alien2, 4, 4, Surface.BlendMode.COMPOSITE);
         alien2.blit(screen, 0, 200);
 
+        // Test Surface.copy, blitting the result to the top left
+        Surface alienCopy = alien.copy();
+        alienCopy.blit(screen, 30,20 );
+        
         Video.flip();
 
         Events.enableKeyTranslation(true);
