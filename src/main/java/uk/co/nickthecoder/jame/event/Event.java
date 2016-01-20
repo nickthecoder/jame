@@ -12,4 +12,16 @@ public class Event
     public static final int STATE_RELEASED = 0;
     public static final int STATE_PRESSED = 1;
 
+    /**
+     * In a complex system where many objects are offered the chance to handle an event,
+     * it is handy to have some way to state that the event has been handled, and should
+     * not be propagated to any other objects.
+     * 
+     * This does so by throwing a StopPropagation.
+     * It is up to your own event loop to catch this exception, and do the appropriate thing.
+     */
+    public void stopPropagation()
+    {
+    	throw new StopPropagation();
+    }
 }
