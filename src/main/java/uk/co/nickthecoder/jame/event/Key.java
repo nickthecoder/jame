@@ -7,8 +7,10 @@
  ******************************************************************************/
 package uk.co.nickthecoder.jame.event;
 
-public enum KeysEnum
-{
+import java.util.HashMap;
+
+public enum Key
+{    
     BACKSPACE( 8, "Backspace" ),
     TAB( 9, "Tab" ),
     CLEAR( 12, "Clear" ),
@@ -248,17 +250,31 @@ public enum KeysEnum
     EURO( 321, "€" ),
     UNDO( 322, "Undo" );
     
+    // Reverse-lookup map for getting a day from an abbreviation
+    private static final HashMap<Integer, Key> lookup = new HashMap<Integer, Key>();
+
+    static {
+        for (Key keysEnum : Key.values()) {
+            lookup.put(keysEnum.value, keysEnum);
+        }
+    }
+    
+    public static Key findKey( int keyCode )
+    {
+        return lookup.get(keyCode);
+    }
+    
     public final int value;
     
     public final String label;
     
-    private KeysEnum(int value)
+    private Key(int value)
     {
         this.value = value;
         this.label = this.name();
     }
     
-    private KeysEnum(int value, String label)
+    private Key(int value, String label)
     {
         this.value = value;
         this.label = label;

@@ -10,9 +10,9 @@ package uk.co.nickthecoder.jame.event;
 
 public class KeyboardEvent extends Event implements Keys
 {
-    public int state;
-    public int scanCode;
-    public int symbol;
+    public int state; // STATE_PRESSED or STATE_RELEASED
+    public int scanCode; // Not very useful
+    public int symbol; // This is the most useful value
     public int modifiers;
 
     /**
@@ -21,6 +21,12 @@ public class KeyboardEvent extends Event implements Keys
      */
     public char c;
 
+    /**
+     * Maps the key's symbol to a Key. Lazily evaluated.
+     */
+    private Key key;
+    
+    
     public boolean isPressed()
     {
         return this.state == STATE_PRESSED;
@@ -51,6 +57,14 @@ public class KeyboardEvent extends Event implements Keys
     public boolean modifier( ModifierKey.ModifierKeySet modifiers )
     {
         return modifiers.pressed( this.modifiers );
+    }
+    
+    public Key getKey()
+    {
+        if (this.key == null) {
+            this.key = Key.findKey( symbol );
+        }
+        return this.key;
     }
 
     @Override

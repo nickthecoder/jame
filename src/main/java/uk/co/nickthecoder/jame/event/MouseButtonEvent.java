@@ -12,25 +12,28 @@ public class MouseButtonEvent extends MouseEvent
     public static final int BUTTON_LEFT = 1;
     public static final int BUTTON_MIDDLE = 2;
     public static final int BUTTON_RIGHT = 3;
-    public static final int BUTTON_WHEELUP = 4;
-    public static final int BUTTON_WHEELDOWN = 5;
-    
+    public static final int BUTTON_WHEEL_UP = 4;
+    public static final int BUTTON_WHEEL_DOWN = 5;
+    public static final int BUTTON_WHEEL_LEFT = 6;
+    public static final int BUTTON_WHEEL_RIGHT = 7;
+
     /**
      * The input device index
      */
     public int which;
 
     /**
-     * The mouse button index (BUTTON_LEFT, BUTTON_MIDDLE, BUTTON_RIGHT,
-     * BUTTON_WHEELUP, BUTTON_WHEELDOWN)
+     * The mouse button index (BUTTON_LEFT, BUTTON_MIDDLE, BUTTON_RIGHT, BUTTON_WHEELUP, BUTTON_WHEELDOWN)
      */
     public int button;
 
     /**
-     * SDL_PRESSED or SDL_RELEASED. You can also use isPressed and/or isReleased
-     * for brevity
+     * SDL_PRESSED or SDL_RELEASED. You can also use isPressed and/or isReleased for brevity
      */
     public int state;
+    
+    private MouseButton mouseButton;
+    
 
     public boolean isPressed()
     {
@@ -42,6 +45,14 @@ public class MouseButtonEvent extends MouseEvent
         return this.state == STATE_RELEASED;
     }
 
+    public MouseButton getMouseButton()
+    {
+        if (this.mouseButton == null) {
+            this.mouseButton = MouseButton.findButton(this.button);
+        }
+        return this.mouseButton;
+    }
+    
     public String toString()
     {
         return "MouseButtonEven{ which=" + which + ", button=" + button + ", state=" + state + ", x=" + x + ", y=" + y
