@@ -32,7 +32,7 @@ JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_events_1poll
             jobject jevent = (*env)->AllocObject( env, subClass );
             //printf( "Created instance %p\n", jevent );
             return jevent;
-
+        /*
         } else if ( type == SDL_ACTIVEEVENT ) {
 
             jclass subClass = (*env)->FindClass( env, "uk/co/nickthecoder/jame/event/WindowEvent" );
@@ -49,7 +49,7 @@ JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_events_1poll
             (*env)->SetIntField(env,jevent,fid, e.active.state);
 
             return jevent;
-
+        */
         } else if ( (type == SDL_KEYDOWN) || (type == SDL_KEYUP) ) {
             //printf( "Key up or down event\n" );
 
@@ -72,9 +72,11 @@ JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_events_1poll
             fid = (*env)->GetFieldID(env,subClass,"modifiers","I");
             (*env)->SetIntField(env,jevent,fid, e.key.keysym.mod);
 
+            /*
             fid = (*env)->GetFieldID(env,subClass,"c","C");
             (*env)->SetIntField(env,jevent,fid, e.key.keysym.unicode);
-
+            */
+            
             return jevent;
 
         } else if ( (type == SDL_MOUSEBUTTONDOWN) || (type == SDL_MOUSEBUTTONUP) ) {
@@ -129,7 +131,7 @@ JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_events_1poll
             (*env)->SetIntField(env,jevent,fid, e.motion.yrel);
 
             return jevent;
-
+        /**
         } else if ( type == SDL_VIDEORESIZE ) {
 
             jclass subClass = (*env)->FindClass( env, "uk/co/nickthecoder/jame/event/ResizeEvent" );
@@ -146,15 +148,19 @@ JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_events_1poll
             (*env)->SetIntField(env,jevent,fid, e.resize.h);
 
             return jevent;
+        */
         }
+        
     }
 }
 
+/*
 JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Events_events_1enableUnicode
   (JNIEnv *env, jclass jevents, jboolean value )
 {
     SDL_EnableUNICODE( value );
 }
+*/
 
 JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Events_events_1keyboardRepeat
   (JNIEnv *env, jclass jevents, jint delay, jint repeat )

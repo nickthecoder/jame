@@ -1,0 +1,91 @@
+Converting JAME to SDL2
+=======================
+
+ToDo
+====
+
+Fill in Renderer constants
+
+event.c commented out code because ACTIVEEVENT and SDL_VIDEORESIZE are no longer valid.
+implement key presses using new SDL events (which is unicode compliant - Yah!)
+
+
+Last
+====
+
+Compile under windows
+
+Functions
+=========
+
+        SDL_DestroyWindow
+    SDL_GetWindowPosition
+    SDL_GetWindowSize
+    SDL_HideWindow
+    SDL_MaximizeWindow
+    SDL_MinimizeWindow
+    SDL_RaiseWindow
+    SDL_RestoreWindow
+    SDL_SetWindowFullscreen
+    SDL_SetWindowIcon
+    SDL_SetWindowInputFocus
+    SDL_SetWindowPosition
+    SDL_SetWindowResizable
+    SDL_SetWindowSize
+    SDL_SetWindowTitle
+    SDL_ShowMessageBox
+    SDL_ShowSimpleMessageBox
+    SDL_ShowWindow
+    SDL_VideoQuit
+
+Display and Window Management
+-----------------------------
+    SDL_GetClosestDisplayMode
+    SDL_GetCurrentDisplayMode
+    SDL_GetDesktopDisplayMode
+    SDL_GetDisplayBounds
+    SDL_GetDisplayDPI
+    SDL_GetDisplayMode
+    SDL_GetDisplayName
+    SDL_GetDisplayUsableBounds
+    SDL_GetGrabbedWindow
+    SDL_GetNumDisplayModes
+    SDL_GetNumVideoDisplays
+    SDL_GetNumVideoDrivers
+    SDL_GetVideoDriver
+    SDL_GetWindowBordersSize
+    SDL_GetWindowBrightness
+    SDL_GetWindowData
+    SDL_GetWindowDisplayIndex
+    SDL_GetWindowDisplayMode
+    SDL_GetWindowFlags
+    SDL_GetWindowFromID
+    SDL_GetWindowGammaRamp
+    SDL_GetWindowGrab
+    SDL_GetWindowID
+    SDL_GetWindowMaximumSize
+    SDL_GetWindowMinimumSize
+    SDL_GetWindowOpacity
+    SDL_GetWindowPixelFormat
+    SDL_GetWindowSurface
+    SDL_GetWindowTitle
+    SDL_GetWindowWMInfo
+
+    SDL_IsScreenSaverEnabled
+    SDL_SetWindowBordered
+    SDL_SetWindowBrightness
+    SDL_SetWindowData
+    SDL_SetWindowDisplayMode
+
+    SDL_SetWindowGammaRamp
+    SDL_SetWindowGrab
+    SDL_SetWindowHitTest
+
+    SDL_SetWindowMaximumSize
+    SDL_SetWindowMinimumSize
+    SDL_SetWindowModalFor
+    SDL_SetWindowOpacity
+    SDL_UpdateWindowSurface
+    SDL_UpdateWindowSurfaceRects
+    SDL_VideoInit
+

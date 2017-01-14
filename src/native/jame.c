@@ -25,7 +25,7 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Jame_jame_1initSubsystem
 JNIEXPORT jstring JNICALL Java_uk_co_nickthecoder_jame_Jame_jame_1getError
   (JNIEnv *env, jclass class )
 {
-    char* message = SDL_GetError();
+    const char* message = SDL_GetError();
     return( (*env)->NewStringUTF(env, message));
 }
 

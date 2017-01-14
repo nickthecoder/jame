@@ -16,12 +16,6 @@ public class KeyboardEvent extends Event implements Keys
     public int modifiers;
 
     /**
-     * The character that was just typed. Only populated during a key down
-     * event, and only if Events.enableKeyTranslation has been set to true.
-     */
-    public char c;
-
-    /**
      * Maps the key's symbol to a Key. Lazily evaluated.
      */
     private Key key;

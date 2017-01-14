@@ -4,7 +4,14 @@
  ******************************************************************************/
 package uk.co.nickthecoder.jame.test;
 
-import uk.co.nickthecoder.jame.*;
+import uk.co.nickthecoder.jame.Events;
+import uk.co.nickthecoder.jame.RGBA;
+import uk.co.nickthecoder.jame.Rect;
+import uk.co.nickthecoder.jame.Renderer;
+import uk.co.nickthecoder.jame.Surface;
+import uk.co.nickthecoder.jame.Texture;
+import uk.co.nickthecoder.jame.TrueTypeFont;
+import uk.co.nickthecoder.jame.Window;
 import uk.co.nickthecoder.jame.event.Event;
 import uk.co.nickthecoder.jame.event.KeyboardEvent;
 import uk.co.nickthecoder.jame.event.MouseButtonEvent;
@@ -14,16 +21,15 @@ import uk.co.nickthecoder.jame.event.WindowEvent;
 
 public class TestVideo
 {
-    public static void main( String[] argv ) throws Exception
+    public static void main(String[] argv) throws Exception
     {
-        Video.init();
-        Video.setWindowTitle("Jame TestVideo");
-        Video.setWindowIcon("icon.bmp");
+        Window.init();
+        Window window = new Window("Jame TestVideo", 640, 480, true, 0);
+        // Video.setWindowIcon("icon.bmp");
+        System.out.println("Window is " + window.getWidth() + " by " + window.getHeight());
 
-        Surface screen = Video.setMode(640, 480);
+        Surface screen = new Surface(640, 480, false);
 
-        System.out.println("Screen is " + screen.getWidth() + " by "
-            + screen.getHeight());
         screen.fill(new Rect(100, 100, 300, 300), 123456789);
         screen.fill(new Rect(50, 50, 200, 200), new RGBA(255, 0, 0));
         screen.fill(new Rect(250, 75, 200, 300), new RGBA(0, 0, 255, 128));
@@ -31,24 +37,24 @@ public class TestVideo
         // channel
 
         Surface alien = new Surface("resources/alien.png");
-        Surface convertedAlien = alien.convert();
+        // Surface convertedAlien = alien.convert();
 
         System.out.println("Alien is " + alien.getWidth() + " by "
             + alien.getHeight());
         alien.blit(screen, 40, 70);
         alien.blit(new Rect(0, 0, 20, 20), screen, new Rect(80, 200, 20, 20));
         alien.blit(new Rect(0, 20, 38, 18), screen, new Rect(80, 240, 38, 18));
-        convertedAlien.blit(new Rect(20, 0, 18, 38), screen, new Rect(130, 200,
+        alien.blit(new Rect(20, 0, 18, 38), screen, new Rect(130, 200,
             18, 38));
 
         alien.blit(screen, -10, 70);
 
         // Tests SDL's setAlpha
         // These methods will do what you'd expect for an RGBA surface.
-        alien.setAlphaEnabled(false);
-        alien.blit(screen, 100, 150);
+        // alien.setAlphaEnabled(false);
+        // alien.blit(screen, 100, 150);
 
-        alien.setAlphaEnabled(true);
+        // alien.setAlphaEnabled(true);
         alien.blit(screen, 140, 150);
 
         RGBA red = new RGBA(255, 0, 0);
@@ -92,13 +98,13 @@ public class TestVideo
         // Tests SDL's setAlpha for RGB surfaces (RGBA was done above with the
         // alien).
         helloShaded.setPerSurfaceAlpha(128);
-        helloShaded.blit(screen, 430, 120);
+        // helloShaded.blit(screen, 430, 120);
 
         helloShaded.setPerSurfaceAlpha(64);
-        helloShaded.blit(screen, 430, 160);
+        // helloShaded.blit(screen, 430, 160);
 
         helloShaded.setPerSurfaceAlpha(255);
-        helloShaded.blit(screen, 430, 200);
+        // helloShaded.blit(screen, 430, 200);
 
         System.out.println("Testing overlapping");
         Surface square = new Surface(10, 10, true);
@@ -126,11 +132,18 @@ public class TestVideo
 
         // Test Surface.copy, blitting the result to the top left
         Surface alienCopy = alien.copy();
-        alienCopy.blit(screen, 30,20 );
-        
-        Video.flip();
+        alienCopy.blit(screen, 30, 20);
 
-        Events.enableKeyTranslation(true);
+        // Video.flip();
+
+        Renderer renderer = new Renderer(window);
+        renderer.setDrawColor(RGBA.BLACK);
+        renderer.clear();
+
+        Texture screenTexture = new Texture(renderer, screen);
+        renderer.copy(screenTexture, new Rect(0, 0, screen.getWidth(), screen.getHeight()), 0, 0);
+
+        renderer.present();
 
         while (true) {
             Event event = Events.poll();

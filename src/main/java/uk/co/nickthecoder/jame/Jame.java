@@ -28,7 +28,7 @@ class Jame
 
     private static boolean initialised = false;
 
-    static void init()
+    public static void init()
         throws JameRuntimeException
     {
         if (!initialised) {

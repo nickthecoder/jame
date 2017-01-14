@@ -6,7 +6,6 @@
 package uk.co.nickthecoder.jame;
 
 import uk.co.nickthecoder.jame.event.Event;
-import uk.co.nickthecoder.jame.event.KeyboardEvent;
 
 public class Events
 {
@@ -34,20 +33,6 @@ public class Events
     }
 
     private static native Event events_poll();
-
-    /**
-     * Enables or disables the translation from low-level keyboard symbols and the more meaningful
-     * character values. When enabled, keyboard events will set the {@link KeyboardEvent#c
-     * KeyboardEvent.c} attribute to the character that has just been typed, taking into account the
-     * modifiers. For example, if the shift key is down, and the "a" key is pressed, then
-     * KeyboardEvent.c will contain 'A'. With key translations disabled, KeyboardEvent.c is not set.
-     */
-    public static void enableKeyTranslation( boolean enable )
-    {
-        events_enableUnicode(enable);
-    }
-
-    private static native void events_enableUnicode( boolean enable );
 
     /**
      * When typing, if you hold down a key long enough, you will get it to auto-repeat, that is, it

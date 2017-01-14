@@ -10,13 +10,11 @@
 #include <SDL.h>
 #include <SDL_video.h>
 #include <SDL_image.h>
-#include <SDL_rotozoom.h>
+#include <SDL2_rotozoom.h>
 #include <png.h>
 
 #include "include/uk_co_nickthecoder_jame_Surface.h"
 #include "savepng.h"
-
-SDL_Surface* Java_uk_co_nickthecoder_jame_Video_getExampleAlphaSurface( void );
 
 void initialiseSurface( JNIEnv *env, jobject jsurface, SDL_Surface *surface )
 {
@@ -43,20 +41,10 @@ void initialiseSurface( JNIEnv *env, jobject jsurface, SDL_Surface *surface )
     }
 }
 
-// In complex situations, this function seems to cause nasty crashes, but I haven't managed to
-// create a SIMPLE test case which still fails. My best guess is a bug in my version of SDL, but
-// I can't be sure.
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1setAlpha
-  (JNIEnv *env, jobject jsurface, jlong pSurface, jint flags, jint alpha )
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1setSurfaceAlphaMod
+  (JNIEnv *env, jobject jobj, jlong pSurface, jint alpha)
 {
-    struct SDL_Surface *surface = (SDL_Surface*) (intptr_t) pSurface;
-    
-    //int result = SDL_SetAlpha( surface, 0x10000, alpha ); // Works
-    //int result = SDL_SetAlpha( surface, 0, alpha ); // Fails
-    //int result = SDL_SetAlpha( surface, 0, 255 ); // Fails
-    //int result = SDL_SetAlpha( surface, 0, 0 ); // Fails
-    int result = SDL_SetAlpha( surface, flags, alpha );
-    return result;
+    return SDL_SetSurfaceAlphaMod( (SDL_Surface*) pSurface, alpha );
 }
 
 
@@ -68,23 +56,13 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1free
 }
 
 JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1create
-  (JNIEnv *env, jobject jsurface, jint width, jint height, jboolean alpha, jboolean hardware)
+  (JNIEnv *env, jobject jsurface, jint width, jint height, jboolean alpha)
 {
-    Uint32 flags = ( hardware ? SDL_HWSURFACE : SDL_SWSURFACE);
-
-    SDL_PixelFormat *fmt;
-    if ( alpha ) {
-        fmt = Java_uk_co_nickthecoder_jame_Video_getExampleAlphaSurface()->format;
-    } else {
-        SDL_Surface *screen = SDL_GetVideoSurface();
-        fmt = screen->format;
-    }
-
-    SDL_Surface *result = SDL_CreateRGBSurface( flags, width, height, fmt->BitsPerPixel, fmt->Rmask, fmt->Gmask, fmt->Bmask, fmt->Amask );
-
-    initialiseSurface( env, jsurface, result );
+    SDL_Surface* pSurface = SDL_CreateRGBSurface(0, width, height, alpha ? 32 : 24, 0, 0, 0, 0);
     
-    return result == 0;
+    initialiseSurface( env, jsurface, pSurface );
+    
+    return pSurface == 0;
 }
 
 JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1load
@@ -95,7 +73,7 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1load
     SDL_Surface *surface = IMG_Load( filename );
     initialiseSurface( env, jsurface, surface );
 
-   (*env)->ReleaseStringUTFChars(env, jfilename, filename);
+    (*env)->ReleaseStringUTFChars(env, jfilename, filename);
 
     return surface == 0;
 }
@@ -177,19 +155,6 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1blit3
     struct SDL_Rect destRect = { .x=dx, .y=dy, .w=dwidth, .h=dheight };
 
     return pygame_Blit( src, &srcRect, dest, &destRect, flags );
-}
-
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1displayFormat
-  (JNIEnv *env, jobject jsurface, jlong pSrc)
-{
-    struct SDL_Surface *src = (SDL_Surface*) (intptr_t) pSrc;
-    struct SDL_Surface *result = (src->format->Amask == 0) ?
-        SDL_DisplayFormat( src ) :
-        SDL_DisplayFormatAlpha( src );
-
-    initialiseSurface( env, jsurface, result );
-
-    return result == 0;
 }
 
 JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1zoom

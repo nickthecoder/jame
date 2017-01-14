@@ -1,4 +1,4 @@
-version = '1.1'
+version = '2.0'
 group = 'uk.co.nickthecoder'
 
 repositories {
@@ -18,8 +18,8 @@ targetCompatibility = 1.7
 
 subprojects {
 
+    version = '2.0'
     group = 'uk.co.nickthecoder'
-    version = '1.1'
 
     repositories {
         mavenCentral()
@@ -43,15 +43,25 @@ task generateSound_h(type:Exec) {
     def nativeIncludes = "src/native/include"
     commandLine "javah", "-d", "$nativeIncludes", "-classpath", "$classpath", "uk.co.nickthecoder.jame.Sound"
 }
-task generateVideo_h(type:Exec) {
+task generateWindow_h(type:Exec) {
     def classpath = sourceSets.main.output.classesDir
     def nativeIncludes = "src/native/include"
-    commandLine "javah", "-d", "$nativeIncludes", "-classpath", "$classpath", "uk.co.nickthecoder.jame.Video"
+    commandLine "javah", "-d", "$nativeIncludes", "-classpath", "$classpath", "uk.co.nickthecoder.jame.Window"
+}
+task generateRenderer_h(type:Exec) {
+    def classpath = sourceSets.main.output.classesDir
+    def nativeIncludes = "src/native/include"
+    commandLine "javah", "-d", "$nativeIncludes", "-classpath", "$classpath", "uk.co.nickthecoder.jame.Renderer"
 }
 task generateSurface_h(type:Exec) {
     def classpath = sourceSets.main.output.classesDir
     def nativeIncludes = "src/native/include"
     commandLine "javah", "-d", "$nativeIncludes", "-classpath", "$classpath", "uk.co.nickthecoder.jame.Surface"
+}
+task generateTexture_h(type:Exec) {
+    def classpath = sourceSets.main.output.classesDir
+    def nativeIncludes = "src/native/include"
+    commandLine "javah", "-d", "$nativeIncludes", "-classpath", "$classpath", "uk.co.nickthecoder.jame.Texture"
 }
 task generateTrueTypeFont_h(type:Exec) {
     def classpath = sourceSets.main.output.classesDir
@@ -70,7 +80,7 @@ task generateAudio_h(type:Exec) {
 }
 
 task generateJNIHeaders {
-    dependsOn generateJame_h, generateVideo_h, generateSound_h, generateSurface_h, generateTrueTypeFont_h, generateEvents_h, generateAudio_h
+    dependsOn generateJame_h, generateWindow_h, generateSound_h, generateSurface_h, generateTexture_h, generateTrueTypeFont_h, generateEvents_h, generateAudio_h
 }
 
 task makeNativeLinux(type:Exec) {
