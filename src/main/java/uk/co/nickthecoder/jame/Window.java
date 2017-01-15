@@ -1,5 +1,7 @@
 package uk.co.nickthecoder.jame;
 
+import uk.co.nickthecoder.jame.Texture.Access;
+
 /**
  * A wrapper around the SDL2 SDL_Window structure.
  * 
@@ -93,6 +95,11 @@ public class Window
 
     private int height;
 
+    /**
+     * Set in Renderer's constructor.
+     */
+    Renderer renderer;
+
     private static PixelFormat recommendedPixelFormat = PixelFormat.RGBX8888;
 
     private static PixelFormat recommendedPixelFormatAlpha = PixelFormat.RGBA8888;
@@ -150,6 +157,23 @@ public class Window
             System.err.println("Failed to get PixelFormat with alpha channel from " + recommendedPixelFormat);
             // Ignore, keep to the default.
         }
+    }
+
+    /**
+     * Creates a streaming texture with a suitable pixel format for this window.
+     * 
+     * @param width
+     * @param height
+     * @return
+     */
+    public Texture createTexture(int width, int height, boolean alpha)
+    {
+        return new Texture(this.renderer, width, height, recommendedPixelFormat(alpha), Access.STREAMING);
+    }
+
+    public Surface createSurface(int width, int height, boolean alpha)
+    {
+        return new Surface(width, height, recommendedPixelFormat(alpha));
     }
 
     /**
@@ -329,4 +353,8 @@ public class Window
 
     private native int window_getPixelFormat(long pWindow);
 
+    public String toString()
+    {
+        return "Window(" + width + "," + height + ") " + getPixelFormat();
+    }
 }

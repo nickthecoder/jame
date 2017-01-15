@@ -2,7 +2,6 @@ package uk.co.nickthecoder.jame;
 
 public class PixelFormat
 {
-
     public enum PixelType
     {
         UNKNOWN, INDEX1, INDEX4, INDEX8, PACKED8, PACKED16, PACKED32,
@@ -153,8 +152,16 @@ public class PixelFormat
             | (bits << 8) | bytes;
     }
 
+    public boolean hasAlpha()
+    {
+        return (order == PackedOrder.RGBA) || (order == PackedOrder.ARGB) ||
+            (order == PackedOrder.ABGR) || (order == PackedOrder.BGRA) ||
+            (order == ArrayOrder.ABGR) || (order == ArrayOrder.ARGB) ||
+            (order == ArrayOrder.BGRA || (order == ArrayOrder.RGBA));
+    }
+
     /**
-     * Used to get a PixelFormat that is compatable with {@link Window#getPixelFormat()}, but also has an alpha channel
+     * Used to get a PixelFormat that is compatible with {@link Window#getPixelFormat()}, but also has an alpha channel
      * 
      * @return A PixelFormat similar to this one, but with an alpha channel.
      * 
@@ -184,4 +191,9 @@ public class PixelFormat
         return false;
     }
 
+    public String toString()
+    {
+        return "PixelFormat(T:" + this.pixelType + " L:" + this.layout
+            + " O:" + this.order + " Bits:" + this.bits + " Bytes:" + this.bytes + ")";
+    }
 }

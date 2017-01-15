@@ -4,11 +4,27 @@ Converting JAME to SDL2
 ToDo
 ====
 
-Fill in Renderer constants
+Rebuild all JNI headers, and check that the .c files haven't missed any functions.
+    Order the function in the .c files in the same order as the .h
+
+Expand the test application
+    Menu screen. Press a key to try each  sub screen...
+    
+    Rectangles draw on Surfaces and Renderers
+    Sprites blitted to the screen using Surfaces and Textures
+    Clipping rectangles for Surface and Textures
+    Renderering to a Texture
+    Info : Window size, position, Pixel format
+    Fullscreen windows (both kinds)
+    Mouse events - drag a rectangle within a window. (Have lots of them just for fun?)
+    Keyboard events : up, down, meta, shift etc.
+    Text events. Display what is being typed in. Try unicode characters such as °.
+
 
 event.c commented out code because ACTIVEEVENT and SDL_VIDEORESIZE are no longer valid.
 implement key presses using new SDL events (which is unicode compliant - Yah!)
 
+Implement Text events
 
 Last
 ====

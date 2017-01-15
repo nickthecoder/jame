@@ -55,12 +55,40 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1free
     SDL_FreeSurface( surface );
 }
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1create
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1create__IIZ
   (JNIEnv *env, jobject jsurface, jint width, jint height, jboolean alpha)
 {
     SDL_Surface* pSurface = SDL_CreateRGBSurface(0, width, height, alpha ? 32 : 24, 0, 0, 0, 0);
     
     initialiseSurface( env, jsurface, pSurface );
+    
+    return pSurface == 0;
+}
+
+
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1create__III
+  (JNIEnv *env, jobject jSurface, jint width, jint height, jint format)
+{
+    int bits = (format >> 8) & 0xff;
+    
+    // SDL_CreateRGBSurfaceWithFormat is only a DRAFT, therefore we can't use that...
+    //SDL_Surface* pSurface = SDL_CreateRGBSurfaceWithFormat( 0, width, height, bits, format );
+    
+    // So instead, we'll use the clunky old version...
+    Uint32 Rmask;
+    Uint32 Gmask;
+    Uint32 Bmask;
+    Uint32 Amask;
+    int bpp;
+    SDL_PixelFormatEnumToMasks(format, &bpp, &Rmask, &Gmask, &Bmask, &Amask);
+    // If is is Packed32, then the number of bits must be 32, even without an alpha channel
+    if ( ((format >> 24) & 0xf ) == 6 ) {
+        bits = 32;
+    }
+    SDL_Surface* pSurface = SDL_CreateRGBSurface(0, width, height, bits, Rmask, Gmask, Bmask, Amask );
+
+    // And then do the rest as we normaly would.
+    initialiseSurface( env, jSurface, pSurface );
     
     return pSurface == 0;
 }
@@ -331,11 +359,6 @@ JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1setPixel__J
     SDL_UnlockSurface( surface );
 }
 
-/*
- * Class:     uk_co_nickthecoder_jame_Surface
- * Method:    surface_setPixel
- * Signature: (JIILuk/co/nickthecoder/jame/RGBA;)V
- */
 JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1setPixel__JIIIIII
   (JNIEnv *env, jobject jSurface, jlong pSurface, jint x, jint y, jint r, jint g, jint b, jint a )
 {
@@ -356,3 +379,11 @@ JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1setPixel__J
     SDL_UnlockSurface( surface );
         
 }
+
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1getPixelFormat
+  (JNIEnv *env, jobject jobj, jlong pSurface)
+{
+    return ((SDL_Surface*) pSurface)->format->format;
+}
+
+

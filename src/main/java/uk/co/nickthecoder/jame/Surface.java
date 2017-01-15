@@ -156,6 +156,16 @@ public final class Surface
 
     private native int surface_create(int width, int height, boolean alpha);
 
+    public Surface(int width, int height, PixelFormat format)
+        throws JameRuntimeException
+    {
+        this();
+        Jame.checkRuntimeStatus(this.surface_create(width, height, format.value));
+        this.hasAlpha = format.hasAlpha();
+    }
+
+    private native int surface_create(int width, int height, int format);
+
     private native int surface_saveAsPNG(long pSurface, String filename);
 
     public void saveAsPNG(String filename)
@@ -264,7 +274,7 @@ public final class Surface
 
     public void setPerSurfaceAlpha(int alpha) throws JameRuntimeException
     {
-        Jame.checkRuntimeStatus(this.surface_setSurfaceAlphaMod(pSurface, alpha));        
+        Jame.checkRuntimeStatus(this.surface_setSurfaceAlphaMod(pSurface, alpha));
     }
 
     /*
@@ -799,10 +809,16 @@ public final class Surface
     private native boolean surface_pixelOverlap(long pA, long pB, int dx,
         int dy, int threshold);
 
+    public PixelFormat getPixelFormat()
+    {
+        return new PixelFormat(surface_getPixelFormat(pSurface));
+    }
+
+    private native int surface_getPixelFormat(long pSurface);
+
     @Override
     public String toString()
     {
-        return "Surface (" + getWidth() + "," + getHeight() + ") "
-            + this.hashCode() + " -> " + this.pSurface;
+        return "Surface (" + getWidth() + "," + getHeight() + ") " + getPixelFormat();
     }
 }

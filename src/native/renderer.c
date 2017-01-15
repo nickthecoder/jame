@@ -40,6 +40,36 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1setClip
     return SDL_RendererSetClipRect( (SDL_Renderer*) pRenderer, &rect );
 }
 
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1setViewport
+  (JNIEnv *env, jobject jobj, jlong pRenderer, jint x, jint y, jint width, jint height)
+{
+    SDL_Rect rect = { .x=x, .y=y, .w=width, .h=height };
+    return SDL_SetRendererViewport( (SDL_Renderer*) pRenderer, &rect );
+}
+
+JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1getViewport
+  (JNIEnv *env, jobject jobj, jlong pRenderer, jobject jRect)
+{
+    SDL_Rect rect;
+    SDL_GetRendererViewport( (SDL_Renderer*) pRenderer, &rect );
+    
+    jclass clazz = (*env)->GetObjectClass(env, jRect);
+    jfieldID fid;
+
+    fid = (*env)->GetFieldID(env,clazz,"x","I");
+    (*env)->SetIntField(env,jRect,fid,rect.x);
+
+    fid = (*env)->GetFieldID(env,clazz,"y","I");
+    (*env)->SetIntField(env,jRect,fid,rect.y);
+
+    fid = (*env)->GetFieldID(env,clazz,"width","I");
+    (*env)->SetIntField(env,jRect,fid,rect.w);
+
+    fid = (*env)->GetFieldID(env,clazz,"height","I");
+    (*env)->SetIntField(env,jRect,fid,rect.h);
+
+}
+
 JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1setLogicalSize
   (JNIEnv *env, jobject obj, jlong pRenderer, jint x, jint y)
 {
@@ -92,26 +122,78 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1clear
 }
 
 JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1copy
-  (JNIEnv *env, jobject jobj, jlong pRenderer, jlong pTexture, jint sx, jint sy, jint sw, jint sh, jint dx, jint dy, jint dw, jint dh)
+  (JNIEnv *env, jobject jobj, jlong pRenderer, jlong pTexture,
+    jint srcX, jint srcY, jint srcWidth, jint srcHeight,
+    jint dstX, jint dstY, jint dstWidth, jint dstHeight)
 {
-    SDL_Rect src = {.x=sx, .y=sy, .w=sw, .h=sh };
-    SDL_Rect dest = { .x=dx, .y=dy, .w=dw, .h=dh };
+    SDL_Rect src = { .x=srcX, .y=srcY, .w=srcWidth, .h=srcHeight };
+    SDL_Rect dst = { .x=dstX, .y=dstY, .w=dstWidth, .h=dstHeight };
     
-    int result = SDL_RenderCopy( (SDL_Renderer*) pRenderer, (SDL_Texture*) pTexture, &src, &dest );
+    int result = SDL_RenderCopy( (SDL_Renderer*) pRenderer, (SDL_Texture*) pTexture, &src, &dst );
 }
 
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1copyEx
+  (JNIEnv *env, jobject jobj, jlong pRenderer, jlong pTexture,
+  jint srcX, jint srcY, jint srcWidth, jint srcHeight,
+  jint dstX, jint dstY, jint dstWidth, jint dstHeight,
+  jdouble angle, jint ox, jint oy, jint flip)
+{
+    SDL_Rect src = {.x=srcX, .y=srcY, .w=srcWidth, .h=srcHeight };
+    SDL_Rect dst = { .x=dstX, .y=dstY, .w=dstWidth, .h=dstHeight };
+    SDL_Point center = {.x=ox, .y=oy };
+
+    return SDL_RenderCopyEx( (SDL_Renderer*) pRenderer, (SDL_Texture*) pTexture, &src, &dst,
+        angle, &center, flip );
+}
 
 
 JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1setDrawBlendMode
   (JNIEnv *env, jobject jobj, jlong pRenderer, jint mode )
 {
-    return SDL_SetRendererDrawBlendMode( (SDL_Renderer*) pRenderer, mode );
+    SDL_BlendMode blendMode = mode;
+    return SDL_SetRenderDrawBlendMode( (SDL_Renderer*) pRenderer, mode );
 }
 
 JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1getDrawBlendMode
   (JNIEnv *env, jobject jobj, jlong pRenderer)
 {
-    return SDL_GetRendererDrawBlendMode( (SDL_Renderer*) pRenderer );
+    SDL_BlendMode blendMode;
+    if ( SDL_GetRenderDrawBlendMode( (SDL_Renderer*) pRenderer, &blendMode ) != 0) {
+        return -1;
+    }
+    return blendMode;
+}
+
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1setTarget
+  (JNIEnv *env, jobject jobj, jlong pRenderer, jlong pTexture )
+{
+    return SDL_RenderTarget( (SDL_Renderer*) pRenderer, (SDL_Texture*) pTexture );
+}
+
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Texture_texture_1setColorMod
+  (JNIEnv *env, jobject jobj, jlong pTexture, jint r, jint g, jint b)
+{
+    return SDL_TextureColorMod( (SDL_Texture*) pTexture, r, g, b );
+}
+
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1drawRect
+  (JNIEnv *env, jobject jobj, jlong pRenderer, jint x, jint y, jint width, jint height)
+{
+    SDL_Rect rect = { .x = x, .y = y, .w=width, .h=height };
+    return SDL_RenderDrawRect( (SDL_Renderer*) pRenderer, &rect );
+}
+
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1fillRect
+  (JNIEnv *env, jobject jobj, jlong pRenderer, jint x, jint y, jint width, jint height)
+{
+    SDL_Rect rect = { .x = x, .y = y, .w=width, .h=height };
+    return SDL_RenderFillRect( (SDL_Renderer*) pRenderer, &rect );
+}
+
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1drawLine
+  (JNIEnv *env, jobject jobj, jlong pRenderer, jint x1, jint y1, jint x2, jint y2)
+{
+    return SDL_RenderDrawLine( (SDL_Renderer*) pRenderer, x1, y1, x2, y2 );
 }
 
 

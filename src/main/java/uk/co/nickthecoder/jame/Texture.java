@@ -23,27 +23,15 @@ public class Texture
     private int width;
 
     private int height;
-
-    /**
-     * Creates a texture with suitable as a rendering target (using {@link Access#TARGET}).
-     * The pixel format is chosen automatically. At the moment it is hard-coded to {@link PixelFormat#RGBA8888},
-     * but will be based on the pixel format of the {@link Window} that was last opened.
-     * TODO automate pixel format selection.
-     * 
-     * @param renderer
-     * @param width
-     * @param height
-     */
-    public Texture(Renderer renderer, int width, int height)
-    {
-        this(renderer, width, height, PixelFormat.RGBA8888, Access.TARGET);
-    }
+    
+    private PixelFormat pixelFormat;
 
     public Texture(Renderer renderer, int width, int height, PixelFormat pixelFormat, Access access)
     {
         pTexture = texture_create(renderer.getPointer(), pixelFormat.value, access.ordinal(), width, height);
         this.width = width;
         this.height = height;
+        this.pixelFormat = pixelFormat;
     }
 
     private native long texture_create(long pRenderer, int format, int access, int width, int height);
@@ -53,6 +41,7 @@ public class Texture
         pTexture = texture_createFromSurface(renderer.getPointer(), surface.getPointer());
         this.width = surface.getWidth();
         this.height = surface.getHeight();
+        this.pixelFormat = surface.getPixelFormat();
     }
 
     private native long texture_createFromSurface(long pRenderer, long pSurface);
@@ -96,6 +85,13 @@ public class Texture
         return height;
     }
 
+    public PixelFormat getPixelFormat()
+    {
+        return pixelFormat;
+    }
+    
+    
+    
     public void setBlendMode(BlendMode blendMode)
     {
         Jame.checkRuntimeStatus(renderer_setBlendMode(pTexture, blendMode.ordinal()));
@@ -114,4 +110,48 @@ public class Texture
 
     private native int renderer_getBlendMode(long pTexture);
 
+    public void setAlpha(int alpha)
+    {
+        Jame.checkRuntimeStatus(texture_setAlpha(pTexture, alpha));
+    }
+
+    private native int texture_setAlpha(long pTexture, int alpha);
+
+    public int getAlpha()
+    {
+        return texture_getAlpha(pTexture);
+    }
+
+    private native int texture_getAlpha(long pTexture);
+
+    private RGBA colorMod;
+
+    // TODO Check that the byte casts work, despite bytes being SIGNED in java.
+    public void setColorMod(RGBA color)
+    {
+        Jame.checkRuntimeStatus(texture_setColorMod(pTexture, (byte) color.r, (byte) color.g, (byte) color.b));
+        colorMod = color;
+    }
+
+    private native int texture_setColorMod(long pTexture, byte r, byte g, byte b);
+
+    public RGBA getColorMod()
+    {
+        return colorMod;
+    }
+
+    public void update(Surface surface)
+    {
+        Jame.checkRuntimeStatus(texture_update(pTexture, surface.getPointer()));
+    }
+
+    private native int texture_update(long pTexture, long pSurface);
+    
+    
+    
+    
+    public String toString()
+    {
+        return "Texture " + getPixelFormat();
+    }
 }

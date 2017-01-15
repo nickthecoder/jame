@@ -5,31 +5,36 @@ public class Renderer
     /**
      * The renderer is a software fallback
      */
-    public static final int SOFTWARE = 0;
+    public static final int SOFTWARE = 1;
 
     /**
      * The renderer uses hardware acceleration
      */
-    public static final int ACCELERATED = 0;
+    public static final int ACCELERATED = 2;
 
     /**
      * {@link #present()} is synchronized with the refresh rate
      */
-    public static final int PRESENTVSYNC = 0;
+    public static final int PRESENTVSYNC = 4;
 
     /**
      * the renderer supports rendering to texture
      */
-    public static final int TARGETTEXTURE = 0;
+    public static final int TARGETTEXTURE = 8;
 
     /**
      * C pointer to the SDL_Renderer structure.
      */
     private long pRenderer;
 
-    public Renderer(Window window)
+    public Renderer(Window window )
     {
-        this(window, 0);
+        this( window, false );
+    }
+    
+    public Renderer(Window window, boolean sync)
+    {
+        this(window, ACCELERATED | (sync ? PRESENTVSYNC : 0));
     }
 
     /**
@@ -37,11 +42,13 @@ public class Renderer
      * @param window
      *            The window to be rendered
      * @param flags
-     *            Any of : {@link #ACCELERATED}, {@link #SOFTWARE}, {@link #PRESENTVSYNC}, {@link #TARGETTEXTURE}.
+     *            Combination of : {@link #SOFTWARE}, {@link #ACCELERATED}, {@link #PRESENTVSYNC}.
+     *            To combine flags, either add them or better still, use bitwise or.
      */
     public Renderer(Window window, int flags)
     {
         pRenderer = renderer_create(window.getPointer(), flags);
+        window.renderer = this;
     }
 
     private native long renderer_create(long pWindow, int flags);
@@ -79,12 +86,40 @@ public class Renderer
 
     private native void renderer_present(long pPointer);
 
+    private Rect clip = null;
+
     public void setClip(Rect rect)
     {
         Jame.checkRuntimeStatus(renderer_setClip(pRenderer, rect.x, rect.y, rect.width, rect.height));
+        clip = rect;
     }
 
     private native int renderer_setClip(long pRenderer, int x, int y, int width, int height);
+
+    public void setViewport(Rect rect)
+    {
+        Jame.checkRuntimeStatus(renderer_setViewport(pRenderer, rect.x, rect.y, rect.width, rect.height));
+    }
+
+    private native int renderer_setViewport(long pRenderer, int x, int y, int width, int height);
+
+    public Rect getViewport()
+    {
+        Rect result = new Rect(0, 0, 0, 0);
+        renderer_getViewport(pRenderer, result);
+        return result;
+    }
+
+    private native void renderer_getViewport(long pRenderer, Rect pRect);
+
+    /**
+     * 
+     * @return The clipping rectangle, or null, if there is not clipping.
+     */
+    public Rect getClip()
+    {
+        return clip;
+    }
 
     public void setLogicalSize(int width, int height)
     {
@@ -144,8 +179,23 @@ public class Renderer
                 destRect.x, destRect.y, destRect.width, destRect.height));
     }
 
-    private native int renderer_copy(long pRenderer, long pTexture, int sx, int sy, int sw, int sh, int dx, int dy,
-        int dw, int dh);
+    private native int renderer_copy(long pRenderer, long pTexture,
+        int srcX, int srcY, int srcWidth, int srcHeight,
+        int dstX, int dstY, int dstWidht, int dstHeight);
+
+    public void copyEx(Texture texture, Rect srcRect, Rect dstRect,
+        double angle, int ox, int oy, boolean flipX, boolean flipY)
+    {
+        Jame.checkRuntimeStatus(renderer_copyEx(pRenderer, texture.getPointer(),
+            srcRect.x, srcRect.y, srcRect.width, srcRect.height,
+            dstRect.x, dstRect.y, dstRect.width, dstRect.height,
+            angle, ox, oy, (flipX ? 1 : 0) | (flipY ? 2 : 0)));
+    }
+
+    private native int renderer_copyEx(long pRenderer, long pTexture,
+        int srcX, int srcY, int srcWidth, int srcHeight,
+        int dstX, int dstY, int dstWidth, int dstHeight,
+        double angle, int centerX, int centerY, int flip);
 
     public void setDrawBlendMode(BlendMode blendMode)
     {
@@ -156,9 +206,77 @@ public class Renderer
 
     public BlendMode getDrawBlendMode()
     {
-        return BlendMode.values()[renderer_getDrawBlendMode(pRenderer)];
+        int value = renderer_getDrawBlendMode(pRenderer);
+        if (value < 0) {
+            Jame.checkRuntimeStatus(value);
+        }
+        return BlendMode.values()[value];
     }
 
     private native int renderer_getDrawBlendMode(long pRenderer);
 
+    private Texture target = null;
+
+    public void setTarget(Texture texture)
+    {
+        long pTexture = texture == null ? 0 : texture.getPointer();
+        Jame.checkRuntimeStatus(renderer_setTarget(pRenderer, pTexture));
+        target = texture;
+    }
+
+    private native int renderer_setTarget(long pRenderer, long pTexture);
+
+    /**
+     * @return The {@link Texture} passed to {@link #setTarget(Texture)}, or null setTaget hasn't been called.
+     */
+    public Texture getTarget()
+    {
+        return target;
+    }
+
+    /**
+     * Draws the outline of a rectangle.
+     * 
+     * @param rect
+     */
+    public void drawRect(Rect rect)
+    {
+        Jame.checkRuntimeStatus(renderer_drawRect(pRenderer, rect.x, rect.y, rect.width, rect.height));
+    }
+
+    private native int renderer_drawRect(long pRenderer, int x, int y, int width, int height);
+
+    /**
+     * Draws a filled rectangle
+     * 
+     * @param rect
+     */
+    public void fillRect(Rect rect)
+    {
+        Jame.checkRuntimeStatus(renderer_fillRect(pRenderer, rect.x, rect.y, rect.width, rect.height));
+    }
+
+    private native int renderer_fillRect(long pRenderer, int x, int y, int width, int height);
+
+    /**
+     * Draws a line between two points
+     * 
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     */
+    public void drawLine(int x1, int y1, int x2, int y2)
+    {
+        Jame.checkRuntimeStatus(renderer_drawLine(pRenderer, x1, y1, x2, y2));
+    }
+
+    private native int renderer_drawLine(long pRenderer, int x1, int y1, int x2, int y2);
+
+    
+    
+    public String toString()
+    {
+        return "Renderer";
+    }
 }
