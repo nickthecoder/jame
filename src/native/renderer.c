@@ -184,7 +184,7 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1getDrawBl
 JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1setTarget
   (JNIEnv *env, jobject jobj, jlong pRenderer, jlong pTexture )
 {
-    return SDL_RenderTarget( (SDL_Renderer*) pRenderer, (SDL_Texture*) pTexture );
+    return SDL_SetRenderTarget( (SDL_Renderer*) pRenderer, (SDL_Texture*) pTexture );
 }
 
 JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Texture_texture_1setColorMod

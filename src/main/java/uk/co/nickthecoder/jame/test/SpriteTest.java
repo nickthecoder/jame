@@ -6,7 +6,6 @@ import java.util.List;
 import uk.co.nickthecoder.jame.JameException;
 import uk.co.nickthecoder.jame.RGBA;
 import uk.co.nickthecoder.jame.Surface;
-import uk.co.nickthecoder.jame.Texture;
 
 public class SpriteTest extends AbstractTest
 {
@@ -14,22 +13,17 @@ public class SpriteTest extends AbstractTest
 
     public Surface spriteSurface;
 
-    public Texture spriteTexture;
+    public SizedTexture spriteTexture;
 
-    public int width;
-
-    public int height;
 
     public List<BouncySprite> sprites;
 
     public TestController controller;
 
-    public SpriteTest(Texture texture, int width, int height)
+    public SpriteTest(SizedTexture texture)
         throws JameException
     {
         spriteTexture = texture;
-        this.width = width;
-        this.height = height;
 
         this.useTextures = true;
     }
@@ -38,8 +32,6 @@ public class SpriteTest extends AbstractTest
         throws JameException
     {
         spriteSurface = surface;
-        this.width = surface.getWidth();
-        this.height = surface.getHeight();
 
         this.useTextures = false;
     }
@@ -102,13 +94,13 @@ public class SpriteTest extends AbstractTest
         @Override
         protected int getWidth()
         {
-            return width;
+            return spriteTexture == null ? spriteSurface.getWidth() : spriteTexture.getWidth();
         }
 
         @Override
         protected int getHeight()
         {
-            return height;
+            return spriteTexture == null ? spriteSurface.getHeight() : spriteTexture.getHeight();
         }
 
     }

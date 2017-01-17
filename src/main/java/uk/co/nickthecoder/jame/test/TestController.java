@@ -22,11 +22,14 @@ import uk.co.nickthecoder.jame.event.QuitEvent;
 
 /**
  * Interactive tests of Jame API.
- * 
+ * <p>
  * Keys :
- * ctrl+F = Toggle Fullscreen with mode change
- * ctrl+G = Toggle Fullscreen Desktop
- *
+ * </p>
+ * <ul>
+ * <li>ctrl+F = Toggle Fullscreen with mode change</li>
+ * <li>ctrl+G = Toggle Fullscreen Desktop</li>
+ * <li>1 = Toggle Alpha (only used by some tests).</li>
+ * </ul>
  */
 public class TestController implements Test
 {
@@ -112,11 +115,14 @@ public class TestController implements Test
         System.out.println();
 
         Surface iconSurface = new Surface("icon.png");
-        Texture iconTexture = new Texture(renderer, iconSurface);
+        SizedTexture iconTexture = new SizedTexture(renderer, iconSurface);
         window.setIcon(iconSurface);
 
         Surface angrySurface = new Surface("resources/face-angry.png");
-        Texture angryTexture = new Texture(renderer, angrySurface);
+        SizedTexture angryTexture = new SizedTexture(renderer, angrySurface);
+
+        Surface laughSurface = new Surface("resources/face-laugh.png");
+        SizedTexture laughTexture = new SizedTexture(renderer, laughSurface);
 
         System.out.println("Icon " + iconSurface);
         System.out.println("Icon " + iconTexture);
@@ -130,11 +136,15 @@ public class TestController implements Test
         addMenuItem("Texture Empty Rectangles", new TextureRectanglesTest());
         addMenuItem("Texture Filled Rectangles", new TextureFilledRectanglesTest());
         addMenuItem("Surface Filled Rectangles", new SurfaceFilledRectanglesTest());
-        addMenuItem("Texture Sprites", new SpriteTest(iconTexture, iconSurface.getWidth(), iconSurface.getHeight()));
+
+        addMenuItem("Texture Sprites", new SpriteTest(iconTexture));
         addMenuItem("Surface Sprites", new SpriteTest(iconSurface));
-        addMenuItem("Larger Textures", new SpriteTest(angryTexture, angrySurface.getWidth(), angrySurface.getHeight()));
+        addMenuItem("Larger Textures", new SpriteTest(angryTexture));
+
         addMenuItem("Texture Clip", new ClippingTest(angrySurface, angryTexture));
         addMenuItem("Surface Clip", new ClippingTest(angrySurface));
+
+        addMenuItem("Mouse", new MouseTest(10, angryTexture, laughTexture));
     }
 
     public void end(TestController controller)
@@ -316,4 +326,5 @@ public class TestController implements Test
         controller.go();
         System.out.println("End of Main");
     }
+
 }

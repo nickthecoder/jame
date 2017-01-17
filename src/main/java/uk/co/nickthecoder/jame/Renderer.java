@@ -200,7 +200,7 @@ public class Renderer
         int srcX, int srcY, int srcWidth, int srcHeight,
         int dstX, int dstY, int dstWidht, int dstHeight);
 
-    public void copyEx(Texture texture, Rect srcRect, Rect dstRect,
+    public void copy(Texture texture, Rect srcRect, Rect dstRect,
         double angle, int ox, int oy, boolean flipX, boolean flipY)
     {
         Jame.checkRuntimeStatus(renderer_copyEx(pRenderer, texture.getPointer(),

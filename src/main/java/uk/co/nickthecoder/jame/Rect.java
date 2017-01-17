@@ -38,8 +38,7 @@ public class Rect
 
     public boolean contains( int x, int y )
     {
-        return ((this.x >= x) && (this.y >= y) && (this.x + this.width < x) && (this.y +
-            this.height < y));
+        return ((x >= this.x) && (y >= this.y) && (x < this.x + this.width) && (y < this.y + this.height));
     }
 
     public Rect intersection( Rect other )

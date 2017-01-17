@@ -71,4 +71,45 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Texture_texture_1update
     return SDL_UpdateTexture( (SDL_Texture*) pTexture, &rect, pSurface->pixels, pSurface->pitch);
 }
 
+/*
+    Fills the java RGBA with the pixel at (0,0) of the renderer
+*/
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Texture_texture_1getPixel
+  (JNIEnv *env, jobject jobj, jlong pRenderer, jint pixelFormat, jobject jRGBA)
+{
+    SDL_Rect rect = {.x=0,.y=0,.w=1,.h=1 };
+    Uint32 pixels;
+    
+    int result = SDL_RenderReadPixels( (SDL_Renderer*) pRenderer, &rect, pixelFormat, &pixels, 4 /* four bytes */);
+    if ( result != 0 ) {
+        return result;
+    }
+    
+    Uint8 red;
+    Uint8 green;
+    Uint8 blue;
+    Uint8 alpha;
+    
+    SDL_PixelFormat* pf = SDL_AllocFormat(pixelFormat);
+    SDL_GetRGBA( pixels, pf, &red, &green, &blue, &alpha );
+    SDL_FreeFormat(pf);
+
+    jclass clazz = (*env)->GetObjectClass(env, jRGBA);
+    jfieldID fid;
+
+    fid = (*env)->GetFieldID(env,clazz,"r","I");
+    (*env)->SetIntField(env,jRGBA,fid, red );
+    
+    fid = (*env)->GetFieldID(env,clazz,"g","I");
+    (*env)->SetIntField(env,jRGBA,fid, green );
+
+    fid = (*env)->GetFieldID(env,clazz,"b","I");
+    (*env)->SetIntField(env,jRGBA,fid, blue );
+    
+    fid = (*env)->GetFieldID(env,clazz,"a","I");
+    (*env)->SetIntField(env,jRGBA,fid, alpha );
+
+    return 0;
+}
+
 

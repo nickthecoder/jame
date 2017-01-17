@@ -23,7 +23,7 @@ public class Texture
     private int width;
 
     private int height;
-    
+
     private PixelFormat pixelFormat;
 
     public Texture(Renderer renderer, int width, int height, PixelFormat pixelFormat, Access access)
@@ -89,9 +89,7 @@ public class Texture
     {
         return pixelFormat;
     }
-    
-    
-    
+
     public void setBlendMode(BlendMode blendMode)
     {
         Jame.checkRuntimeStatus(renderer_setBlendMode(pTexture, blendMode.ordinal()));
@@ -146,10 +144,54 @@ public class Texture
     }
 
     private native int texture_update(long pTexture, long pSurface);
-    
-    
-    
-    
+
+    /**
+     * Reads the pixel at a given point. Note, this may be SLOW, so don't read lots of pixels.
+     * <p>
+     * Note the renderer must not be currently rendering to a texture See {@link Renderer#setTarget(Texture)}, because
+     * this methods set its own target, and then resets at the end.
+     * 
+     * @param renderer
+     *            To read the pixels, it seems SDL2 needs to use a renderer. Grrr.
+     * @param x
+     * @param y
+     * @return The pixel at the given point, or null if outside of the texture.
+     */
+    public RGBA getPixel(Renderer renderer, int x, int y)
+    {
+        if ((x < 0) || (y < 0)) {
+            return null;
+        }
+
+        Texture temp = null;
+        try {
+            PixelFormat pixelFormat = Window.recommendedPixelFormat(true);
+            // Copy the pixel to a temporary texture
+            temp = new Texture(renderer, 1, 1, pixelFormat, Access.TARGET);
+            renderer.setTarget(temp);
+            renderer.setDrawColor(RGBA.TRANSPARENT);
+            renderer.clear();
+            renderer.copy(this, -x, -y);
+
+            RGBA result = new RGBA(0, 0, 0);
+
+            Jame.checkRuntimeStatus( texture_getPixel(renderer.getPointer(), pixelFormat.value, result) );
+            return result;
+            
+        } finally {
+            try {
+                renderer.setTarget(null);
+            } catch (Exception e) {
+                // Do nothing
+            }
+            if (temp != null) {
+                temp.destroy();
+            }
+        }
+    }
+
+    private native int texture_getPixel(long pRenderer, int pixelFormat, RGBA result);
+
     public String toString()
     {
         return "Texture " + getPixelFormat();
