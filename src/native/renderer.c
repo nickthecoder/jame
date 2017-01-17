@@ -25,6 +25,17 @@ JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1destroy
     SDL_DestroyRenderer( (SDL_Renderer*) pRenderer );
 }
 
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1getFlags
+  (JNIEnv *env, jobject jobj, jlong pRenderer)
+{
+    SDL_RendererInfo info;
+    
+    if ( SDL_GetRendererInfo( (SDL_Renderer*) pRenderer, &info ) == 0 ) {
+        return info.flags;
+    }
+    return -1;
+}
+
 
 JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1present
   (JNIEnv *env, jobject obj, jlong pRenderer )
@@ -37,7 +48,13 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1setClip
 {
     struct SDL_Rect rect = { .x=x, .y=y, .w=width, .h=height };
     
-    return SDL_RendererSetClipRect( (SDL_Renderer*) pRenderer, &rect );
+    return SDL_RenderSetClipRect( (SDL_Renderer*) pRenderer, &rect );
+}
+
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1clearClip
+  (JNIEnv *env, jobject obj, jlong pRenderer)
+{
+    return SDL_RenderSetClipRect( (SDL_Renderer*) pRenderer, NULL );
 }
 
 JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1setViewport

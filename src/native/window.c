@@ -139,4 +139,16 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Window_window_1getPixelForma
     return SDL_GetWindowPixelFormat( (SDL_Window*) pWindow );
 }
 
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Window_window_1getRefreshRate
+  (JNIEnv *env, jobject jobj, jlong pWindow)
+{
+    SDL_DisplayMode mode;
+    
+    if ( SDL_GetWindowDisplayMode( (SDL_Window*) pWindow, &mode ) == 0 ) {
+        return mode.refresh_rate;
+    } else {
+        return -1;
+    }
+}
+
 

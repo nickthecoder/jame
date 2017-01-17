@@ -20,11 +20,21 @@ import uk.co.nickthecoder.jame.event.KeyboardEvent;
 import uk.co.nickthecoder.jame.event.ModifierKey;
 import uk.co.nickthecoder.jame.event.QuitEvent;
 
+/**
+ * Interactive tests of Jame API.
+ * 
+ * Keys :
+ * ctrl+F = Toggle Fullscreen with mode change
+ * ctrl+G = Toggle Fullscreen Desktop
+ *
+ */
 public class TestController implements Test
 {
     public Test currentTest;
 
     public Window window;
+
+    public int refreshRate;
 
     public Renderer renderer;
 
@@ -60,6 +70,7 @@ public class TestController implements Test
      */
     public boolean quitting = false;
 
+    public boolean fullscreen = false;
     /**
      * Increments each frame, until it reaches {@link #INFO_TICKS}, at which point, statistic are displayed
      * and infoCounter is reset. See {@link #showInfo(TestController)}.
@@ -82,7 +93,8 @@ public class TestController implements Test
         infoCounter = 0;
 
         window = new Window("Jame Tests", 640, 480, true, 0);
-        renderer = new Renderer(window);
+        refreshRate = window.getRefreshRate();
+        renderer = new Renderer(window, Renderer.PRESENTVSYNC);
 
         surface = window.createSurface(640, 480, false);
         texture = window.createTexture(640, 480, false);
@@ -99,9 +111,18 @@ public class TestController implements Test
         System.out.println("Alpha " + alphaTexture);
         System.out.println();
 
-        Surface icon = new Surface("resources/alien.png");
-        window.setIcon(icon);
-        icon.free();
+        Surface iconSurface = new Surface("icon.png");
+        Texture iconTexture = new Texture(renderer, iconSurface);
+        window.setIcon(iconSurface);
+
+        Surface angrySurface = new Surface("resources/face-angry.png");
+        Texture angryTexture = new Texture(renderer, angrySurface);
+
+        System.out.println("Icon " + iconSurface);
+        System.out.println("Icon " + iconTexture);
+        System.out.println("Angry " + angrySurface);
+        System.out.println("Angry " + angryTexture);
+        System.out.println();
 
         smallFont = new TrueTypeFont("resources/Vera.ttf", 16);
 
@@ -109,6 +130,11 @@ public class TestController implements Test
         addMenuItem("Texture Empty Rectangles", new TextureRectanglesTest());
         addMenuItem("Texture Filled Rectangles", new TextureFilledRectanglesTest());
         addMenuItem("Surface Filled Rectangles", new SurfaceFilledRectanglesTest());
+        addMenuItem("Texture Sprites", new SpriteTest(iconTexture, iconSurface.getWidth(), iconSurface.getHeight()));
+        addMenuItem("Surface Sprites", new SpriteTest(iconSurface));
+        addMenuItem("Larger Textures", new SpriteTest(angryTexture, angrySurface.getWidth(), angrySurface.getHeight()));
+        addMenuItem("Texture Clip", new ClippingTest(angrySurface, angryTexture));
+        addMenuItem("Surface Clip", new ClippingTest(angrySurface));
     }
 
     public void end(TestController controller)
@@ -129,8 +155,6 @@ public class TestController implements Test
         currentTest = this;
     }
 
-    public boolean fullscreen = false;
-
     public void event(TestController controller, Event event)
         throws JameException
     {
@@ -140,20 +164,29 @@ public class TestController implements Test
             if (ke.isPressed()) {
                 int value = ke.symbol;
 
-                for (MenuItem menuItem : menuItems) {
-                    if (menuItem.letter == value) {
-                        Test test = menuItem.test;
+                if (ke.modifier(ModifierKey.CTRL)) {
+                    if (ke.symbol == 'f') {
+                        fullscreen = !fullscreen;
+                        window.setFullScreen(fullscreen ? Window.FULLSCREEN : 0);
+                    }
+                    if (ke.symbol == 'g') {
+                        fullscreen = !fullscreen;
+                        window.setFullScreen(fullscreen ? Window.FULLSCREEN_DESKTOP : 0);
+                    }
 
-                        this.currentTest = test;
-                        test.begin(this);
-                        return;
+                } else {
+
+                    for (MenuItem menuItem : menuItems) {
+                        if (menuItem.letter == value) {
+                            Test test = menuItem.test;
+
+                            this.currentTest = test;
+                            test.begin(this);
+                            return;
+                        }
                     }
                 }
 
-                if (ke.modifier(ModifierKey.CTRL) && (ke.symbol == 'f')) {
-                    fullscreen = !fullscreen;
-                    window.setFullScreen(fullscreen ? Window.FULLSCREEN : 0);
-                }
             }
         }
     }
@@ -191,8 +224,10 @@ public class TestController implements Test
     public void showInfo(TestController controller)
     {
         long millis = System.currentTimeMillis() - lastMillis;
-
-        System.out.println("Frames : " + INFO_TICKS + " in " + millis + " = " + INFO_TICKS * 1000 / millis + "fps");
+        long fps = INFO_TICKS * 1000 / millis;
+        if (fps + 1 < refreshRate) {
+            System.out.println("Dropping frames. " + INFO_TICKS * 1000 / millis + "fps");
+        }
         lastMillis = System.currentTimeMillis();
     }
 

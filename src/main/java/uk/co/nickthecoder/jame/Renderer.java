@@ -27,11 +27,11 @@ public class Renderer
      */
     private long pRenderer;
 
-    public Renderer(Window window )
+    public Renderer(Window window)
     {
-        this( window, false );
+        this(window, false);
     }
-    
+
     public Renderer(Window window, boolean sync)
     {
         this(window, ACCELERATED | (sync ? PRESENTVSYNC : 0));
@@ -79,6 +79,17 @@ public class Renderer
         return pRenderer;
     }
 
+    public int getFlags()
+    {
+        int flags = renderer_getFlags(pRenderer);
+        if (flags < 0) {
+            Jame.checkRuntimeStatus(flags);
+        }
+        return flags;
+    }
+
+    private native int renderer_getFlags(long pRenderer);
+
     public void present()
     {
         renderer_present(pRenderer);
@@ -90,11 +101,17 @@ public class Renderer
 
     public void setClip(Rect rect)
     {
-        Jame.checkRuntimeStatus(renderer_setClip(pRenderer, rect.x, rect.y, rect.width, rect.height));
+        if (rect == null) {
+            Jame.checkRuntimeStatus(renderer_clearClip(pRenderer));
+        } else {
+            Jame.checkRuntimeStatus(renderer_setClip(pRenderer, rect.x, rect.y, rect.width, rect.height));
+        }
         clip = rect;
     }
 
     private native int renderer_setClip(long pRenderer, int x, int y, int width, int height);
+
+    private native int renderer_clearClip(long pRenderer);
 
     public void setViewport(Rect rect)
     {
@@ -273,10 +290,21 @@ public class Renderer
 
     private native int renderer_drawLine(long pRenderer, int x1, int y1, int x2, int y2);
 
-    
-    
     public String toString()
     {
-        return "Renderer";
+        StringBuffer result = new StringBuffer();
+        result.append("Renderer ");
+
+        int flags = getFlags();
+        if ((flags & SOFTWARE) != 0)
+            result.append(" SOFTWARE");
+        if ((flags & ACCELERATED) != 0)
+            result.append(" ACCELERATED");
+        if ((flags & PRESENTVSYNC) != 0)
+            result.append(" PRESENTVSYNC");
+        if ((flags & TARGETTEXTURE) != 0)
+            result.append(" TARGETTEXTURE");
+
+        return result.toString();
     }
 }

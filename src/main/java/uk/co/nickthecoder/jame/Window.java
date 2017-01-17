@@ -353,6 +353,19 @@ public class Window
 
     private native int window_getPixelFormat(long pWindow);
 
+
+    public int getRefreshRate()
+    {
+        int result = window_getRefreshRate( pWindow );
+        if ( result < 0) {
+            Jame.checkRuntimeStatus(result);
+        }
+        return result;
+    }
+    
+    private native int window_getRefreshRate( long pWindow );
+    
+
     public String toString()
     {
         return "Window(" + width + "," + height + ") " + getPixelFormat();

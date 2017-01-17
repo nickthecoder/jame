@@ -2,7 +2,6 @@ package uk.co.nickthecoder.jame.test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import uk.co.nickthecoder.jame.JameException;
 import uk.co.nickthecoder.jame.RGBA;
@@ -13,15 +12,12 @@ public abstract class RectanglesTest extends AbstractTest
 {
     List<BouncyRectangle> rectangles;
 
-    Random random;
-
     boolean useAlpha = false;
 
     @Override
     public void begin(TestController controller) throws JameException
     {
         rectangles = new ArrayList<BouncyRectangle>(1000);
-        random = new Random();
     }
 
     protected void keyboardEvent(TestController controller, KeyboardEvent ke) throws JameException
@@ -58,45 +54,38 @@ public abstract class RectanglesTest extends AbstractTest
         this.rectangles.clear();
     }
 
-    public class BouncyRectangle
+    public class BouncyRectangle extends Bouncy
     {
         Rect rect;
         RGBA color;
-        int dx;
-        int dy;
 
         public BouncyRectangle()
         {
-            rect = new Rect(random.nextInt(640 + 200) - 100, random.nextInt(480 + 200) - 100,
-                random.nextInt(200), random.nextInt(200));
+            super();
             color = new RGBA(random.nextInt(256), random.nextInt(256), random.nextInt(256), random.nextInt(256));
-
-            dx = random.nextInt(5) - 2;
-            dy = random.nextInt(5) - 2;
+            rect = new Rect(0, 0, random.nextInt(200), random.nextInt(200));
+            move();
         }
-
-        static final int WIDTH = 640;
-        static final int HEIGHT = 480;
 
         public void move()
         {
-            rect.x += dx;
-            rect.y += dy;
-
-            if ((rect.x < 0) && (dx < 0)) {
-                dx = -dx;
-            }
-            if ((rect.y < 0) && (dy < 0)) {
-                dy = -dy;
-            }
-
-            if ((rect.x + rect.width > WIDTH) && (dx > 0)) {
-                dx = -dx;
-            }
-            if ((rect.y + rect.height > HEIGHT) && (dy > 0)) {
-                dy = -dy;
-            }
+            super.move();
+            rect.x = x;
+            rect.y = y;
         }
+
+        @Override
+        protected int getWidth()
+        {
+            return rect.width;
+        }
+
+        @Override
+        protected int getHeight()
+        {
+            return rect.height;
+        }
+
     }
 
 }
