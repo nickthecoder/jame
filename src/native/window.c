@@ -12,7 +12,7 @@
 
 #include "include/uk_co_nickthecoder_jame_Window.h"
 
-JNIEXPORT jlong JNICALL Java_uk_co_nickthecoder_jame_Window_window_1create
+JNIEXPORT jlong JNICALL Java_uk_co_nickthecoder_jame_Window_native_1create
   (JNIEnv *env, jobject jwindow, jstring jtitle, jint x, jint y, jint w, jint h, jint flags)
 {
     const char *title = (*env)->GetStringUTFChars(env, jtitle, 0);
@@ -21,13 +21,13 @@ JNIEXPORT jlong JNICALL Java_uk_co_nickthecoder_jame_Window_window_1create
 }
 
 
-JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Window_window_1destroy
+JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Window_native_1destroy
   (JNIEnv *env, jobject jobj, jlong pWindow )
 {
     SDL_DestroyWindow( (SDL_Window*) pWindow );
 }
 
-JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Window_window_1getPosition
+JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Window_native_1getPosition
   (JNIEnv *env, jobject jobj, jlong pWindow, jobject jRect )
 {
     int x;
@@ -55,74 +55,74 @@ JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Window_window_1getPosition
 
 }
 
-JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Window_window_1hide
+JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Window_native_1hide
   (JNIEnv *env, jobject jobj, jlong pWindow)
 {
     SDL_HideWindow( (SDL_Window*) pWindow );
 }
 
 
-JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Window_window_1show
+JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Window_native_1show
   (JNIEnv *env, jobject jobj, jlong pWindow)
 {
     SDL_ShowWindow( (SDL_Window*) pWindow );
 }
 
-JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Window_window_1maximize
+JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Window_native_1maximize
   (JNIEnv *env, jobject jobj, jlong pWindow)
 {
     SDL_MaximizeWindow( (SDL_Window*) pWindow );
 }
 
-JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Window_window_1restore
+JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Window_native_1restore
   (JNIEnv *env, jobject jobj, jlong pWindow)
 {
     SDL_RestoreWindow( (SDL_Window*) pWindow );
 }
 
-JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Window_window_1raise
+JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Window_native_1raise
   (JNIEnv *env, jobject jobj, jlong pWindow)
 {
     SDL_RaiseWindow( (SDL_Window*) pWindow );
 }
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Window_window_1fullScreen
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Window_native_1fullScreen
   (JNIEnv *env, jobject jobj, jlong pWindow, jint flags)
 {
     return SDL_SetWindowFullscreen( (SDL_Window*) pWindow, flags );
 }
 
-JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Window_window_1setIcon
+JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Window_native_1setIcon
   (JNIEnv *env, jobject jobj, jlong pWindow, jlong pSurface)
 {
     SDL_SetWindowIcon( (SDL_Window*) pWindow, (SDL_Surface*) pSurface );
 }
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Window_window_1setInputFocus
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Window_native_1setInputFocus
   (JNIEnv *env, jobject jobj, jlong pWindow)
 {
     return SDL_SetWindowInputFocus( (SDL_Window*) pWindow );
 }
 
-JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Window_window_1setPosition
+JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Window_native_1setPosition
   (JNIEnv *env, jobject jobj, jlong pWindow, jint x, jint y)
 {
     SDL_SetWindowPosition( (SDL_Window*) pWindow, x, y );
 }
 
-JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Window_window_1setResizable
+JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Window_native_1setResizable
   (JNIEnv *env, jobject jobj, jlong pWindow, jboolean resizable )
 {
     SDL_SetWindowResizable( (SDL_Window*) pWindow, resizable );
 }
 
-JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Window_window_1setSize
+JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Window_native_1setSize
   (JNIEnv *env, jobject jobj, jlong pWindow, jint width, jint height)
 {
     SDL_SetWindowSize( (SDL_Window*) pWindow, width, height );
 }
 
-JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Window_window_1setTitle
+JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Window_native_1setTitle
   (JNIEnv *env, jobject jobj, jlong pWindow, jstring jtitle )
 {
     const char *title = (*env)->GetStringUTFChars(env, jtitle, 0);
@@ -133,13 +133,13 @@ JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Window_window_1setTitle
 }
 
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Window_window_1getPixelFormat
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Window_native_1getPixelFormat
   (JNIEnv *env, jobject jobj, jlong pWindow )
 {
     return SDL_GetWindowPixelFormat( (SDL_Window*) pWindow );
 }
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Window_window_1getRefreshRate
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Window_native_1getRefreshRate
   (JNIEnv *env, jobject jobj, jlong pWindow)
 {
     SDL_DisplayMode mode;

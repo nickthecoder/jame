@@ -136,7 +136,7 @@ public class Window
     {
         this.width = width;
         this.height = height;
-        this.pWindow = window_create(title, x, y, width, height, flags);
+        this.pWindow = native_create(title, x, y, width, height, flags);
 
         updateRecommendedPixelFormats();
     }
@@ -186,7 +186,7 @@ public class Window
         return pWindow;
     }
 
-    private native long window_create(String title, int x, int y, int w, int h, int flags);
+    private native long native_create(String title, int x, int y, int w, int h, int flags);
 
     public int getWidth()
     {
@@ -207,7 +207,7 @@ public class Window
 
     public void destroy()
     {
-        window_destroy(pWindow);
+        native_destroy(pWindow);
         pWindow = 0;
     }
 
@@ -222,64 +222,64 @@ public class Window
         this.destroy();
     }
 
-    private native void window_destroy(long pWindow);
+    private native void native_destroy(long pWindow);
 
     public Rect getPosition()
     {
         Rect rect = new Rect(0, 0, 0, 0);
-        window_getPosition(pWindow, rect);
+        native_getPosition(pWindow, rect);
 
         return rect;
     }
 
-    private native void window_getPosition(long pWindow, Rect rect);
+    private native void native_getPosition(long pWindow, Rect rect);
 
     /**
      * Hides a window. Use {@link #show()} to make it visible again.
      */
     public void hide()
     {
-        window_hide(pWindow);
+        native_hide(pWindow);
     }
 
-    private native void window_hide(long pWindow);
+    private native void native_hide(long pWindow);
 
     /**
      * Makes the window visible after it has been hidden with {@link #hide()}.
      */
     public void show()
     {
-        window_show(pWindow);
+        native_show(pWindow);
     }
 
-    private native void window_show(long pWindow);
+    private native void native_show(long pWindow);
 
     /**
      * Makes the window as big as possible. This is NOT the same as {@link #setFullScreen(int)}.
      */
     public void maximize()
     {
-        window_maximize(pWindow);
+        native_maximize(pWindow);
     }
 
-    private native void window_maximize(long pWindow);
+    private native void native_maximize(long pWindow);
 
     /**
      * Restore the window to normal size after it has been maximised, or minimized.
      */
     public void restore()
     {
-        window_restore(pWindow);
+        native_restore(pWindow);
     }
 
-    private native void window_restore(long pWindow);
+    private native void native_restore(long pWindow);
 
     public void raise()
     {
-        window_raise(pWindow);
+        native_raise(pWindow);
     }
 
-    private native void window_raise(long pWindow);
+    private native void native_raise(long pWindow);
 
     /**
      * Make the window fullscreen or windowed depending on the value of <code>flags</flags>.
@@ -291,11 +291,11 @@ public class Window
      */
     public void setFullScreen(int flags)
     {
-        Jame.checkRuntimeStatus(window_fullScreen(pWindow, flags));
+        Jame.checkRuntimeStatus(native_fullScreen(pWindow, flags));
         updateRecommendedPixelFormats();
     }
 
-    private native int window_fullScreen(long pWindow, int flags);
+    private native int native_fullScreen(long pWindow, int flags);
 
     /**
      * Sets the icon for the window using a {@link Surface}. The surface may be free thereafter.
@@ -306,64 +306,64 @@ public class Window
      */
     public void setIcon(Surface surface)
     {
-        window_setIcon(pWindow, surface.getPointer());
+        native_setIcon(pWindow, surface.getPointer());
     }
 
-    private native void window_setIcon(long pWindow, long pSurface);
+    private native void native_setIcon(long pWindow, long pSurface);
 
     public void setInputFocus()
     {
-        Jame.checkRuntimeStatus(window_setInputFocus(pWindow));
+        Jame.checkRuntimeStatus(native_setInputFocus(pWindow));
     }
 
-    private native int window_setInputFocus(long pWindow);
+    private native int native_setInputFocus(long pWindow);
 
     public void setPosition(int x, int y)
     {
-        window_setPosition(pWindow, x, y);
+        native_setPosition(pWindow, x, y);
     }
 
-    private native void window_setPosition(long pWindow, int x, int y);
+    private native void native_setPosition(long pWindow, int x, int y);
 
     public void setResizable(boolean value)
     {
-        window_setResizable(pWindow, value);
+        native_setResizable(pWindow, value);
     }
 
-    private native void window_setResizable(long pWindow, boolean value);
+    private native void native_setResizable(long pWindow, boolean value);
 
     public void setSize(int width, int height)
     {
-        window_setSize(pWindow, width, height);
+        native_setSize(pWindow, width, height);
     }
 
-    private native void window_setSize(long pWindow, int width, int height);
+    private native void native_setSize(long pWindow, int width, int height);
 
     public void setTitle(String title)
     {
-        window_setTitle(pWindow, title);
+        native_setTitle(pWindow, title);
     }
 
-    private native void window_setTitle(long pWindow, String title);
+    private native void native_setTitle(long pWindow, String title);
 
     public PixelFormat getPixelFormat()
     {
-        return new PixelFormat(window_getPixelFormat(pWindow));
+        return new PixelFormat(native_getPixelFormat(pWindow));
     }
 
-    private native int window_getPixelFormat(long pWindow);
+    private native int native_getPixelFormat(long pWindow);
 
 
     public int getRefreshRate()
     {
-        int result = window_getRefreshRate( pWindow );
+        int result = native_getRefreshRate( pWindow );
         if ( result < 0) {
             Jame.checkRuntimeStatus(result);
         }
         return result;
     }
     
-    private native int window_getRefreshRate( long pWindow );
+    private native int native_getRefreshRate( long pWindow );
     
 
     public String toString()

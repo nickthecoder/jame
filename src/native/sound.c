@@ -24,7 +24,7 @@ void initialiseSound( JNIEnv *env, jobject jsound, Mix_Chunk *chunk )
 
 }
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Sound_sound_1load
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Sound_native_1load
   (JNIEnv *env, jobject jsound, jstring jfilename)
 {
     const char *filename = (*env)->GetStringUTFChars(env, jfilename, 0);
@@ -38,14 +38,14 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Sound_sound_1load
 }
 
 
-JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Sound_sound_1free
+JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Sound_native_1free
   (JNIEnv *env, jobject jsound, jlong pSound )
 {
     Mix_Chunk *chunk = (Mix_Chunk*) (intptr_t) pSound;
     Mix_FreeChunk( chunk );
 }
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Sound_sound_1play
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Sound_native_1play
   (JNIEnv *env, jobject jsound, jlong pSound )
 {
     Mix_Chunk *chunk = (Mix_Chunk*) (intptr_t) pSound;

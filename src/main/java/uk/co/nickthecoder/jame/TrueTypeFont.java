@@ -22,10 +22,10 @@ package uk.co.nickthecoder.jame;
 public class TrueTypeFont
 {
     static {
-        trueTypeFont_init();
+        native_init();
     }
 
-    private native static void trueTypeFont_init();
+    private native static void native_init();
 
     private long pFont;
 
@@ -40,10 +40,10 @@ public class TrueTypeFont
      */
     public TrueTypeFont( String filename, int pointSize ) throws JameException
     {
-        Jame.checkStatus(this.trueTypeFont_open(filename, pointSize));
+        Jame.checkStatus(this.native_open(filename, pointSize));
     }
 
-    private native int trueTypeFont_open( String filename, int pointSize );
+    private native int native_open( String filename, int pointSize );
 
     /**
      * Releases the resources used by this TrueTypeFont. This will automatically be called when this
@@ -53,11 +53,11 @@ public class TrueTypeFont
     public void close()
     {
         if (this.pFont != 0) {
-            this.trueTypeFont_close(this.pFont);
+            this.native_close(this.pFont);
         }
     }
 
-    private native void trueTypeFont_close( long pFont );
+    private native void native_close( long pFont );
 
     /**
      * Uses {@link #close()} to release the resources.
@@ -75,10 +75,10 @@ public class TrueTypeFont
      */
     public int getHeight()
     {
-        return trueTypeFont_getHeight(this.pFont);
+        return native_getHeight(this.pFont);
     }
 
-    private native int trueTypeFont_getHeight( long pFont );
+    private native int native_getHeight( long pFont );
 
     /**
      * Get the maximum pixel ascent of all glyphs of the loaded font. This can also be interpreted
@@ -86,10 +86,10 @@ public class TrueTypeFont
      */
     public int getAscent()
     {
-        return trueTypeFont_getAscent(this.pFont);
+        return native_getAscent(this.pFont);
     }
 
-    private native int trueTypeFont_getAscent( long pFont );
+    private native int native_getAscent( long pFont );
 
     /**
      * Get the maximum pixel descent of all glyphs of the loaded font. This can also be interpreted
@@ -97,10 +97,10 @@ public class TrueTypeFont
      */
     public int getDescent()
     {
-        return trueTypeFont_getDescent(this.pFont);
+        return native_getDescent(this.pFont);
     }
 
-    private native int trueTypeFont_getDescent( long pFont );
+    private native int native_getDescent( long pFont );
 
     /**
      * Get the recommended pixel height of a rendered line of text of the loaded font. This is
@@ -108,10 +108,10 @@ public class TrueTypeFont
      */
     public int getLineHeight()
     {
-        return trueTypeFont_getLineHeight(this.pFont);
+        return native_getLineHeight(this.pFont);
     }
 
-    private native int trueTypeFont_getLineHeight( long pFont );
+    private native int native_getLineHeight( long pFont );
 
     /**
      * Calculate the resulting surface width of the text rendered using font. No actual rendering is
@@ -125,10 +125,10 @@ public class TrueTypeFont
      */
     public int sizeText( String text )
     {
-        return trueTypeFont_sizeText(this.pFont, text);
+        return native_sizeText(this.pFont, text);
     }
 
-    private native int trueTypeFont_sizeText( long pFont, String text );
+    private native int native_sizeText( long pFont, String text );
 
     /**
      * Renders text to a new Surface without any anti-aliasing. The results will look poor.
@@ -141,12 +141,12 @@ public class TrueTypeFont
             return this.createEmpty();
         }
         Surface surface = new Surface();
-        Jame.checkRuntimeStatus(this.trueTypeFont_renderSolid(this.pFont, surface, text, color.r,
+        Jame.checkRuntimeStatus(this.native_renderSolid(this.pFont, surface, text, color.r,
             color.g, color.b));
         return surface;
     }
 
-    private native int trueTypeFont_renderSolid( long pFont, Surface surface, String text, int red,
+    private native int native_renderSolid( long pFont, Surface surface, String text, int red,
         int green, int blue );
 
     /**
@@ -160,12 +160,12 @@ public class TrueTypeFont
             return this.createEmpty();
         }
         Surface surface = new Surface();
-        Jame.checkRuntimeStatus(this.trueTypeFont_renderBlended(this.pFont, surface, text, color.r,
+        Jame.checkRuntimeStatus(this.native_renderBlended(this.pFont, surface, text, color.r,
             color.g, color.b));
         return surface;
     }
 
-    private native int trueTypeFont_renderBlended( long pFont, Surface surface, String text,
+    private native int native_renderBlended( long pFont, Surface surface, String text,
         int red, int green, int blue );
 
     /**
@@ -180,18 +180,18 @@ public class TrueTypeFont
             return this.createEmpty();
         }
         Surface surface = new Surface();
-        Jame.checkRuntimeStatus(this.trueTypeFont_renderShaded(this.pFont, surface, text, fg.r,
+        Jame.checkRuntimeStatus(this.native_renderShaded(this.pFont, surface, text, fg.r,
             fg.g, fg.b, bg.r, bg.g, bg.b));
         return surface;
     }
 
-    private native int trueTypeFont_renderShaded( long pFont, Surface surface, String text,
+    private native int native_renderShaded( long pFont, Surface surface, String text,
         int fgr, int fgg, int fgb, int bgr, int bgg, int bgb );
 
     private Surface createEmpty() throws JameRuntimeException
     {
         Surface surface = new Surface();
-        Jame.checkRuntimeStatus(this.trueTypeFont_renderSolid(this.pFont, surface, "X", 0, 0, 0));
+        Jame.checkRuntimeStatus(this.native_renderSolid(this.pFont, surface, "X", 0, 0, 0));
         Surface result = new Surface(1, surface.getHeight(), true);
         surface.free();
 

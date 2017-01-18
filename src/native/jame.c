@@ -10,19 +10,19 @@
 #include <SDL_video.h>
 #include "include/uk_co_nickthecoder_jame_Jame.h"
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Jame_jame_1init
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Jame_native_1init
   (JNIEnv *env, jclass class )
 {
     return SDL_Init( 0 );
 }
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Jame_jame_1initSubsystem
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Jame_native_1initSubsystem
   (JNIEnv *env, jclass class, jint subsystem )
 {
     return SDL_InitSubSystem( subsystem );
 }
 
-JNIEXPORT jstring JNICALL Java_uk_co_nickthecoder_jame_Jame_jame_1getError
+JNIEXPORT jstring JNICALL Java_uk_co_nickthecoder_jame_Jame_native_1getError
   (JNIEnv *env, jclass class )
 {
     const char* message = SDL_GetError();

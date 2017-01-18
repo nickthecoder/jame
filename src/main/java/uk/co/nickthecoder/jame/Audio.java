@@ -90,11 +90,11 @@ public class Audio
      */
     public static void open( int frequency, SampleFormat format, int channels, int chunkSize )
     {
-        audio_open(frequency, format.code, channels, chunkSize);
+        native_open(frequency, format.code, channels, chunkSize);
         setMixChannels(8);
     }
 
-    private static native int audio_open( int frequency, int format, int channels, int chunkSize );
+    private static native int native_open( int frequency, int format, int channels, int chunkSize );
 
     /**
      * Sets the maximum number of sounds that can be played simultaneously. The default is 8.
@@ -103,7 +103,7 @@ public class Audio
      */
     public static void setMixChannels( int count )
     {
-        int actual = audio_setMixChannels(count);
+        int actual = native_setMixChannels(count);
         ArrayList<MixChannel> previous = mixChannels;
 
         mixChannels = new ArrayList<MixChannel>(actual);
@@ -117,7 +117,7 @@ public class Audio
         }
     }
 
-    private static native int audio_setMixChannels( int mixChannels );
+    private static native int native_setMixChannels( int mixChannels );
 
     /**
      * Used internally from other Jame classes to call the JNI method,
@@ -128,30 +128,30 @@ public class Audio
         if ((mixChannelNumber < 0) || (mixChannelNumber > mixChannels.size())) {
             return false;
         }
-        return audio_isPlaying(mixChannelNumber) == 1;
+        return native_isPlaying(mixChannelNumber) == 1;
     }
 
-    private static native int audio_isPlaying( int mixChannelNumber );
+    private static native int native_isPlaying( int mixChannelNumber );
 
     /**
      * Used internally from other Jame classes to call the JNI method. 
      */
     static void stop( int mixChannelNumber )
     {
-        audio_stop(mixChannelNumber);
+        native_stop(mixChannelNumber);
     }
 
-    private static native void audio_stop( int mixChannelNumber );
+    private static native void native_stop( int mixChannelNumber );
 
     /**
      * Used internally from other Jame classes to call the JNI method. 
      */
     static void fadeOut( int mixChannelNumber, int milliseconds )
     {
-        audio_fadeOut(mixChannelNumber, milliseconds);
+        native_fadeOut(mixChannelNumber, milliseconds);
     }
 
-    private static native void audio_fadeOut( int mixChannelNumber, int milliseconds );
+    private static native void native_fadeOut( int mixChannelNumber, int milliseconds );
 
     /**
      * Audio only contains static methods, so don't publish a constructor.

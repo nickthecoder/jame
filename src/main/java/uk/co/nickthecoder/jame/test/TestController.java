@@ -139,10 +139,10 @@ public class TestController implements Test
 
         addMenuItem("Texture Sprites", new SpriteTest(iconTexture));
         addMenuItem("Surface Sprites", new SpriteTest(iconSurface));
-        addMenuItem("Larger Textures", new SpriteTest(angryTexture));
+        addMenuItem("Larger Textures", new SpriteTest(angryTexture, laughTexture));
 
-        addMenuItem("Texture Clip", new ClippingTest(angrySurface, angryTexture));
-        addMenuItem("Surface Clip", new ClippingTest(angrySurface));
+        addMenuItem("Texture Clip", new ClippingTest(5, angryTexture, laughTexture));
+        addMenuItem("Surface Clip", new ClippingTest(5, angrySurface, laughSurface));
 
         addMenuItem("Mouse", new MouseTest(10, angryTexture, laughTexture));
     }

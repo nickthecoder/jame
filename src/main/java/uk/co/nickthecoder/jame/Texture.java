@@ -28,23 +28,23 @@ public class Texture
 
     public Texture(Renderer renderer, int width, int height, PixelFormat pixelFormat, Access access)
     {
-        pTexture = texture_create(renderer.getPointer(), pixelFormat.value, access.ordinal(), width, height);
+        pTexture = native_create(renderer.getPointer(), pixelFormat.value, access.ordinal(), width, height);
         this.width = width;
         this.height = height;
         this.pixelFormat = pixelFormat;
     }
 
-    private native long texture_create(long pRenderer, int format, int access, int width, int height);
+    private native long native_create(long pRenderer, int format, int access, int width, int height);
 
     public Texture(Renderer renderer, Surface surface)
     {
-        pTexture = texture_createFromSurface(renderer.getPointer(), surface.getPointer());
+        pTexture = native_createFromSurface(renderer.getPointer(), surface.getPointer());
         this.width = surface.getWidth();
         this.height = surface.getHeight();
         this.pixelFormat = surface.getPixelFormat();
     }
 
-    private native long texture_createFromSurface(long pRenderer, long pSurface);
+    private native long native_createFromSurface(long pRenderer, long pSurface);
 
     protected void finalize()
     {
@@ -59,12 +59,12 @@ public class Texture
     public void destroy()
     {
         if (pTexture != 0) {
-            texture_destroy(pTexture);
+            native_destroy(pTexture);
             pTexture = 0;
         }
     }
 
-    private native void texture_destroy(long pTexture);
+    private native void native_destroy(long pTexture);
 
     /**
      * 
@@ -92,46 +92,46 @@ public class Texture
 
     public void setBlendMode(BlendMode blendMode)
     {
-        Jame.checkRuntimeStatus(renderer_setBlendMode(pTexture, blendMode.ordinal()));
+        Jame.checkRuntimeStatus(native_setBlendMode(pTexture, blendMode.ordinal()));
     }
 
-    private native int renderer_setBlendMode(long pTexture, int blendMode);
+    private native int native_setBlendMode(long pTexture, int blendMode);
 
     public BlendMode getBlendMode()
     {
-        int result = renderer_getBlendMode(pTexture);
+        int result = native_getBlendMode(pTexture);
         if (result < 0) {
             Jame.checkRuntimeStatus(-result);
         }
         return BlendMode.values()[result];
     }
 
-    private native int renderer_getBlendMode(long pTexture);
+    private native int native_getBlendMode(long pTexture);
 
     public void setAlpha(int alpha)
     {
-        Jame.checkRuntimeStatus(texture_setAlpha(pTexture, alpha));
+        Jame.checkRuntimeStatus(native_setAlpha(pTexture, alpha));
     }
 
-    private native int texture_setAlpha(long pTexture, int alpha);
+    private native int native_setAlpha(long pTexture, int alpha);
 
     public int getAlpha()
     {
-        return texture_getAlpha(pTexture);
+        return native_getAlpha(pTexture);
     }
 
-    private native int texture_getAlpha(long pTexture);
+    private native int native_getAlpha(long pTexture);
 
     private RGBA colorMod;
 
     // TODO Check that the byte casts work, despite bytes being SIGNED in java.
     public void setColorMod(RGBA color)
     {
-        Jame.checkRuntimeStatus(texture_setColorMod(pTexture, (byte) color.r, (byte) color.g, (byte) color.b));
+        Jame.checkRuntimeStatus(native_setColorMod(pTexture, (byte) color.r, (byte) color.g, (byte) color.b));
         colorMod = color;
     }
 
-    private native int texture_setColorMod(long pTexture, byte r, byte g, byte b);
+    private native int native_setColorMod(long pTexture, byte r, byte g, byte b);
 
     public RGBA getColorMod()
     {
@@ -140,10 +140,10 @@ public class Texture
 
     public void update(Surface surface)
     {
-        Jame.checkRuntimeStatus(texture_update(pTexture, surface.getPointer()));
+        Jame.checkRuntimeStatus(native_update(pTexture, surface.getPointer()));
     }
 
-    private native int texture_update(long pTexture, long pSurface);
+    private native int native_update(long pTexture, long pSurface);
 
     /**
      * Reads the pixel at a given point. Note, this may be SLOW, so don't read lots of pixels.
@@ -175,7 +175,7 @@ public class Texture
 
             RGBA result = new RGBA(0, 0, 0);
 
-            Jame.checkRuntimeStatus( texture_getPixel(renderer.getPointer(), pixelFormat.value, result) );
+            Jame.checkRuntimeStatus( native_getPixel(renderer.getPointer(), pixelFormat.value, result) );
             return result;
             
         } finally {
@@ -190,7 +190,7 @@ public class Texture
         }
     }
 
-    private native int texture_getPixel(long pRenderer, int pixelFormat, RGBA result);
+    private native int native_getPixel(long pRenderer, int pixelFormat, RGBA result);
 
     public String toString()
     {

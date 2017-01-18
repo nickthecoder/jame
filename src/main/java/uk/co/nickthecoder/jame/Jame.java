@@ -32,21 +32,21 @@ class Jame
         throws JameRuntimeException
     {
         if (!initialised) {
-            Jame.checkRuntimeStatus(jame_init());
+            Jame.checkRuntimeStatus(native_init());
             initialised = true;
         }
     }
 
-    private static native int jame_init();
+    private static native int native_init();
 
     static void initSubsystem( Subsystem subsystem )
         throws JameRuntimeException
     {
         init();
-        Jame.checkRuntimeStatus(jame_initSubsystem(subsystem.code));
+        Jame.checkRuntimeStatus(native_initSubsystem(subsystem.code));
     }
 
-    private static native int jame_initSubsystem( int subsystem );
+    private static native int native_initSubsystem( int subsystem );
 
     static void checkStatus( int returnValue )
         throws JameException
@@ -54,7 +54,7 @@ class Jame
         if (returnValue != 0) {
             String message;
             try {
-                message = jame_getError();
+                message = native_getError();
             } catch (Exception e) {
                 throw new JameException();
             }
@@ -67,7 +67,7 @@ class Jame
         if (returnValue != 0) {
             String message;
             try {
-                message = jame_getError();
+                message = native_getError();
             } catch (Exception e) {
                 throw new JameRuntimeException();
             }
@@ -81,7 +81,7 @@ class Jame
         if (obj == null) {
             String message;
             try {
-                message = jame_getError();
+                message = native_getError();
             } catch (Exception e) {
                 throw new JameException();
             }
@@ -95,7 +95,7 @@ class Jame
         if (obj == null) {
             String message;
             try {
-                message = jame_getError();
+                message = native_getError();
             } catch (Exception e) {
                 throw new JameRuntimeException();
             }
@@ -103,6 +103,6 @@ class Jame
         }
     }
 
-    private static native String jame_getError();
+    private static native String native_getError();
 
 }

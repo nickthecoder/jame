@@ -1,108 +1,36 @@
 package uk.co.nickthecoder.jame.test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import uk.co.nickthecoder.jame.JameException;
-import uk.co.nickthecoder.jame.RGBA;
 import uk.co.nickthecoder.jame.Surface;
 
-public class SpriteTest extends AbstractTest
+public class SpriteTest extends AbstractSpriteTest
 {
-    public boolean useTextures;
-
-    public Surface spriteSurface;
-
-    public SizedTexture spriteTexture;
-
-
-    public List<BouncySprite> sprites;
-
-    public TestController controller;
-
-    public SpriteTest(SizedTexture texture)
+    public SpriteTest(SizedTexture... textures)
         throws JameException
     {
-        spriteTexture = texture;
-
-        this.useTextures = true;
+        super(0, textures);
     }
-    
-    public SpriteTest(Surface surface)
+
+    public SpriteTest(Surface... surfaces)
         throws JameException
     {
-        spriteSurface = surface;
-
-        this.useTextures = false;
-    }
-
-    public void showInfo(TestController controller) throws JameException
-    {
-        super.showInfo(controller);
-        System.out.println("Sprite Count : " + this.sprites.size());
-    }
-
-    @Override
-    public void begin(TestController controller) throws JameException
-    {
-
-        System.out.println("Sprite " + spriteSurface);
-        System.out.println("Sprite " + spriteTexture);
-        System.out.println();
-
-        sprites = new ArrayList<BouncySprite>(1000);
-        this.controller = controller;
+        super(0, surfaces);
     }
 
     @Override
     public void display(TestController controller) throws JameException
     {
         if (sprites.size() < 10000) {
-            sprites.add(new BouncySprite());
+            Sprite sprite = createSprite();
+            sprite.dx = random.nextInt( 5 ) - 2;
+            sprite.dy = random.nextInt( 5 ) - 2;
         }
-
-        if (useTextures) {
-            controller.renderer.setDrawColor(RGBA.BLACK);
-            controller.renderer.clear();
-        } else {
-            controller.alphaSurface.fill(RGBA.BLACK);
+        
+        for (Sprite sprite : sprites) {
+            sprite.move();
         }
-
-        for (BouncySprite bouncy : sprites) {
-            if (useTextures) {
-                controller.renderer.copy(spriteTexture, bouncy.x, bouncy.y);
-            } else {
-                spriteSurface.blit(controller.alphaSurface, bouncy.x, bouncy.y, Surface.BlendMode.COMPOSITE);
-            }
-            bouncy.move();
-        }
-
-        if (useTextures) {
-            controller.renderer.present();
-        } else {
-            controller.showSurface(true);
-        }
-    }
-
-    class BouncySprite extends Bouncy
-    {
-        public BouncySprite()
-        {
-            super();
-        }
-
-        @Override
-        protected int getWidth()
-        {
-            return spriteTexture == null ? spriteSurface.getWidth() : spriteTexture.getWidth();
-        }
-
-        @Override
-        protected int getHeight()
-        {
-            return spriteTexture == null ? spriteSurface.getHeight() : spriteTexture.getHeight();
-        }
-
+        
+        super.display(controller);
     }
 
 }

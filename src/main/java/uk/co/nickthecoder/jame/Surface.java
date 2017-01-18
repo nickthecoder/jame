@@ -80,7 +80,7 @@ public final class Surface
 
     /**
      * For internal use only. We need to create blank Surface objects, which can
-     * then be filled in by the JNI calls such as surface_setMode.
+     * then be filled in by the JNI calls such as {@link #native_create(int, int, boolean)}.
      */
     Surface()
     {
@@ -108,7 +108,7 @@ public final class Surface
     public Surface(String filename) throws JameException
     {
         this();
-        Jame.checkStatus(this.surface_load(filename));
+        Jame.checkStatus(this.native_load(filename));
     }
 
     public Surface(File filename) throws JameException
@@ -125,7 +125,7 @@ public final class Surface
         return pSurface;
     }
 
-    private native int surface_load(String filename);
+    private native int native_load(String filename);
 
     /**
      * Creates a blank surface of a given size.
@@ -150,28 +150,28 @@ public final class Surface
         throws JameRuntimeException
     {
         this();
-        Jame.checkRuntimeStatus(this.surface_create(width, height, alpha));
+        Jame.checkRuntimeStatus(this.native_create(width, height, alpha));
         this.hasAlpha = alpha;
     }
 
-    private native int surface_create(int width, int height, boolean alpha);
+    private native int native_create(int width, int height, boolean alpha);
 
     public Surface(int width, int height, PixelFormat format)
         throws JameRuntimeException
     {
         this();
-        Jame.checkRuntimeStatus(this.surface_create(width, height, format.value));
+        Jame.checkRuntimeStatus(this.native_create(width, height, format.value));
         this.hasAlpha = format.hasAlpha();
     }
 
-    private native int surface_create(int width, int height, int format);
+    private native int native_create(int width, int height, int format);
 
-    private native int surface_saveAsPNG(long pSurface, String filename);
+    private native int native_saveAsPNG(long pSurface, String filename);
 
     public void saveAsPNG(String filename)
         throws JameException
     {
-        Jame.checkStatus(this.surface_saveAsPNG(this.pSurface, filename));
+        Jame.checkStatus(this.native_saveAsPNG(this.pSurface, filename));
     }
 
     /**
@@ -223,12 +223,12 @@ public final class Surface
     {
         if (this.pSurface != 0) {
             totalExisting -= 1;
-            this.surface_free(this.pSurface);
+            this.native_free(this.pSurface);
             this.pSurface = 0;
         }
     }
 
-    private native int surface_free(long pSurface);
+    private native int native_free(long pSurface);
 
     /**
      * Frees the SDL_Surface
@@ -267,14 +267,14 @@ public final class Surface
 
     public void setSurfaceAlphaMod(int alpha)
     {
-        Jame.checkRuntimeStatus(this.surface_setSurfaceAlphaMod(pSurface, alpha));
+        Jame.checkRuntimeStatus(this.native_setSurfaceAlphaMod(pSurface, alpha));
     }
 
-    private native int surface_setSurfaceAlphaMod(long pSurface, int alpha);
+    private native int native_setSurfaceAlphaMod(long pSurface, int alpha);
 
     public void setPerSurfaceAlpha(int alpha) throws JameRuntimeException
     {
-        Jame.checkRuntimeStatus(this.surface_setSurfaceAlphaMod(pSurface, alpha));
+        Jame.checkRuntimeStatus(this.native_setSurfaceAlphaMod(pSurface, alpha));
     }
 
     /*
@@ -300,7 +300,7 @@ public final class Surface
      * throw new JameRuntimeException(
      * "Cannot setPerSurfaceAlpha on RGBA surfaces");
      * } else {
-     * // Jame.checkRuntimeStatus(this.surface_setAlpha(this.pSurface,
+     * // Jame.checkRuntimeStatus(this.native_setAlpha(this.pSurface,
      * // alpha == 255 ? 0 : SDL_SRCALPHA, alpha));
      * setAlpha(alpha != 255, alpha);
      * }
@@ -323,7 +323,7 @@ public final class Surface
      * public void setAlphaEnabled(boolean value) throws JameRuntimeException
      * {
      * if (this.hasAlpha) {
-     * //Jame.checkRuntimeStatus(this.surface_setAlpha(this.pSurface,
+     * //Jame.checkRuntimeStatus(this.native_setAlpha(this.pSurface,
      * // value ? SDL_SRCALPHA : 0, 255));
      * throw new JameRuntimeException( "No longer suported" );
      * } else {
@@ -357,11 +357,11 @@ public final class Surface
 
         this.alphaEnabled = srcAlpha;
         this.alpha = alpha;
-        Jame.checkRuntimeStatus(this.surface_setAlpha(this.pSurface,
+        Jame.checkRuntimeStatus(this.native_setAlpha(this.pSurface,
             srcAlpha ? SDL_SRCALPHA : 0, alpha));
     }
 
-    private native int surface_setAlpha(long pSurface, int flags, int alpha);
+    private native int native_setAlpha(long pSurface, int flags, int alpha);
 
     /**
      * Gets the value of a single pixel. Only works with 32 bit surfaces. The
@@ -379,10 +379,10 @@ public final class Surface
     {
         ensureNotFreed();
 
-        return this.surface_getPixelColor(this.pSurface, x, y);
+        return this.native_getPixelColor(this.pSurface, x, y);
     }
 
-    private native int surface_getPixelColor(long pSurface, int x, int y);
+    private native int native_getPixelColor(long pSurface, int x, int y);
 
     /**
      * Gets the value of a single pixel. Only works with 32 bit surfaces.
@@ -398,11 +398,11 @@ public final class Surface
         ensureNotFreed();
 
         RGBA result = new RGBA(0, 0, 0);
-        this.surface_getPixelRGBA(this.pSurface, result, x, y);
+        this.native_getPixelRGBA(this.pSurface, result, x, y);
         return result;
     }
 
-    private native void surface_getPixelRGBA(long pSurface, RGBA result, int x,
+    private native void native_getPixelRGBA(long pSurface, RGBA result, int x,
         int y);
 
     /**
@@ -421,10 +421,10 @@ public final class Surface
     {
         ensureNotFreed();
 
-        this.surface_setPixel(this.pSurface, x, y, value);
+        this.native_setPixel(this.pSurface, x, y, value);
     }
 
-    private native void surface_setPixel(long pSurface, int x, int y, int value);
+    private native void native_setPixel(long pSurface, int x, int y, int value);
 
     /**
      * Sets the value of a single pixel.
@@ -440,11 +440,11 @@ public final class Surface
     {
         ensureNotFreed();
 
-        this.surface_setPixel(this.pSurface, x, y, color.r, color.g, color.b,
+        this.native_setPixel(this.pSurface, x, y, color.r, color.g, color.b,
             color.a);
     }
 
-    private native void surface_setPixel(long pSurface, int x, int y, int r,
+    private native void native_setPixel(long pSurface, int x, int y, int r,
         int g, int b, int a);
 
     /**
@@ -457,7 +457,7 @@ public final class Surface
     {
         ensureNotFreed();
 
-        Jame.checkRuntimeStatus(this.surface_fill(this.pSurface, 0, 0,
+        Jame.checkRuntimeStatus(this.native_fill(this.pSurface, 0, 0,
             this.width, this.height, color));
     }
 
@@ -473,11 +473,11 @@ public final class Surface
     {
         ensureNotFreed();
 
-        Jame.checkRuntimeStatus(this.surface_fill(this.pSurface, rect.x,
+        Jame.checkRuntimeStatus(this.native_fill(this.pSurface, rect.x,
             rect.y, rect.width, rect.height, color));
     }
 
-    private native int surface_fill(long pSurface, int x, int y, int width,
+    private native int native_fill(long pSurface, int x, int y, int width,
         int height, int color);
 
     /**
@@ -490,7 +490,7 @@ public final class Surface
     {
         ensureNotFreed();
 
-        Jame.checkRuntimeStatus(this.surface_fill2(this.pSurface, 0, 0,
+        Jame.checkRuntimeStatus(this.native_fill2(this.pSurface, 0, 0,
             this.width, this.height, color.r, color.g, color.b, color.a));
     }
 
@@ -512,7 +512,7 @@ public final class Surface
     {
         ensureNotFreed();
 
-        Jame.checkRuntimeStatus(this.surface_fill2(this.pSurface, 0, 0,
+        Jame.checkRuntimeStatus(this.native_fill2(this.pSurface, 0, 0,
             this.width, this.height, red, green, blue, alpha));
     }
 
@@ -528,7 +528,7 @@ public final class Surface
     {
         ensureNotFreed();
 
-        Jame.checkRuntimeStatus(this.surface_fill2(this.pSurface, rect.x,
+        Jame.checkRuntimeStatus(this.native_fill2(this.pSurface, rect.x,
             rect.y, rect.width, rect.height, color.r, color.g, color.b,
             color.a));
     }
@@ -553,11 +553,11 @@ public final class Surface
     {
         ensureNotFreed();
 
-        Jame.checkRuntimeStatus(this.surface_fill2(this.pSurface, rect.x,
+        Jame.checkRuntimeStatus(this.native_fill2(this.pSurface, rect.x,
             rect.y, rect.width, rect.height, red, green, blue, alpha));
     }
 
-    private native int surface_fill2(long pSurface, int x, int y, int width,
+    private native int native_fill2(long pSurface, int x, int y, int width,
         int height, int red, int green, int blur, int alpha);
 
     /**
@@ -570,10 +570,10 @@ public final class Surface
     {
         ensureNotFreed();
 
-        Jame.checkRuntimeStatus(this.surface_flip(this.pSurface));
+        Jame.checkRuntimeStatus(this.native_flip(this.pSurface));
     }
 
-    private native int surface_flip(long pSurface);
+    private native int native_flip(long pSurface);
 
     /**
      * Blits <code>this</code> onto <code>dest</this>, aligning their top left corners.
@@ -621,16 +621,16 @@ public final class Surface
         ensureNotFreed();
 
         if (blendMode == BlendMode.NONE) {
-            Jame.checkRuntimeStatus(this.surface_blit(this.pSurface,
+            Jame.checkRuntimeStatus(this.native_blit(this.pSurface,
                 dest.pSurface, x, y));
         } else {
-            Jame.checkRuntimeStatus(this.surface_blit3(this.pSurface, 0, 0,
+            Jame.checkRuntimeStatus(this.native_blit3(this.pSurface, 0, 0,
                 this.getWidth(), this.getHeight(), dest.pSurface, x, y,
                 this.getWidth(), this.getHeight(), blendMode.code));
         }
     }
 
-    private native int surface_blit(long pSrc, long pDest, int x, int y);
+    private native int native_blit(long pSrc, long pDest, int x, int y);
 
     /**
      * Blits <code>this</code> onto <code>dest</code>. The top left of srcRect
@@ -645,7 +645,7 @@ public final class Surface
     {
         ensureNotFreed();
 
-        Jame.checkRuntimeStatus(this.surface_blit2(this.pSurface, srcRect.x,
+        Jame.checkRuntimeStatus(this.native_blit2(this.pSurface, srcRect.x,
             srcRect.y, srcRect.width, srcRect.height, dest.pSurface,
             destRect.x, destRect.y, destRect.width, destRect.height));
     }
@@ -662,7 +662,7 @@ public final class Surface
     {
         ensureNotFreed();
 
-        Jame.checkRuntimeStatus(this.surface_blit2(this.pSurface, srcRect.x,
+        Jame.checkRuntimeStatus(this.native_blit2(this.pSurface, srcRect.x,
             srcRect.y, srcRect.width, srcRect.height, dest.pSurface, x, y,
             srcRect.width, srcRect.height));
     }
@@ -680,21 +680,21 @@ public final class Surface
         ensureNotFreed();
 
         if (blendMode == BlendMode.NONE) {
-            Jame.checkRuntimeStatus(this.surface_blit2(this.pSurface,
+            Jame.checkRuntimeStatus(this.native_blit2(this.pSurface,
                 srcRect.x, srcRect.y, srcRect.width, srcRect.height,
                 dest.pSurface, x, y, srcRect.width, srcRect.height));
         } else {
-            Jame.checkRuntimeStatus(this.surface_blit3(this.pSurface,
+            Jame.checkRuntimeStatus(this.native_blit3(this.pSurface,
                 srcRect.x, srcRect.y, srcRect.width, srcRect.height,
                 dest.pSurface, x, y, srcRect.width, srcRect.height,
                 blendMode.code));
         }
     }
 
-    private native int surface_blit2(long pSrc, int sx, int sy, int swidth,
+    private native int native_blit2(long pSrc, int sx, int sy, int swidth,
         int sheight, long pDest, int dx, int dy, int dwidth, int dheight);
 
-    private native int surface_blit3(long pSrc, int sx, int sy, int swidth,
+    private native int native_blit3(long pSrc, int sx, int sy, int swidth,
         int sheight, long pDest, int dx, int dy, int dwidth, int dheight,
         int flags);
 
@@ -725,13 +725,13 @@ public final class Surface
 
         Surface result = new Surface();
 
-        Jame.checkRuntimeStatus(this.surface_zoom(result, this.pSurface, zoomX,
+        Jame.checkRuntimeStatus(this.native_zoom(result, this.pSurface, zoomX,
             zoomY, smooth));
 
         return result;
     }
 
-    private native int surface_zoom(Surface dest, long pSrc, double zoomX,
+    private native int native_zoom(Surface dest, long pSrc, double zoomX,
         double zoomY, boolean smooth);
 
     /**
@@ -754,14 +754,14 @@ public final class Surface
         ensureNotFreed();
 
         Surface result = new Surface();
-        Jame.checkRuntimeStatus(this.surface_rotoZoom(result, this.pSurface,
+        Jame.checkRuntimeStatus(this.native_rotoZoom(result, this.pSurface,
             angle, zoom, smooth));
 
         return result;
 
     }
 
-    private native int surface_rotoZoom(Surface dest, long pSrc, double angle,
+    private native int native_rotoZoom(Surface dest, long pSrc, double angle,
         double zoom, boolean smooth);
 
     /**
@@ -802,19 +802,19 @@ public final class Surface
     {
         ensureNotFreed();
 
-        return this.surface_pixelOverlap(this.pSurface, other.pSurface, dx, dy,
+        return this.native_pixelOverlap(this.pSurface, other.pSurface, dx, dy,
             alphaThreshold);
     }
 
-    private native boolean surface_pixelOverlap(long pA, long pB, int dx,
+    private native boolean native_pixelOverlap(long pA, long pB, int dx,
         int dy, int threshold);
 
     public PixelFormat getPixelFormat()
     {
-        return new PixelFormat(surface_getPixelFormat(pSurface));
+        return new PixelFormat(native_getPixelFormat(pSurface));
     }
 
-    private native int surface_getPixelFormat(long pSurface);
+    private native int native_getPixelFormat(long pSurface);
 
     @Override
     public String toString()

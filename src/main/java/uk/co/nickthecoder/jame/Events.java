@@ -28,11 +28,11 @@ public class Events
      */
     public static Event poll()
     {
-        Event event = events_poll();
+        Event event = native_poll();
         return event;
     }
 
-    private static native Event events_poll();
+    private static native Event native_poll();
 
     /**
      * When typing, if you hold down a key long enough, you will get it to auto-repeat, that is, it
@@ -46,8 +46,8 @@ public class Events
      */
     public static void keyboardRepeat( int delay, int interval )
     {
-        events_keyboardRepeat(delay, interval);
+        native_keyboardRepeat(delay, interval);
     }
 
-    private static native void events_keyboardRepeat( int delay, int interval );
+    private static native void native_keyboardRepeat( int delay, int interval );
 }

@@ -11,7 +11,7 @@
 #include "include/uk_co_nickthecoder_jame_Events.h"
 
 
-JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_events_1poll
+JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_native_1poll
   (JNIEnv *env, jclass eventsClass )
 {
     SDL_Event e;
@@ -155,14 +155,14 @@ JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_events_1poll
 }
 
 /*
-JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Events_events_1enableUnicode
+JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Events_native_1enableUnicode
   (JNIEnv *env, jclass jevents, jboolean value )
 {
     SDL_EnableUNICODE( value );
 }
 */
 
-JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Events_events_1keyboardRepeat
+JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Events_native_1keyboardRepeat
   (JNIEnv *env, jclass jevents, jint delay, jint repeat )
 {
 	SDL_EnableKeyRepeat( delay, repeat );

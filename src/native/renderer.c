@@ -12,20 +12,20 @@
 
 #include "include/uk_co_nickthecoder_jame_Renderer.h"
 
-JNIEXPORT jlong JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1create
+JNIEXPORT jlong JNICALL Java_uk_co_nickthecoder_jame_Renderer_native_1create
   (JNIEnv *env, jobject obj, jlong pWindow, jint flags)
 {
     return (jlong) SDL_CreateRenderer( (SDL_Window*) pWindow, -1, flags );
 }
 
 
-JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1destroy
+JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Renderer_native_1destroy
   (JNIEnv *env, jobject jobj, jlong pRenderer )
 {
     SDL_DestroyRenderer( (SDL_Renderer*) pRenderer );
 }
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1getFlags
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_native_1getFlags
   (JNIEnv *env, jobject jobj, jlong pRenderer)
 {
     SDL_RendererInfo info;
@@ -37,13 +37,13 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1getFlags
 }
 
 
-JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1present
+JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Renderer_native_1present
   (JNIEnv *env, jobject obj, jlong pRenderer )
 {
     SDL_RenderPresent( (SDL_Renderer*) pRenderer );
 }
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1setClip
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_native_1setClip
   (JNIEnv *env, jobject obj, jlong pRenderer, jint x, jint y, jint width, jint height)
 {
     struct SDL_Rect rect = { .x=x, .y=y, .w=width, .h=height };
@@ -51,20 +51,20 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1setClip
     return SDL_RenderSetClipRect( (SDL_Renderer*) pRenderer, &rect );
 }
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1clearClip
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_native_1clearClip
   (JNIEnv *env, jobject obj, jlong pRenderer)
 {
     return SDL_RenderSetClipRect( (SDL_Renderer*) pRenderer, NULL );
 }
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1setViewport
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_native_1setViewport
   (JNIEnv *env, jobject jobj, jlong pRenderer, jint x, jint y, jint width, jint height)
 {
     SDL_Rect rect = { .x=x, .y=y, .w=width, .h=height };
     return SDL_SetRendererViewport( (SDL_Renderer*) pRenderer, &rect );
 }
 
-JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1getViewport
+JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Renderer_native_1getViewport
   (JNIEnv *env, jobject jobj, jlong pRenderer, jobject jRect)
 {
     SDL_Rect rect;
@@ -87,20 +87,20 @@ JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1getViewpo
 
 }
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1setLogicalSize
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_native_1setLogicalSize
   (JNIEnv *env, jobject obj, jlong pRenderer, jint x, jint y)
 {
     return SDL_RendererSetLogicalSize( (SDL_Renderer*) pRenderer, x, y );
 }
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1setDrawColor
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_native_1setDrawColor
   (JNIEnv *env, jobject jobj, jlong pRenderer, jint r, jint g, jint b, jint a)
 {
     int result = SDL_SetRenderDrawColor( (SDL_Renderer*) pRenderer, r, g, b, a );
     return result;
 }
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1getDrawColor
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_native_1getDrawColor
   (JNIEnv *env, jobject job, jlong pRenderer, jobject jRGBA)
 {
     int r;
@@ -131,14 +131,14 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1getDrawCo
 
 
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1clear
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_native_1clear
   (JNIEnv *env, jobject jobj, jlong pRenderer)
 {
     int result = SDL_RenderClear( (SDL_Renderer*) pRenderer );
     return result;
 }
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1copy
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_native_1copy
   (JNIEnv *env, jobject jobj, jlong pRenderer, jlong pTexture,
     jint srcX, jint srcY, jint srcWidth, jint srcHeight,
     jint dstX, jint dstY, jint dstWidth, jint dstHeight)
@@ -149,7 +149,7 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1copy
     int result = SDL_RenderCopy( (SDL_Renderer*) pRenderer, (SDL_Texture*) pTexture, &src, &dst );
 }
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1copyEx
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_native_1copyEx
   (JNIEnv *env, jobject jobj, jlong pRenderer, jlong pTexture,
   jint srcX, jint srcY, jint srcWidth, jint srcHeight,
   jint dstX, jint dstY, jint dstWidth, jint dstHeight,
@@ -164,14 +164,14 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1copyEx
 }
 
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1setDrawBlendMode
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_native_1setDrawBlendMode
   (JNIEnv *env, jobject jobj, jlong pRenderer, jint mode )
 {
     SDL_BlendMode blendMode = mode;
     return SDL_SetRenderDrawBlendMode( (SDL_Renderer*) pRenderer, mode );
 }
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1getDrawBlendMode
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_native_1getDrawBlendMode
   (JNIEnv *env, jobject jobj, jlong pRenderer)
 {
     SDL_BlendMode blendMode;
@@ -181,7 +181,7 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1getDrawBl
     return blendMode;
 }
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1setTarget
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_native_1setTarget
   (JNIEnv *env, jobject jobj, jlong pRenderer, jlong pTexture )
 {
     return SDL_SetRenderTarget( (SDL_Renderer*) pRenderer, (SDL_Texture*) pTexture );
@@ -193,21 +193,21 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Texture_texture_1setColorMod
     return SDL_TextureColorMod( (SDL_Texture*) pTexture, r, g, b );
 }
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1drawRect
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_native_1drawRect
   (JNIEnv *env, jobject jobj, jlong pRenderer, jint x, jint y, jint width, jint height)
 {
     SDL_Rect rect = { .x = x, .y = y, .w=width, .h=height };
     return SDL_RenderDrawRect( (SDL_Renderer*) pRenderer, &rect );
 }
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1fillRect
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_native_1fillRect
   (JNIEnv *env, jobject jobj, jlong pRenderer, jint x, jint y, jint width, jint height)
 {
     SDL_Rect rect = { .x = x, .y = y, .w=width, .h=height };
     return SDL_RenderFillRect( (SDL_Renderer*) pRenderer, &rect );
 }
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_renderer_1drawLine
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Renderer_native_1drawLine
   (JNIEnv *env, jobject jobj, jlong pRenderer, jint x1, jint y1, jint x2, jint y2)
 {
     return SDL_RenderDrawLine( (SDL_Renderer*) pRenderer, x1, y1, x2, y2 );

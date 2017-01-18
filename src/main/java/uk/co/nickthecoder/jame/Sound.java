@@ -13,20 +13,20 @@ public class Sound
 
     public Sound( String filename ) throws JameException
     {
-        Jame.checkStatus(this.sound_load(filename));
+        Jame.checkStatus(this.native_load(filename));
     }
 
-    private native int sound_load( String filename );
+    private native int native_load( String filename );
 
     public void free()
     {
         if (this.pSound != 0) {
-            this.sound_free(this.pSound);
+            this.native_free(this.pSound);
             this.pSound = 0;
         }
     }
 
-    private native void sound_free( long pSound );
+    private native void native_free( long pSound );
 
     public void finalise()
     {
@@ -46,7 +46,7 @@ public class Sound
 
     public boolean play()
     {
-        int result = this.sound_play(this.pSound);
+        int result = this.native_play(this.pSound);
         if (result >= 0) {
             this.latestMixChannel = result;
             Audio.mixChannels.get(this.latestMixChannel).sound = this;
@@ -55,7 +55,7 @@ public class Sound
         return false;
     }
 
-    private native int sound_play( long pSound );
+    private native int native_play( long pSound );
 
     public MixChannel getMixChannel()
     {

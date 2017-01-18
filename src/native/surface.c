@@ -41,21 +41,21 @@ void initialiseSurface( JNIEnv *env, jobject jsurface, SDL_Surface *surface )
     }
 }
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1setSurfaceAlphaMod
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_native_1setSurfaceAlphaMod
   (JNIEnv *env, jobject jobj, jlong pSurface, jint alpha)
 {
     return SDL_SetSurfaceAlphaMod( (SDL_Surface*) pSurface, alpha );
 }
 
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1free
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_native_1free
   (JNIEnv *env, jobject jsurface, jlong pSurface )
 {
     struct SDL_Surface *surface = (SDL_Surface*) (intptr_t) pSurface;
     SDL_FreeSurface( surface );
 }
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1create__IIZ
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_native_1create__IIZ
   (JNIEnv *env, jobject jsurface, jint width, jint height, jboolean alpha)
 {
     SDL_Surface* pSurface = SDL_CreateRGBSurface(0, width, height, alpha ? 32 : 24, 0, 0, 0, 0);
@@ -66,7 +66,7 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1create__IIZ
 }
 
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1create__III
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_native_1create__III
   (JNIEnv *env, jobject jSurface, jint width, jint height, jint format)
 {
     int bits = (format >> 8) & 0xff;
@@ -93,7 +93,7 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1create__III
     return pSurface == 0;
 }
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1load
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_native_1load
   (JNIEnv *env, jobject jsurface, jstring jfilename)
 {
     const char *filename = (*env)->GetStringUTFChars(env, jfilename, 0);
@@ -106,7 +106,7 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1load
     return surface == 0;
 }
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1saveAsPNG
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_native_1saveAsPNG
   (JNIEnv *env, jobject jSurface, jlong pSurface, jstring jfilename )
 {
     const char *filename = (*env)->GetStringUTFChars(env, jfilename, 0);
@@ -119,7 +119,7 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1saveAsPNG
   
 
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1fill2
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_native_1fill2
   (JNIEnv *rnv, jobject jsurface, jlong pSurface, jint x, jint y, jint width, jint height, jint red, jint green, jint blue, jint alpha )
 {
     struct SDL_Surface *surface = (SDL_Surface*) (intptr_t) pSurface;
@@ -130,7 +130,7 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1fill2
 }
 
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1fill
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_native_1fill
   (JNIEnv *env, jobject jsurface, jlong pSurface, jint x, jint y, jint width, jint height, jint color)
 {
     struct SDL_Surface *surface = (SDL_Surface*) (intptr_t) pSurface;
@@ -139,7 +139,7 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1fill
     return SDL_FillRect( surface, &rect, color );
 }
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1flip
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_native_1flip
   (JNIEnv *env, jobject jsurface, jlong pSurface)
 {
     struct SDL_Surface *surface = (SDL_Surface*) (intptr_t) pSurface;
@@ -147,7 +147,7 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1flip
     return SDL_Flip( surface );
 }
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1blit
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_native_1blit
   (JNIEnv *env, jobject jsurface, jlong pSrc, jlong pDest, jint x, jint y)
 {
     struct SDL_Surface *src = (SDL_Surface*) (intptr_t) pSrc;
@@ -158,7 +158,7 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1blit
     return SDL_BlitSurface( src, &srcRect, dest, &destRect );
 }
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1blit2
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_native_1blit2
   (JNIEnv *env, jobject jsurface, jlong pSrc, jint sx, jint sy, jint swidth, jint sheight, jlong pDest, jint dx, jint dy, jint dwidth, jint dheight )
 {
     struct SDL_Surface *src = (SDL_Surface*) (intptr_t) pSrc;
@@ -174,7 +174,7 @@ int
 pygame_Blit (SDL_Surface * src, SDL_Rect * srcrect,
              SDL_Surface * dst, SDL_Rect * dstrect, int the_args);
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1blit3
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_native_1blit3
   (JNIEnv *env, jobject jsurface, jlong pSrc, jint sx, jint sy, jint swidth, jint sheight, jlong pDest, jint dx, jint dy, jint dwidth, jint dheight, jint flags )
 {
     struct SDL_Surface *src = (SDL_Surface*) (intptr_t) pSrc;
@@ -185,7 +185,7 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1blit3
     return pygame_Blit( src, &srcRect, dest, &destRect, flags );
 }
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1zoom
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_native_1zoom
   (JNIEnv *env, jobject jsrc, jobject jdest, jlong pSrc, jdouble zoomX, jdouble zoomY, jboolean smooth)
 {
     SDL_Surface *src = (SDL_Surface*) (intptr_t) pSrc;
@@ -196,7 +196,7 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1zoom
     return dest == 0;
 }
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1rotoZoom
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_native_1rotoZoom
   (JNIEnv *env, jobject jsrc, jobject jdest, jlong pSrc, jdouble angle, jdouble zoom, jboolean smooth )
 {
     SDL_Surface *src = (SDL_Surface*) (intptr_t) pSrc;
@@ -206,7 +206,7 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1rotoZoom
     return dest == 0;
 }
 
-JNIEXPORT jboolean JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1pixelOverlap
+JNIEXPORT jboolean JNICALL Java_uk_co_nickthecoder_jame_Surface_native_1pixelOverlap
   (JNIEnv *env, jobject jsurface, jlong pA, jlong pB, jint dx, jint dy, jint alphaThreshold )
 {
     SDL_Surface *a = (SDL_Surface*) (intptr_t) pA;
@@ -300,7 +300,7 @@ JNIEXPORT jboolean JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1pixelOv
     return 0;
 }
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1getPixelColor
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_native_1getPixelColor
   (JNIEnv *env, jobject jsurface, jlong pSurface, jint x, jint y)
 {
     SDL_Surface *surface = (SDL_Surface*) (intptr_t) pSurface;    
@@ -315,7 +315,7 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1getPixelCol
     return value;
 }
 
-JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1getPixelRGBA
+JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Surface_native_1getPixelRGBA
   (JNIEnv *env, jobject jsurface, jlong pSurface, jobject jrgba, jint x, jint y)
 {
     SDL_Surface *surface = (SDL_Surface*) (intptr_t) pSurface;    
@@ -345,7 +345,7 @@ JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1getPixelRGB
 }
 
 // Set Pixel
-JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1setPixel__JIII
+JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Surface_native_1setPixel__JIII
   (JNIEnv *env, jobject jSurface, jlong pSurface, jint x, jint y, jint value)
 {
    SDL_Surface *surface = (SDL_Surface*) (intptr_t) pSurface;    
@@ -359,7 +359,7 @@ JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1setPixel__J
     SDL_UnlockSurface( surface );
 }
 
-JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1setPixel__JIIIIII
+JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Surface_native_1setPixel__JIIIIII
   (JNIEnv *env, jobject jSurface, jlong pSurface, jint x, jint y, jint r, jint g, jint b, jint a )
 {
     SDL_Surface *surface = (SDL_Surface*) (intptr_t) pSurface;
@@ -380,7 +380,7 @@ JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1setPixel__J
         
 }
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_surface_1getPixelFormat
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Surface_native_1getPixelFormat
   (JNIEnv *env, jobject jobj, jlong pSurface)
 {
     return ((SDL_Surface*) pSurface)->format->format;

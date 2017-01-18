@@ -13,19 +13,19 @@
 
 #include "include/uk_co_nickthecoder_jame_Texture.h"
 
-JNIEXPORT jlong JNICALL Java_uk_co_nickthecoder_jame_Texture_texture_1create
+JNIEXPORT jlong JNICALL Java_uk_co_nickthecoder_jame_Texture_native_1create
   (JNIEnv *env, jobject jobj, jlong pRenderer, jint format, jint access, jint width, jint height)
 {
     return (long) SDL_CreateTexture( (SDL_Renderer*) pRenderer, format, access, width, height );
 }
 
-JNIEXPORT jlong JNICALL Java_uk_co_nickthecoder_jame_Texture_texture_1createFromSurface
+JNIEXPORT jlong JNICALL Java_uk_co_nickthecoder_jame_Texture_native_1createFromSurface
   (JNIEnv *env, jobject jobj, jlong pRenderer, jlong pSurface)
 {
     return (long) SDL_CreateTextureFromSurface( (SDL_Renderer*) pRenderer, (SDL_Surface*) pSurface);
 }
 
-JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Texture_texture_1destroy
+JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Texture_native_1destroy
   (JNIEnv *env, jobject jobj, jlong pTexture)
 {
     SDL_DestroyTexture( (SDL_Texture*) pTexture );
@@ -50,19 +50,19 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Texture_renderer_1getBlendMo
 }
 
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Texture_texture_1setAlpha
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Texture_native_1setAlpha
   (JNIEnv *env, jobject jobj, jlong pTexture, jint alpha)
 {
     return SDL_SetTextureAlphaMod( (SDL_Texture*) pTexture, alpha );
 }
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Texture_texture_1getAlpha
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Texture_native_1getAlpha
   (JNIEnv *env, jobject jobj, jlong pTexture)
 {
     return SDL_GetTExtureAlphaMod( (SDL_Texture*) pTexture );
 }    
 
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Texture_texture_1update
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Texture_native_1update
   (JNIEnv *env, jobject job, jlong pTexture, jlong surface)
 {
     SDL_Surface *pSurface = (SDL_Surface*) surface;
@@ -74,7 +74,7 @@ JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Texture_texture_1update
 /*
     Fills the java RGBA with the pixel at (0,0) of the renderer
 */
-JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Texture_texture_1getPixel
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Texture_native_1getPixel
   (JNIEnv *env, jobject jobj, jlong pRenderer, jint pixelFormat, jobject jRGBA)
 {
     SDL_Rect rect = {.x=0,.y=0,.w=1,.h=1 };
