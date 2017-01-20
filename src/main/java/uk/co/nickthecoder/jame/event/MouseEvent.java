@@ -7,6 +7,8 @@
  ******************************************************************************/
 package uk.co.nickthecoder.jame.event;
 
+import uk.co.nickthecoder.jame.Window;
+
 /**
  * Holds the common stuff from MouseMotionEvent and MouseButtonEvent
  * 
@@ -24,5 +26,17 @@ public class MouseEvent extends Event
      * The Y coordinates of the mouse at press/release time
      */
     public int y;
+
+    public int windowID;
+
+    /**
+     * The unique id for the window or 0.
+     */
+    public int windowId;
+
+    public Window getWindow()
+    {
+        return Window.getWindowById(windowID);
+    }
 
 }

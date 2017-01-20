@@ -7,6 +7,8 @@
  ******************************************************************************/
 package uk.co.nickthecoder.jame.event;
 
+import uk.co.nickthecoder.jame.Window;
+
 public class MouseMotionEvent extends MouseEvent
 {
     /**
@@ -18,6 +20,15 @@ public class MouseMotionEvent extends MouseEvent
 
     public int relativeX;
     public int relativeY;
+
+    @Override
+    public void postConstruct()
+    {
+        Window window = getWindow();
+        if (window != null) {
+            window.onMouseMotionEvent(this);
+        }
+    }
 
     /**
      * Uses bitwise-OR of the this.state to test if a mouse button is pressed.

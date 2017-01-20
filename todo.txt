@@ -30,6 +30,9 @@ Tests / Examples
 
 event.c commented out code because ACTIVEEVENT and SDL_VIDEORESIZE are no longer valid.
 
+Class Keys uses the virtual key values, rather than the physical key scan code: not useful for most games.
+    Either replace it with physical keys, or create a new class called VKeys.
+    Itchy should use scan codes most of the time.
 
 Last
 ====

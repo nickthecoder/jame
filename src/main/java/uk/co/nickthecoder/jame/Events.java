@@ -6,6 +6,7 @@
 package uk.co.nickthecoder.jame;
 
 import uk.co.nickthecoder.jame.event.Event;
+import uk.co.nickthecoder.jame.event.StopPropagation;
 
 public class Events
 {
@@ -21,18 +22,25 @@ public class Events
     public static final int DEFAULT_REPEAT_INTERVAL = 30;
 
     /**
-     * Within your game loop, call poll repeatedly until it returns null. See the subclasses of
-     * {@link Event} for all of the possible events that are generated.
+     * Within your game loop, call poll repeatedly until it returns null. See the subclasses of {@link Event} for all of
+     * the possible events that are generated.
      * 
      * @return <code>null</code> if there are no more events.
      */
     public static Event poll()
     {
-        Event event = native_poll();
-        if (event != null) {
-            event.postConstruct();
+        while (true) {
+            Event event = native_poll();
+            if (event != null) {
+                try {
+                    event.postConstruct();
+                } catch (StopPropagation sp) {
+                    // The event has already been handled, so prevent it from being handled again, by not returning it.
+                    continue;
+                }
+            }
+            return event;
         }
-        return event;
     }
 
     private static native Event native_poll();
@@ -42,15 +50,15 @@ public class Events
      * will fire multiple KeyboardEvents.
      * 
      * @param delay
-     *        The time in milliseconds you need to hold the key down for, in order to start generating
-     *        these extra keyboard events.
+     *            The time in milliseconds you need to hold the key down for, in order to start generating
+     *            these extra keyboard events.
      * @param interval
-     *        This is the time in milliseconds between each of the additional KeyboardEvents.
+     *            This is the time in milliseconds between each of the additional KeyboardEvents.
      */
-    public static void keyboardRepeat( int delay, int interval )
+    public static void keyboardRepeat(int delay, int interval)
     {
         native_keyboardRepeat(delay, interval);
     }
 
-    private static native void native_keyboardRepeat( int delay, int interval );
+    private static native void native_keyboardRepeat(int delay, int interval);
 }

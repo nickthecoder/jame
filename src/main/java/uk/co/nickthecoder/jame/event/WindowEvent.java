@@ -36,7 +36,7 @@ public class WindowEvent extends Event
     }
 
     /**
-     * Sets {@link #windowEventType} and also fires {@link Window#onEvent(WindowEvent)}.
+     * Sets {@link #windowEventType} and also fires {@link Window#onWindowEvent(WindowEvent)}.
      */
     public void postConstruct()
     {
@@ -44,7 +44,7 @@ public class WindowEvent extends Event
 
         Window window = this.getWindow();
         if (window != null) {
-            window.onEvent(this);
+            window.onWindowEvent(this);
         }
     }
 

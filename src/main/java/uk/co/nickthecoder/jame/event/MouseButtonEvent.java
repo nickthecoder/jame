@@ -7,6 +7,8 @@
  ******************************************************************************/
 package uk.co.nickthecoder.jame.event;
 
+import uk.co.nickthecoder.jame.Window;
+
 public class MouseButtonEvent extends MouseEvent
 {
     public static final int BUTTON_LEFT = 1;
@@ -31,9 +33,17 @@ public class MouseButtonEvent extends MouseEvent
      * SDL_PRESSED or SDL_RELEASED. You can also use isPressed and/or isReleased for brevity
      */
     public int state;
-    
+
     private MouseButton mouseButton;
-    
+
+    @Override
+    public void postConstruct()
+    {
+        Window window = getWindow();
+        if (window != null) {
+            window.onMouseButtonEvent(this);
+        }
+    }
 
     public boolean isPressed()
     {
@@ -52,7 +62,8 @@ public class MouseButtonEvent extends MouseEvent
         }
         return this.mouseButton;
     }
-    
+
+    @Override
     public String toString()
     {
         return "MouseButtonEven{ which=" + which + ", button=" + button + ", state=" + state + ", x=" + x + ", y=" + y

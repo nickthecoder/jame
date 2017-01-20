@@ -18,6 +18,7 @@ import uk.co.nickthecoder.jame.Window;
 import uk.co.nickthecoder.jame.event.Event;
 import uk.co.nickthecoder.jame.event.KeyboardEvent;
 import uk.co.nickthecoder.jame.event.ModifierKey;
+import uk.co.nickthecoder.jame.event.MouseButtonEvent;
 import uk.co.nickthecoder.jame.event.QuitEvent;
 import uk.co.nickthecoder.jame.event.WindowEvent;
 
@@ -90,6 +91,7 @@ public class TestController implements Test
     {
     }
 
+    @Override
     public void begin(TestController controller)
         throws JameException
     {
@@ -148,6 +150,7 @@ public class TestController implements Test
         addMenuItem("Mouse", new MouseTest(10, angryTexture, laughTexture));
     }
 
+    @Override
     public void end(TestController controller)
         throws JameException
     {
@@ -166,6 +169,7 @@ public class TestController implements Test
         currentTest = this;
     }
 
+    @Override
     public void event(TestController controller, Event event)
         throws JameException
     {
@@ -232,6 +236,7 @@ public class TestController implements Test
         }
     }
 
+    @Override
     public void showInfo(TestController controller)
     {
         long millis = System.currentTimeMillis() - lastMillis;
@@ -328,13 +333,26 @@ public class TestController implements Test
         {
             super("Jame Tests", 640, 480, true, 0);
         }
-        
-        public void onEvent( WindowEvent we )
+
+        @Override
+        public void onWindowEvent(WindowEvent we)
         {
-            System.out.println( "ControllerWindow " + we );
+            //System.out.println("ControllerWindow " + we);
+        }
+
+        @Override
+        public void onKeyboardEvent(KeyboardEvent ke)
+        {
+            //System.out.println("ControllerWindow " + ke);
+        }
+        
+        @Override
+        public void onMouseButtonEvent(MouseButtonEvent mbe)
+        {
+            //System.out.println("ControllerWindow " + mbe);
         }
     }
-    
+
     public static void main(String[] argv) throws Exception
     {
         TestController controller = new TestController();

@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import uk.co.nickthecoder.jame.Texture.Access;
+import uk.co.nickthecoder.jame.event.KeyboardEvent;
+import uk.co.nickthecoder.jame.event.MouseButtonEvent;
+import uk.co.nickthecoder.jame.event.MouseMotionEvent;
 import uk.co.nickthecoder.jame.event.WindowEvent;
 
 /**
@@ -27,7 +30,6 @@ public class Window
 
     private static PixelFormat recommendedPixelFormatAlpha = PixelFormat.RGBA8888;
 
-    
     /** fullscreen window */
     public static final int FULLSCREEN = 0x1;
 
@@ -380,20 +382,60 @@ public class Window
     }
 
     private native int native_getRefreshRate(long pWindow);
-    
-    public static Window getWindowById( int windowID )
+
+    public static Window getWindowById(int windowID)
     {
-        return windowsByID.get( windowID );
+        return windowsByID.get(windowID);
     }
 
     /**
-     * If your game's main event handler calls
-     * direct
+     * Automatically called by a WindowEvent. Override the Window class to handle this event as you see fit,
+     * and call {@link WindowEvent#stopPropagation()} to prevent the event from being returned from
+     * {@link Events#poll()}.
      * 
      * @param we
      *            The window event.
      */
-    public void onEvent(WindowEvent we)
+    public void onWindowEvent(WindowEvent we)
+    {
+        // Do nothing - sub classes can override this method.
+    }
+
+    /**
+     * Automatically called by a KeyboardEvent. Override the Window class to handle this event as you see fit,
+     * and call {@link WindowEvent#stopPropagation()} to prevent the event from being returned from
+     * {@link Events#poll()}.
+     * 
+     * @param we
+     *            The keyboard event.
+     */
+    public void onKeyboardEvent(KeyboardEvent ke)
+    {
+        // Do nothing - sub classes can override this method.
+    }
+    
+    /**
+     * Automatically called by a MouseButtonEvent. Override the Window class to handle this event as you see fit,
+     * and call {@link WindowEvent#stopPropagation()} to prevent the event from being returned from
+     * {@link Events#poll()}.
+     * 
+     * @param we
+     *            The keyboard event.
+     */
+    public void onMouseButtonEvent(MouseButtonEvent mbe)
+    {
+        // Do nothing - sub classes can override this method.
+    }
+    
+    /**
+     * Automatically called by a MouseMotionEvent. Override the Window class to handle this event as you see fit,
+     * and call {@link WindowEvent#stopPropagation()} to prevent the event from being returned from
+     * {@link Events#poll()}.
+     * 
+     * @param we
+     *            The keyboard event.
+     */
+    public void onMouseMotionEvent(MouseMotionEvent mme)
     {
         // Do nothing - sub classes can override this method.
     }

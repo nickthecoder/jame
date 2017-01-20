@@ -72,6 +72,9 @@ JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_native_1poll
             fid = (*env)->GetFieldID(env,subClass,"timestamp","I");
             (*env)->SetIntField(env,jevent,fid, e.common.timestamp);
 
+            fid = (*env)->GetFieldID(env,subClass,"windowID","I");
+            (*env)->SetIntField(env,jevent,fid, e.key.windowID);
+
             fid = (*env)->GetFieldID(env,subClass,"state","I");
             (*env)->SetIntField(env,jevent,fid, e.key.state);
 
@@ -97,6 +100,9 @@ JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_native_1poll
 
             fid = (*env)->GetFieldID(env,subClass,"timestamp","I");
             (*env)->SetIntField(env,jevent,fid, e.common.timestamp);
+
+            fid = (*env)->GetFieldID(env,subClass,"windowID","I");
+            (*env)->SetIntField(env,jevent,fid, e.button.windowID);
 
             fid = (*env)->GetFieldID(env,subClass,"which","I");
             (*env)->SetIntField(env,jevent,fid, e.button.which);
@@ -127,6 +133,9 @@ JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_native_1poll
 
             fid = (*env)->GetFieldID(env,subClass,"timestamp","I");
             (*env)->SetIntField(env,jevent,fid, e.common.timestamp);
+
+            fid = (*env)->GetFieldID(env,subClass,"windowID","I");
+            (*env)->SetIntField(env,jevent,fid, e.motion.windowID);
 
             fid = (*env)->GetFieldID(env,subClass,"state","I");
             (*env)->SetIntField(env,jevent,fid, e.motion.state);
