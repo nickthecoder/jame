@@ -17,10 +17,10 @@ import uk.co.nickthecoder.jame.TrueTypeFont;
 import uk.co.nickthecoder.jame.Window;
 import uk.co.nickthecoder.jame.event.Event;
 import uk.co.nickthecoder.jame.event.KeyboardEvent;
-import uk.co.nickthecoder.jame.event.ModifierKey;
 import uk.co.nickthecoder.jame.event.MouseButtonEvent;
 import uk.co.nickthecoder.jame.event.QuitEvent;
 import uk.co.nickthecoder.jame.event.WindowEvent;
+import uk.co.nickthecoder.jame.util.KeyboardFilter;
 
 /**
  * Interactive tests of Jame API.
@@ -176,33 +176,31 @@ public class TestController implements Test
         if (event instanceof KeyboardEvent) {
 
             KeyboardEvent ke = (KeyboardEvent) event;
-            if (ke.isPressed()) {
-                int value = ke.symbol;
+            int value = ke.symbol;
+            
+            if (KeyboardFilter.ctrlPress.accept(ke)) {
+                if (ke.symbol == 'f') {
+                    fullscreen = !fullscreen;
+                    window.setFullScreen(fullscreen ? Window.FULLSCREEN : 0);
+                }
+                if (ke.symbol == 'g') {
+                    fullscreen = !fullscreen;
+                    window.setFullScreen(fullscreen ? Window.FULLSCREEN_DESKTOP : 0);
+                }
+            }
 
-                if (ke.modifier(ModifierKey.CTRL)) {
-                    if (ke.symbol == 'f') {
-                        fullscreen = !fullscreen;
-                        window.setFullScreen(fullscreen ? Window.FULLSCREEN : 0);
-                    }
-                    if (ke.symbol == 'g') {
-                        fullscreen = !fullscreen;
-                        window.setFullScreen(fullscreen ? Window.FULLSCREEN_DESKTOP : 0);
-                    }
+            if (KeyboardFilter.regularPress.accept(ke)) {
+                for (MenuItem menuItem : menuItems) {
+                    if (menuItem.letter == value) {
+                        Test test = menuItem.test;
 
-                } else {
-
-                    for (MenuItem menuItem : menuItems) {
-                        if (menuItem.letter == value) {
-                            Test test = menuItem.test;
-
-                            this.currentTest = test;
-                            test.begin(this);
-                            return;
-                        }
+                        this.currentTest = test;
+                        test.begin(this);
+                        return;
                     }
                 }
-
             }
+
         }
     }
 
@@ -337,7 +335,7 @@ public class TestController implements Test
         @Override
         public void onWindowEvent(WindowEvent we)
         {
-            //System.out.println("ControllerWindow " + we);
+            // System.out.println("ControllerWindow " + we);
         }
 
         @Override
@@ -345,11 +343,11 @@ public class TestController implements Test
         {
             //System.out.println("ControllerWindow " + ke);
         }
-        
+
         @Override
         public void onMouseButtonEvent(MouseButtonEvent mbe)
         {
-            //System.out.println("ControllerWindow " + mbe);
+            // System.out.println("ControllerWindow " + mbe);
         }
     }
 

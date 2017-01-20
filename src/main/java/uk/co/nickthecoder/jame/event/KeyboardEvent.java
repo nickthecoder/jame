@@ -7,6 +7,7 @@
  ******************************************************************************/
 package uk.co.nickthecoder.jame.event;
 
+import uk.co.nickthecoder.jame.Events;
 import uk.co.nickthecoder.jame.Window;
 
 public class KeyboardEvent extends Event implements Keys
@@ -14,7 +15,7 @@ public class KeyboardEvent extends Event implements Keys
     /**
      * Either {@link Event#STATE_PRESSED} or {@link Event#STATE_RELEASED}.
      */
-    public int state;
+    public final int state;
 
     /**
      * Identifies a physical key. A US keyboard will give the same scanCode as non-US keyboard, despite being labelled
@@ -47,6 +48,15 @@ public class KeyboardEvent extends Event implements Keys
     public int modifiers;
 
     /**
+     * False if this is a regular key down event, true if it is a result of holding down the key, and artificial
+     * events are fired every {@link Events#DEFAULT_REPEAT_INTERVAL}ms after the key is held down for
+     * {@link Events#DEFAULT_REPEAT_DELAY}.
+     * <p>
+     * Use {@link Events#keyboardRepeat(int, int)} to change the repeat timings.
+     */
+    public boolean repeated;
+
+    /**
      * Maps the key's symbol to a Key. Lazily evaluated.
      */
     private Key key;
@@ -56,11 +66,16 @@ public class KeyboardEvent extends Event implements Keys
      */
     public int windowID;
 
+    public KeyboardEvent()
+    {
+        state = 0;
+    }
+    
     @Override
     public void postConstruct()
     {
         Window window = getWindow();
-        if ( window != null) {
+        if (window != null) {
             window.onKeyboardEvent(this);
         }
     }
@@ -94,9 +109,9 @@ public class KeyboardEvent extends Event implements Keys
      * @param modifiers
      * @return True if any of the ModifierKeys in the ModifierKeySet are down.
      */
-    public boolean modifier(ModifierKey.ModifierKeySet modifiers)
+    public boolean modifier(ModifierKeySet modifiers)
     {
-        return modifiers.pressed(this.modifiers);
+        return modifiers.onlyPressed(this.modifiers);
     }
 
     /**
@@ -124,7 +139,6 @@ public class KeyboardEvent extends Event implements Keys
     public String toString()
     {
         return "KeyboardEvent{ state=" + this.state + ", scanCode=" + this.scanCode + ", symbol=" + this.symbol
-            + ", modifiers="
-            + this.modifiers + " }";
+            + ", modifiers=" + this.modifiers + " repeated=" + this.repeated + " }";
     }
 }

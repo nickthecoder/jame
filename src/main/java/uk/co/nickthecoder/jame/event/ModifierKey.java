@@ -4,7 +4,6 @@
  ******************************************************************************/
 package uk.co.nickthecoder.jame.event;
 
-import java.util.EnumSet;
 
 public enum ModifierKey
 {
@@ -21,19 +20,14 @@ public enum ModifierKey
     CAPS(0x2000),
     MODE(0x4000);
 
-    public static final ModifierKeySet SHIFT = LSHIFT.or(RSHIFT);
-    public static final ModifierKeySet CTRL = LCTRL.or(RCTRL);
-    public static final ModifierKeySet ALT = LALT.or(RALT);
-    public static final ModifierKeySet META = LMETA.or(RMETA);
-
     public final int code;
 
-    ModifierKey( int code )
+    ModifierKey(int code)
     {
         this.code = code;
     }
 
-    public boolean pressed( int flags )
+    public boolean pressed(int flags)
     {
         if (this.code == 0) {
             return flags == 0;
@@ -44,37 +38,8 @@ public enum ModifierKey
         }
     }
 
-    public ModifierKeySet or( ModifierKey other )
+    public ModifierKeySet or(ModifierKey other)
     {
-        return new ModifierKeySet(EnumSet.of(this, other));
-    }
-
-    public final class ModifierKeySet
-    {
-        private final int code;
-
-        public ModifierKeySet( ModifierKey modifierKey )
-        {
-            this.code = modifierKey.code;
-        }
-
-        public ModifierKeySet( EnumSet<ModifierKey> modifierKeys )
-        {
-            int code = 0;
-            for (ModifierKey key : modifierKeys) {
-                code |= key.code;
-            }
-            this.code = code;
-        }
-
-        public int getCode()
-        {
-            return this.code;
-        }
-
-        public boolean pressed( int flags )
-        {
-            return (this.code & flags) != 0;
-        }
+        return new ModifierKeySet(this, other);
     }
 }

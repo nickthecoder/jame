@@ -87,6 +87,9 @@ JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_native_1poll
             fid = (*env)->GetFieldID(env,subClass,"modifiers","I");
             (*env)->SetIntField(env,jevent,fid, e.key.keysym.mod);
             
+            fid = (*env)->GetFieldID(env,subClass,"repeated","Z");
+            (*env)->SetBooleanField(env,jevent,fid,e.key.repeat != 0);
+            
             return jevent;
 
         } else if ( (type == SDL_MOUSEBUTTONDOWN) || (type == SDL_MOUSEBUTTONUP) ) {
