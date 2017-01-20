@@ -3,6 +3,8 @@ package uk.co.nickthecoder.jame.util;
 import uk.co.nickthecoder.jame.event.KeyboardEvent;
 import uk.co.nickthecoder.jame.event.ModifierKey;
 import uk.co.nickthecoder.jame.event.ModifierKeyFilter;
+import uk.co.nickthecoder.jame.event.ScanCode;
+import uk.co.nickthecoder.jame.event.Symbol;
 
 public class KeyboardFilter extends AbstractEventFilter<KeyboardEvent>
 {
@@ -91,7 +93,18 @@ public class KeyboardFilter extends AbstractEventFilter<KeyboardEvent>
         this.symbol = symbol;
         return this;
     }
+    
+    public KeyboardFilter symbol(Symbol symbol)
+    {
+        this.symbol = symbol.value;
+        return this;
+    }
 
+    public KeyboardFilter scanCode(ScanCode scanCode)
+    {
+        return scanCode(scanCode.value);
+    }
+    
     public KeyboardFilter scanCode(int scanCode)
     {
         this.scanCode = scanCode;

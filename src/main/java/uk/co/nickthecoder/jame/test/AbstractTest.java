@@ -2,7 +2,7 @@ package uk.co.nickthecoder.jame.test;
 
 import uk.co.nickthecoder.jame.JameException;
 import uk.co.nickthecoder.jame.event.Event;
-import uk.co.nickthecoder.jame.event.Key;
+import uk.co.nickthecoder.jame.event.Symbol;
 import uk.co.nickthecoder.jame.event.KeyboardEvent;
 
 public abstract class AbstractTest implements Test
@@ -24,7 +24,7 @@ public abstract class AbstractTest implements Test
 
     protected void keyboardEvent(TestController controller, KeyboardEvent ke) throws JameException
     {
-        if ( (ke.isPressed()) && (ke.getKey() == Key.ESCAPE ) ) {
+        if ( (ke.isPressed()) && (ke.getSymbol() == Symbol.ESCAPE ) ) {
             this.end( controller );
         }
     }

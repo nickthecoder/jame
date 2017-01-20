@@ -8,9 +8,11 @@ import uk.co.nickthecoder.jame.RGBA;
 import uk.co.nickthecoder.jame.Rect;
 import uk.co.nickthecoder.jame.Surface;
 import uk.co.nickthecoder.jame.event.Event;
-import uk.co.nickthecoder.jame.event.Keys;
+import uk.co.nickthecoder.jame.event.KeyboardEvent;
 import uk.co.nickthecoder.jame.event.ModifierKey;
 import uk.co.nickthecoder.jame.event.ModifierKeyFilter;
+import uk.co.nickthecoder.jame.event.ScanCode;
+import uk.co.nickthecoder.jame.event.Symbol;
 import uk.co.nickthecoder.jame.util.KeyboardFilter;
 
 public class KeyboardEventTest extends AbstractTest
@@ -28,29 +30,37 @@ public class KeyboardEventTest extends AbstractTest
 
         indicators = new ArrayList<Indicator>();
 
-        add("Press A (any mods)", new KeyboardFilter().pressed().symbol(Keys.a));
-        add("Press A (no mods)", new KeyboardFilter().pressed().modifiers(ModifierKeyFilter.NONE).symbol(Keys.a));
+        add("Press A (any mods)", new KeyboardFilter().pressed().symbol(Symbol.a));
+        add("Press A (no mods)", new KeyboardFilter().pressed().modifiers(ModifierKeyFilter.NONE).symbol(Symbol.a));
 
-        add("Press shift+A", new KeyboardFilter().pressed().modifiers(ModifierKeyFilter.SHIFT).symbol(Keys.a));
-        add("Press ctrl+A", new KeyboardFilter().pressed().modifiers(ModifierKeyFilter.CTRL).symbol(Keys.a));
-        add("Press alt+A", new KeyboardFilter().pressed().modifiers(ModifierKeyFilter.ALT).symbol(Keys.a));
+        add("Press shift+A", new KeyboardFilter().pressed().modifiers(ModifierKeyFilter.SHIFT).symbol(Symbol.a));
+        add("Press ctrl+A", new KeyboardFilter().pressed().modifiers(ModifierKeyFilter.CTRL).symbol(Symbol.a));
+        add("Press alt+A", new KeyboardFilter().pressed().modifiers(ModifierKeyFilter.ALT).symbol(Symbol.a));
         
-        add("Press left shift+A", new KeyboardFilter().pressed().modifier(ModifierKey.LSHIFT).symbol(Keys.a));
-        add("Press right shift+A", new KeyboardFilter().pressed().modifier(ModifierKey.RSHIFT).symbol(Keys.a));
+        add("Press left shift+A", new KeyboardFilter().pressed().modifier(ModifierKey.LSHIFT).symbol(Symbol.a));
+        add("Press right shift+A", new KeyboardFilter().pressed().modifier(ModifierKey.RSHIFT).symbol(Symbol.a));
         
-        add("Press left alt+A", new KeyboardFilter().pressed().modifier(ModifierKey.LALT).symbol(Keys.a));
-        add("Press right alt+A", new KeyboardFilter().pressed().modifier(ModifierKey.RALT).symbol(Keys.a));
+        add("Press left alt+A", new KeyboardFilter().pressed().modifier(ModifierKey.LALT).symbol(Symbol.a));
+        add("Press right alt+A", new KeyboardFilter().pressed().modifier(ModifierKey.RALT).symbol(Symbol.a));
 
-        add("Press left ctrl+A", new KeyboardFilter().pressed().modifier(ModifierKey.LCTRL).symbol(Keys.a));
-        add("Press right ctrl+A", new KeyboardFilter().pressed().modifier(ModifierKey.RCTRL).symbol(Keys.a));
+        add("Press left ctrl+A", new KeyboardFilter().pressed().modifier(ModifierKey.LCTRL).symbol(Symbol.a));
+        add("Press right ctrl+A", new KeyboardFilter().pressed().modifier(ModifierKey.RCTRL).symbol(Symbol.a));
         
-        add("Press ctrl+shift+A", new KeyboardFilter().pressed().modifiers(ModifierKeyFilter.SHIFT.and(ModifierKeyFilter.CTRL)).symbol(Keys.a));
+        add("Press ctrl+shift+A", new KeyboardFilter().pressed().modifiers(ModifierKeyFilter.SHIFT.and(ModifierKeyFilter.CTRL)).symbol(Symbol.a));
 
         nextColumn();
-        add("Press A (any mods - include repeats)", new KeyboardFilter().pressed().includeRepeats().symbol(Keys.a));
-        add("Release A (any mods)", new KeyboardFilter().released().symbol(Keys.a));
-        add("Release A (no mods)", new KeyboardFilter().released().modifiers(ModifierKeyFilter.NONE).symbol(Keys.a));
-        add("Release shift+A", new KeyboardFilter().released().modifiers(ModifierKeyFilter.SHIFT).symbol(Keys.a));
+        add("Press A (any mods - include repeats)", new KeyboardFilter().pressed().includeRepeats().symbol(Symbol.a));
+        add("Release A (any mods)", new KeyboardFilter().released().symbol(Symbol.a));
+        add("Release A (no mods)", new KeyboardFilter().released().modifiers(ModifierKeyFilter.NONE).symbol(Symbol.a));
+        add("Release shift+A", new KeyboardFilter().released().modifiers(ModifierKeyFilter.SHIFT).symbol(Symbol.a));
+        
+        // Note, these are different physical keys on my UK keyboard.
+        add("Backslash Scan Code", new KeyboardFilter().pressed().scanCode(ScanCode.BACKSLASH));
+        add("Backslash Symbol", new KeyboardFilter().pressed().symbol(Symbol.BACKSLASH));
+
+        // These are the other versions of the two items above.
+        add("Non US Backslash Scan Code", new KeyboardFilter().pressed().scanCode(ScanCode.NONUSBACKSLASH));
+        add("Hash Symbol", new KeyboardFilter().pressed().symbol(Symbol.HASH));
     }
 
     private void nextColumn()
@@ -76,6 +86,10 @@ public class KeyboardEventTest extends AbstractTest
 
     public void event(TestController controller, Event event) throws JameException
     {
+        if ( event instanceof KeyboardEvent) {
+            System.out.println( event );
+        }
+        
         for (Indicator indicator : indicators) {
             indicator.event(event);
         }

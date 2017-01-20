@@ -9,13 +9,16 @@ package uk.co.nickthecoder.jame.event;
 
 import uk.co.nickthecoder.jame.Events;
 import uk.co.nickthecoder.jame.Window;
+import uk.co.nickthecoder.jame.util.KeyboardFilter;
 
-public class KeyboardEvent extends Event implements Keys
+/**
+ * Fired when a key is pressed, released, and also fired with "fake" presses for keyboard auto-repeat features.
+ * Consider using {@link KeyboardFilter} to test if a given key combination has been pressed/released, as it is much
+ * easier than trying to test the modifiers manually.
+ */
+public class KeyboardEvent extends Event
 {
-    /**
-     * Either {@link Event#STATE_PRESSED} or {@link Event#STATE_RELEASED}.
-     */
-    public final int state;
+    public final boolean pressed;
 
     /**
      * Identifies a physical key. A US keyboard will give the same scanCode as non-US keyboard, despite being labelled
@@ -42,8 +45,9 @@ public class KeyboardEvent extends Event implements Keys
     public int symbol;
 
     /**
-     * Which combination of Shift, Ctrl, Alt and "Flag" key were held down when this KeyboardEvent was fired.
-     * See {@link #modifier(ModifierKey)}.
+     * Which combination of Shift, Ctrl, and Alt key were held down when this KeyboardEvent was fired.
+     * Consider using {@link ModifierKeyFilter} to test if the desired modifier keys are pressed.
+     * You could also use {@link KeyboardFilter} to check the modifiers, scan code and symbol in one go.
      */
     public int modifiers;
 
@@ -59,7 +63,9 @@ public class KeyboardEvent extends Event implements Keys
     /**
      * Maps the key's symbol to a Key. Lazily evaluated.
      */
-    private Key key;
+    private Symbol keySymbol;
+
+    private ScanCode keyScanCode;
 
     /**
      * The unique id for the window with keyboard focus, or 0, if there is none.
@@ -68,9 +74,9 @@ public class KeyboardEvent extends Event implements Keys
 
     public KeyboardEvent()
     {
-        state = 0;
+        pressed = false;
     }
-    
+
     @Override
     public void postConstruct()
     {
@@ -82,40 +88,37 @@ public class KeyboardEvent extends Event implements Keys
 
     public boolean isPressed()
     {
-        return this.state == STATE_PRESSED;
+        return this.pressed;
     }
 
     public boolean isReleased()
     {
-        return this.state == STATE_RELEASED;
+        return ! this.pressed;
     }
 
     /**
-     * Tests if the given ModifierKey is pressed. Note if modifier is NONE, then this returns true only if NO modifiers
-     * are pressed.
-     * 
-     * @param modifier
-     * @return true if the modifier key is pressed, false otherwise.
+     * @return A {@link Symbol} corresponding to the integer {@link #symbol}.
      */
-    public boolean modifier(ModifierKey modifier)
+    public Symbol getSymbol()
     {
-        return modifier.pressed(this.modifiers);
-    }
-
-    /**
-     * 
-     * @return A {@link Key} enum corresponding to {@link #symbol}.
-     */
-    public Key getKey()
-    {
-        if (this.key == null) {
-            this.key = Key.findKey(symbol);
+        if (this.keySymbol == null) {
+            this.keySymbol = Symbol.findKey(symbol);
         }
-        return this.key;
+        return this.keySymbol;
     }
 
     /**
-     * 
+     * @return The {@link ScanCode} corresponding to the integer {@link #scanCode}.
+     */
+    public ScanCode getScanCode()
+    {
+        if (this.keyScanCode == null) {
+            this.keyScanCode = ScanCode.findKey(this.scanCode);
+        }
+        return this.keyScanCode;
+    }
+
+    /**
      * @return The Window with keyboard focus, or null if no window has focus.
      */
     public Window getWindow()
@@ -126,7 +129,7 @@ public class KeyboardEvent extends Event implements Keys
     @Override
     public String toString()
     {
-        return "KeyboardEvent{ state=" + this.state + ", scanCode=" + this.scanCode + ", symbol=" + this.symbol
+        return "KeyboardEvent{ " + (this.pressed ? "Pressed" : "Released" ) + ", scanCode=" + getScanCode() + ", symbol=" + getSymbol()
             + ", modifiers=" + this.modifiers + " repeated=" + this.repeated + " }";
     }
 }
