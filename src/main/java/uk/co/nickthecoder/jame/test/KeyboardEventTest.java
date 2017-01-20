@@ -46,15 +46,24 @@ public class KeyboardEventTest extends AbstractTest
         
         add("Press ctrl+shift+A", new KeyboardFilter().pressed().modifiers(ModifierKeyFilter.SHIFT.and(ModifierKeyFilter.CTRL)).symbol(Keys.a));
 
+        nextColumn();
+        add("Press A (any mods - include repeats)", new KeyboardFilter().pressed().includeRepeats().symbol(Keys.a));
+        add("Release A (any mods)", new KeyboardFilter().released().symbol(Keys.a));
+        add("Release A (no mods)", new KeyboardFilter().released().modifiers(ModifierKeyFilter.NONE).symbol(Keys.a));
+        add("Release shift+A", new KeyboardFilter().released().modifiers(ModifierKeyFilter.SHIFT).symbol(Keys.a));
     }
 
+    private void nextColumn()
+    {
+        this.x += 320;
+        this.y = 30;        
+    }
     private void add(String label, KeyboardFilter filter)
     {
         Indicator indicator = new Indicator(label, filter, this.x, this.y);
         this.y += 30;
         if (this.y >= 450) {
-            this.x += 320;
-            this.y = 30;
+            nextColumn();
         }
         this.indicators.add(indicator);
 
@@ -86,6 +95,8 @@ public class KeyboardEventTest extends AbstractTest
 
     public class Indicator
     {
+        private static final double MAX_SCALE = 1.6;
+        
         SizedTexture texture;
         int x;
         int y;
@@ -121,8 +132,8 @@ public class KeyboardEventTest extends AbstractTest
             if (this.scale < 1) {
                 this.scale = 1;
             }
-            if (this.scale > 2) {
-                this.scale = 2;
+            if (this.scale > MAX_SCALE) {
+                this.scale = MAX_SCALE;
                 this.activated = false; 
             }
 

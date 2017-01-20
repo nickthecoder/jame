@@ -34,6 +34,8 @@ public class KeyboardFilter extends AbstractEventFilter<KeyboardEvent>
 
     private Integer symbol = null;
 
+    private boolean includeRepeats = false;
+
     @Override
     public boolean accept(KeyboardEvent event)
     {
@@ -52,9 +54,15 @@ public class KeyboardFilter extends AbstractEventFilter<KeyboardEvent>
         if ((this.symbol != null) && (event.symbol != this.symbol)) {
             return false;
         }
+
+        if ((!this.includeRepeats) && (event.repeated)) {
+            return false;
+        }
+
         return true;
     }
 
+    
     public KeyboardFilter modifier(ModifierKey modifier)
     {
         return modifiers(new ModifierKeyFilter(modifier));
@@ -90,6 +98,12 @@ public class KeyboardFilter extends AbstractEventFilter<KeyboardEvent>
         return this;
     }
 
+    public KeyboardFilter includeRepeats()
+    {
+        this.includeRepeats = true;
+        return this;
+    }
+    
     public String toString()
     {
         return "KeyboardFilter symbol=" + symbol + " scanCode=" + scanCode + " expectedPress=" + expectedPress +
