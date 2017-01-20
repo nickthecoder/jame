@@ -4,7 +4,13 @@
  ******************************************************************************/
 package uk.co.nickthecoder.jame.event;
 
-
+/**
+ * Modifier keys, the common ones are SHIFT, CTRL, ALT, but also include number lock, caps lock.
+ * <p>
+ * Note that the "GUI" key, sometimes called the "windows key", it NOT included in this list, because it cannot be used
+ * in a cross platform manner (Gnome3 reserves it for iteself, and SDL is not informed when it is pressed).
+ * </p>
+ */
 public enum ModifierKey
 {
     NONE(0x0000),
@@ -14,8 +20,6 @@ public enum ModifierKey
     RCTRL(0x0080),
     LALT(0x0100),
     RALT(0x0200),
-    LMETA(0x0400),
-    RMETA(0x0800),
     NUM(0x1000),
     CAPS(0x2000),
     MODE(0x4000);
@@ -38,8 +42,8 @@ public enum ModifierKey
         }
     }
 
-    public ModifierKeySet or(ModifierKey other)
+    public ModifierKeyFilter or(ModifierKey other)
     {
-        return new ModifierKeySet(this, other);
+        return new ModifierKeyFilter(this, other);
     }
 }

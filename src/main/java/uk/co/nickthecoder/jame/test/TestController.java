@@ -19,6 +19,7 @@ import uk.co.nickthecoder.jame.event.Event;
 import uk.co.nickthecoder.jame.event.KeyboardEvent;
 import uk.co.nickthecoder.jame.event.MouseButtonEvent;
 import uk.co.nickthecoder.jame.event.QuitEvent;
+import uk.co.nickthecoder.jame.event.StopPropagation;
 import uk.co.nickthecoder.jame.event.WindowEvent;
 import uk.co.nickthecoder.jame.util.KeyboardFilter;
 
@@ -147,6 +148,7 @@ public class TestController implements Test
         addMenuItem("Texture Clip", new ClippingTest(5, angryTexture, laughTexture));
         addMenuItem("Surface Clip", new ClippingTest(5, angrySurface, laughSurface));
 
+        addMenuItem("Keyboard Events", new KeyboardEventTest(this));
         addMenuItem("Mouse", new MouseTest(10, angryTexture, laughTexture));
     }
 
@@ -177,8 +179,9 @@ public class TestController implements Test
 
             KeyboardEvent ke = (KeyboardEvent) event;
             int value = ke.symbol;
-            
+
             if (KeyboardFilter.ctrlPress.accept(ke)) {
+                System.out.println( "!!! YES ctrl key pressed" );
                 if (ke.symbol == 'f') {
                     fullscreen = !fullscreen;
                     window.setFullScreen(fullscreen ? Window.FULLSCREEN : 0);
@@ -188,7 +191,7 @@ public class TestController implements Test
                     window.setFullScreen(fullscreen ? Window.FULLSCREEN_DESKTOP : 0);
                 }
             }
-
+            
             if (KeyboardFilter.regularPress.accept(ke)) {
                 for (MenuItem menuItem : menuItems) {
                     if (menuItem.letter == value) {
@@ -265,7 +268,11 @@ public class TestController implements Test
                     quitting = true;
                     currentTest.end(this);
                 } else {
-                    currentTest.event(this, event);
+                    try {
+                        currentTest.event(this, event);
+                    } catch (StopPropagation sp) {
+                        // Do nothing.
+                    }
                 }
 
             }
@@ -341,7 +348,7 @@ public class TestController implements Test
         @Override
         public void onKeyboardEvent(KeyboardEvent ke)
         {
-            //System.out.println("ControllerWindow " + ke);
+            // System.out.println("ControllerWindow " + ke);
         }
 
         @Override

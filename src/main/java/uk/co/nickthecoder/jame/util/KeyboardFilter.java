@@ -1,67 +1,68 @@
 package uk.co.nickthecoder.jame.util;
 
 import uk.co.nickthecoder.jame.event.KeyboardEvent;
-import uk.co.nickthecoder.jame.event.ModifierKeySet;
+import uk.co.nickthecoder.jame.event.ModifierKey;
+import uk.co.nickthecoder.jame.event.ModifierKeyFilter;
 
-public class KeyboardFilter implements EventFilter<KeyboardEvent>
+public class KeyboardFilter extends AbstractEventFilter<KeyboardEvent>
 {
     /**
      * Accepts regular key presses, with NO modifier keys held down.
      */
-    public static final KeyboardFilter regularPress = new KeyboardFilter().pressed().modifiers(ModifierKeySet.NONE);
+    public static final KeyboardFilter regularPress = new KeyboardFilter().pressed().modifiers(ModifierKeyFilter.NONE);
 
     /**
      * Accepts key presses, with either of the shift keys held down.
      */
-    public static final KeyboardFilter shiftPress = new KeyboardFilter().pressed().modifiers(ModifierKeySet.SHIFT);
+    public static final KeyboardFilter shiftPress = new KeyboardFilter().pressed().modifiers(ModifierKeyFilter.SHIFT);
 
     /**
      * Accepts key presses, with either of the control keys held down.
      */
-    public static final KeyboardFilter ctrlPress = new KeyboardFilter().pressed().modifiers(ModifierKeySet.CTRL);
+    public static final KeyboardFilter ctrlPress = new KeyboardFilter().pressed().modifiers(ModifierKeyFilter.CTRL);
 
     /**
      * Accepts key presses, with either of the alt keys held down.
      */
-    public static final KeyboardFilter altPress = new KeyboardFilter().pressed().modifiers(ModifierKeySet.ALT);
+    public static final KeyboardFilter altPress = new KeyboardFilter().pressed().modifiers(ModifierKeyFilter.ALT);
 
-    /**
-     * Accepts key presses, with either of the meta keys held down.
-     */
-    public static final KeyboardFilter metaPress = new KeyboardFilter().pressed().modifiers(ModifierKeySet.META);
+    private Boolean expectedPress = null;
 
-    private Boolean expectedPress = true;
+    private ModifierKeyFilter modifierFilter = null;
 
-    private ModifierKeySet modifiers = null;
-    
     private Integer scanCode = null;
-        
+
     private Integer symbol = null;
 
     @Override
     public boolean accept(KeyboardEvent event)
     {
-        if (event.isPressed() != expectedPress) {
+        if ((expectedPress != null) && (event.isPressed() != expectedPress)) {
             return false;
         }
 
-        if ((modifiers != null) && (!event.modifier(modifiers))) {
+        if ((modifierFilter != null) && (!modifierFilter.accept(event.modifiers))) {
             return false;
         }
 
-        if ((this.scanCode != null) && (event.scanCode != this.scanCode) ) {
+        if ((this.scanCode != null) && (event.scanCode != this.scanCode)) {
             return false;
         }
-        
-        if ((this.symbol != null) && (event.symbol != this.symbol) ) {
+
+        if ((this.symbol != null) && (event.symbol != this.symbol)) {
             return false;
         }
         return true;
     }
 
-    public KeyboardFilter modifiers(ModifierKeySet modifiers)
+    public KeyboardFilter modifier(ModifierKey modifier)
     {
-        this.modifiers = modifiers;
+        return modifiers(new ModifierKeyFilter(modifier));
+    }
+
+    public KeyboardFilter modifiers(ModifierKeyFilter modifierFilter)
+    {
+        this.modifierFilter = modifierFilter;
         return this;
     }
 
@@ -77,16 +78,21 @@ public class KeyboardFilter implements EventFilter<KeyboardEvent>
         return this;
     }
 
-    public KeyboardFilter symbol( int symbol )
+    public KeyboardFilter symbol(int symbol)
     {
         this.symbol = symbol;
         return this;
-    } 
+    }
 
-    public KeyboardFilter scanCode( int scanCode )
+    public KeyboardFilter scanCode(int scanCode)
     {
         this.scanCode = scanCode;
         return this;
-    } 
+    }
 
+    public String toString()
+    {
+        return "KeyboardFilter symbol=" + symbol + " scanCode=" + scanCode + " expectedPress=" + expectedPress +
+            " modifierKeyFilter=" + modifierFilter;
+    }
 }

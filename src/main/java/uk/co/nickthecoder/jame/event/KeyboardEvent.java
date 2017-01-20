@@ -103,18 +103,6 @@ public class KeyboardEvent extends Event implements Keys
     }
 
     /**
-     * Checks if any of a set of modifier keys are pressed.
-     * This is particularly handy to test for either LSHIFT or RSHIFT etc.
-     * 
-     * @param modifiers
-     * @return True if any of the ModifierKeys in the ModifierKeySet are down.
-     */
-    public boolean modifier(ModifierKeySet modifiers)
-    {
-        return modifiers.onlyPressed(this.modifiers);
-    }
-
-    /**
      * 
      * @return A {@link Key} enum corresponding to {@link #symbol}.
      */
