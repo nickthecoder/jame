@@ -31,25 +31,34 @@ JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_native_1poll
             //printf( "Found class %p\n", subClass );
             jobject jevent = (*env)->AllocObject( env, subClass );
             //printf( "Created instance %p\n", jevent );
-            return jevent;
-        /*
-        } else if ( type == SDL_ACTIVEEVENT ) {
+                        
+            jfieldID fid;
+            
+            fid = (*env)->GetFieldID(env,subClass,"timestamp","I");
+            (*env)->SetIntField(env,jevent,fid, e.common.timestamp);
 
+            return jevent;
+        
+        } else if ( type == SDL_WINDOWEVENT ) {
+             
             jclass subClass = (*env)->FindClass( env, "uk/co/nickthecoder/jame/event/WindowEvent" );
             //printf( "Found class %p\n", subClass );
             jobject jevent = (*env)->AllocObject( env, subClass );
             //printf( "Created instance %p\n", jevent );
 
             jfieldID fid;
+            
+            fid = (*env)->GetFieldID(env,subClass,"timestamp","I");
+            (*env)->SetIntField(env,jevent,fid, e.common.timestamp);
 
-            fid = (*env)->GetFieldID(env,subClass,"gain","I");
-            (*env)->SetIntField(env,jevent,fid, e.active.gain);
+            fid = (*env)->GetFieldID(env,subClass,"windowEventTypeInt","I");
+            (*env)->SetIntField(env,jevent,fid, e.window.event);
 
-            fid = (*env)->GetFieldID(env,subClass,"type","I");
-            (*env)->SetIntField(env,jevent,fid, e.active.state);
+            fid = (*env)->GetFieldID(env,subClass,"windowID","I");
+            (*env)->SetIntField(env,jevent,fid, e.window.windowID);
 
             return jevent;
-        */
+        
         } else if ( (type == SDL_KEYDOWN) || (type == SDL_KEYUP) ) {
             //printf( "Key up or down event\n" );
 
@@ -59,6 +68,9 @@ JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_native_1poll
             //printf( "Created instance %p\n", jevent );
 
             jfieldID fid;
+            
+            fid = (*env)->GetFieldID(env,subClass,"timestamp","I");
+            (*env)->SetIntField(env,jevent,fid, e.common.timestamp);
 
             fid = (*env)->GetFieldID(env,subClass,"state","I");
             (*env)->SetIntField(env,jevent,fid, e.key.state);
@@ -71,11 +83,6 @@ JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_native_1poll
 
             fid = (*env)->GetFieldID(env,subClass,"modifiers","I");
             (*env)->SetIntField(env,jevent,fid, e.key.keysym.mod);
-
-            /*
-            fid = (*env)->GetFieldID(env,subClass,"c","C");
-            (*env)->SetIntField(env,jevent,fid, e.key.keysym.unicode);
-            */
             
             return jevent;
 
@@ -87,6 +94,9 @@ JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_native_1poll
             //printf( "Created instance %p\n", jevent );
 
             jfieldID fid;
+
+            fid = (*env)->GetFieldID(env,subClass,"timestamp","I");
+            (*env)->SetIntField(env,jevent,fid, e.common.timestamp);
 
             fid = (*env)->GetFieldID(env,subClass,"which","I");
             (*env)->SetIntField(env,jevent,fid, e.button.which);
@@ -115,6 +125,9 @@ JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_native_1poll
 
             jfieldID fid;
 
+            fid = (*env)->GetFieldID(env,subClass,"timestamp","I");
+            (*env)->SetIntField(env,jevent,fid, e.common.timestamp);
+
             fid = (*env)->GetFieldID(env,subClass,"state","I");
             (*env)->SetIntField(env,jevent,fid, e.motion.state);
 
@@ -131,36 +144,11 @@ JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_native_1poll
             (*env)->SetIntField(env,jevent,fid, e.motion.yrel);
 
             return jevent;
-        /**
-        } else if ( type == SDL_VIDEORESIZE ) {
 
-            jclass subClass = (*env)->FindClass( env, "uk/co/nickthecoder/jame/event/ResizeEvent" );
-            //printf( "Found class %p\n", subClass );
-            jobject jevent = (*env)->AllocObject( env, subClass );
-            //printf( "Created instance %p\n", jevent );
-
-            jfieldID fid;
-
-            fid = (*env)->GetFieldID(env,subClass,"width","I");
-            (*env)->SetIntField(env,jevent,fid, e.resize.w);
-
-            fid = (*env)->GetFieldID(env,subClass,"height","I");
-            (*env)->SetIntField(env,jevent,fid, e.resize.h);
-
-            return jevent;
-        */
         }
         
     }
 }
-
-/*
-JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Events_native_1enableUnicode
-  (JNIEnv *env, jclass jevents, jboolean value )
-{
-    SDL_EnableUNICODE( value );
-}
-*/
 
 JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Events_native_1keyboardRepeat
   (JNIEnv *env, jclass jevents, jint delay, jint repeat )

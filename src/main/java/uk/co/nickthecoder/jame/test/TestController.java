@@ -19,6 +19,7 @@ import uk.co.nickthecoder.jame.event.Event;
 import uk.co.nickthecoder.jame.event.KeyboardEvent;
 import uk.co.nickthecoder.jame.event.ModifierKey;
 import uk.co.nickthecoder.jame.event.QuitEvent;
+import uk.co.nickthecoder.jame.event.WindowEvent;
 
 /**
  * Interactive tests of Jame API.
@@ -95,7 +96,7 @@ public class TestController implements Test
         Window.init();
         infoCounter = 0;
 
-        window = new Window("Jame Tests", 640, 480, true, 0);
+        window = new ControllerWindow();
         refreshRate = window.getRefreshRate();
         renderer = new Renderer(window, Renderer.PRESENTVSYNC);
 
@@ -320,6 +321,20 @@ public class TestController implements Test
         }
     }
 
+    public class ControllerWindow extends Window
+    {
+
+        public ControllerWindow()
+        {
+            super("Jame Tests", 640, 480, true, 0);
+        }
+        
+        public void onEvent( WindowEvent we )
+        {
+            System.out.println( "ControllerWindow " + we );
+        }
+    }
+    
     public static void main(String[] argv) throws Exception
     {
         TestController controller = new TestController();

@@ -29,6 +29,9 @@ public class Events
     public static Event poll()
     {
         Event event = native_poll();
+        if (event != null) {
+            event.postConstruct();
+        }
         return event;
     }
 

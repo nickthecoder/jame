@@ -10,7 +10,20 @@ package uk.co.nickthecoder.jame.event;
 public class Event
 {
     public static final int STATE_RELEASED = 0;
+
     public static final int STATE_PRESSED = 1;
+
+    public int timestamp;
+
+    /**
+     * Used internally by Jame.
+     * Called after the JNI code has created the object, to complete the construction of this instance.
+     * This method was first created for {@link WindowEvent}s to populate their windowEventType.
+     */
+    public void postConstruct()
+    {
+        // Does nothing.
+    }
 
     /**
      * In a complex system where many objects are offered the chance to handle an event,
@@ -22,6 +35,6 @@ public class Event
      */
     public void stopPropagation()
     {
-    	throw new StopPropagation();
+        throw new StopPropagation();
     }
 }

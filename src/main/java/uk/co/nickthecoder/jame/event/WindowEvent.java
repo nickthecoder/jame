@@ -4,58 +4,113 @@
  ******************************************************************************/
 package uk.co.nickthecoder.jame.event;
 
+import uk.co.nickthecoder.jame.Window;
+
 public class WindowEvent extends Event
 {
-    public static final int TYPE_MOUSE_FOCUS = 1;
-    public static final int TYPE_INPUT_FOCUS = 2;
-    public static final int TYPE_RESTORE = 3;
 
-    public int type;
+    public WindowEventType windowEventType;
 
-    public int gain;
+    /**
+     * Used internally by Jame. Populated by the JNI code in events.c, and then the java code uses it to set the
+     * {@link #windowEventType}.
+     */
+    int windowEventTypeInt;
+
+    /**
+     * A unique identifier for this window.
+     */
+    public int windowID;
+    /**
+     * The meaning of this depends on the type of window event. See {@link #windowEventType}.
+     */
+    public int data1;
+
+    /**
+     * The meaning of this depends on the type of window event. See {@link #windowEventType}.
+     */
+    public int data2;
 
     public WindowEvent()
     {
     }
 
-    public boolean gained()
+    /**
+     * Sets {@link #windowEventType} and also fires {@link Window#onEvent(WindowEvent)}.
+     */
+    public void postConstruct()
     {
-        return this.gain == 1;
+        windowEventType = WindowEventType.values()[windowEventTypeInt];
+
+        Window window = this.getWindow();
+        if (window != null) {
+            window.onEvent(this);
+        }
     }
 
-    public int getType()
+    public WindowEventType getType()
     {
-        return this.type;
+        return this.windowEventType;
+    }
+
+    public Window getWindow()
+    {
+        return Window.getWindowById(this.windowID);
     }
 
     public boolean gainedInputFocus()
     {
-        return (this.type == TYPE_INPUT_FOCUS) && (this.gain == 1);
+        return (this.windowEventType == WindowEventType.FOCUS_GAINED);
     }
 
+    /**
+     * @deprecated Replace with : {@link #getType()} == {@link WindowEventType#FOCUS_LOST}
+     * @return
+     */
     public boolean lostInputFocus()
     {
-        return (this.type == TYPE_INPUT_FOCUS) && (this.gain == 0);
+        return (this.windowEventType == WindowEventType.FOCUS_LOST);
     }
 
+    /**
+     * @deprecated Replace with : {@link #getType()} == {@link WindowEventType#FOCUS_GAINED}
+     * @return
+     */
     public boolean gainedMouseFocus()
     {
-        return (this.type == TYPE_MOUSE_FOCUS) && (this.gain == 1);
+        return (this.windowEventType == WindowEventType.FOCUS_GAINED);
     }
 
+    /**
+     * @deprecated Replace with : {@link #getType()} == {@link WindowEventType#FOCUS_LOST}
+     * @return
+     */
     public boolean lostMouseFocus()
     {
-        return (this.type == TYPE_MOUSE_FOCUS) && (this.gain == 0);
+        return (this.windowEventType == WindowEventType.FOCUS_LOST);
     }
 
+    /**
+     * @deprecated Replace with : {@link #getType()} == {@link WindowEventType#RESTORED}
+     * @return
+     */
     public boolean restored()
     {
-        return (this.type == TYPE_RESTORE) && (this.gain == 1);
+        return (this.windowEventType == WindowEventType.RESTORED);
     }
 
+    /**
+     * @deprecated Replace with : {@link #getType()} == {@link WindowEventType#MINIMIZED}
+     * @return
+     */
     public boolean iconified()
     {
-        return (this.type == TYPE_RESTORE) && (this.gain == 0);
+        return (this.windowEventType == WindowEventType.MINIMIZED);
+    }
+    
+    public String toString()
+    {
+        return "WindowEvent " + windowEventType;
     }
 
 }

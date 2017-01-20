@@ -1,6 +1,10 @@
 package uk.co.nickthecoder.jame;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import uk.co.nickthecoder.jame.Texture.Access;
+import uk.co.nickthecoder.jame.event.WindowEvent;
 
 /**
  * A wrapper around the SDL2 SDL_Window structure.
@@ -17,6 +21,13 @@ public class Window
         Jame.initSubsystem(Jame.Subsystem.VIDEO);
     }
 
+    private static Map<Integer, Window> windowsByID = new HashMap<Integer, Window>();
+
+    private static PixelFormat recommendedPixelFormat = PixelFormat.RGBX8888;
+
+    private static PixelFormat recommendedPixelFormatAlpha = PixelFormat.RGBA8888;
+
+    
     /** fullscreen window */
     public static final int FULLSCREEN = 0x1;
 
@@ -91,6 +102,11 @@ public class Window
      */
     private long pWindow;
 
+    /**
+     * A unique identifier for the window. Used by {@link WindowEvent}s.
+     */
+    private final int windowID;
+
     private int width;
 
     private int height;
@@ -99,10 +115,6 @@ public class Window
      * Set in Renderer's constructor.
      */
     Renderer renderer;
-
-    private static PixelFormat recommendedPixelFormat = PixelFormat.RGBX8888;
-
-    private static PixelFormat recommendedPixelFormatAlpha = PixelFormat.RGBA8888;
 
     /**
      * Returns a {@link PixelFormat} based on the pixel format of the window that was most recently opened
@@ -137,9 +149,15 @@ public class Window
         this.width = width;
         this.height = height;
         this.pWindow = native_create(title, x, y, width, height, flags);
+        this.windowID = native_getWindowID(this.pWindow);
+        windowsByID.put(this.windowID, this);
 
         updateRecommendedPixelFormats();
     }
+
+    private native long native_create(String title, int x, int y, int w, int h, int flags);
+
+    private native int native_getWindowID(long pWindow);
 
     public Window(String title, int width, int height, boolean centered, int flags)
     {
@@ -186,8 +204,6 @@ public class Window
         return pWindow;
     }
 
-    private native long native_create(String title, int x, int y, int w, int h, int flags);
-
     public int getWidth()
     {
         return width;
@@ -207,6 +223,7 @@ public class Window
 
     public void destroy()
     {
+        windowsByID.remove(this.windowID);
         native_destroy(pWindow);
         pWindow = 0;
     }
@@ -353,18 +370,33 @@ public class Window
 
     private native int native_getPixelFormat(long pWindow);
 
-
     public int getRefreshRate()
     {
-        int result = native_getRefreshRate( pWindow );
-        if ( result < 0) {
+        int result = native_getRefreshRate(pWindow);
+        if (result < 0) {
             Jame.checkRuntimeStatus(result);
         }
         return result;
     }
+
+    private native int native_getRefreshRate(long pWindow);
     
-    private native int native_getRefreshRate( long pWindow );
-    
+    public static Window getWindowById( int windowID )
+    {
+        return windowsByID.get( windowID );
+    }
+
+    /**
+     * If your game's main event handler calls
+     * direct
+     * 
+     * @param we
+     *            The window event.
+     */
+    public void onEvent(WindowEvent we)
+    {
+        // Do nothing - sub classes can override this method.
+    }
 
     public String toString()
     {

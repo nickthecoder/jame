@@ -20,6 +20,11 @@ JNIEXPORT jlong JNICALL Java_uk_co_nickthecoder_jame_Window_native_1create
     return (long) SDL_CreateWindow( title, x, y, w, h, flags );
 }
 
+JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Window_native_1getWindowID
+  (JNIEnv *env, jobject jwindow, jlong pWindow)
+{
+    return SDL_GetWindowID((SDL_Window*) pWindow);
+}
 
 JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Window_native_1destroy
   (JNIEnv *env, jobject jobj, jlong pWindow )
