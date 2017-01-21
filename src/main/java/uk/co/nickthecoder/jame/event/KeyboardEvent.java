@@ -18,7 +18,7 @@ import uk.co.nickthecoder.jame.util.KeyboardFilter;
  */
 public class KeyboardEvent extends EventForWindow
 {
-    public final boolean pressed;
+    public boolean pressed;
 
     /**
      * Identifies a physical key. A US keyboard will give the same scanCode as non-US keyboard, despite being labelled
@@ -63,55 +63,33 @@ public class KeyboardEvent extends EventForWindow
     /**
      * Maps the key's symbol to a Key. Lazily evaluated.
      */
-    private Symbol keySymbol;
+    public Symbol keySymbol;
 
-    private ScanCode keyScanCode;
+    public ScanCode keyScanCode;
 
     /**
      * The unique id for the window with keyboard focus, or 0, if there is none.
      */
     public int windowID;
 
-    public KeyboardEvent()
+    @Override
+    public void postConstruct()
     {
-        pressed = false;
-    }
-
-    public boolean isPressed()
-    {
-        return this.pressed;
-    }
-
-    public boolean isReleased()
-    {
-        return ! this.pressed;
-    }
-
-    /**
-     * @return A {@link Symbol} corresponding to the integer {@link #symbol}.
-     */
-    public Symbol getSymbol()
-    {
-        if (this.keySymbol == null) {
-            this.keySymbol = Symbol.findKey(symbol);
+        super.postConstruct();
+        keyScanCode = ScanCode.findKey(scanCode);
+        if (keyScanCode == null) {
+            keyScanCode = ScanCode.NONE;
         }
-        return this.keySymbol;
-    }
-
-    /**
-     * @return The {@link ScanCode} corresponding to the integer {@link #scanCode}.
-     */
-    public ScanCode getScanCode()
-    {
-        if (this.keyScanCode == null) {
-            this.keyScanCode = ScanCode.findKey(this.scanCode);
+        this.keySymbol = Symbol.findKey(symbol);
+        if (keySymbol == null) {
+            keySymbol = Symbol.NONE;
         }
-        return this.keyScanCode;
     }
 
     /**
      * @return The Window with keyboard focus, or null if no window has focus.
      */
+    @Override
     public Window getWindow()
     {
         return Window.getWindowById(windowID);
@@ -120,7 +98,8 @@ public class KeyboardEvent extends EventForWindow
     @Override
     public String toString()
     {
-        return "KeyboardEvent{ " + (this.pressed ? "Pressed" : "Released" ) + ", scanCode=" + getScanCode() + ", symbol=" + getSymbol()
-            + ", modifiers=" + this.modifiers + " repeated=" + this.repeated + " }";
+        return "KeyboardEvent{ " + (this.pressed ? "Pressed" : "Released") +
+            ", scanCode=" + keyScanCode + "(" + scanCode + ") symbol=" + keySymbol + "(" + symbol + ")" +
+            ", modifiers=" + this.modifiers + " repeated=" + this.repeated + " }";
     }
 }

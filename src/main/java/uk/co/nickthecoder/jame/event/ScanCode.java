@@ -20,6 +20,7 @@ import java.util.HashMap;
  */
 public enum ScanCode
 {
+    NONE(0, "NONE"),
     A(4, "A"),
     B(5, "B"),
     C(6, "C"),
@@ -308,7 +309,7 @@ public enum ScanCode
     LALT(226, "Left Alt"),
     LGUI(227, "Left GUI"),
     RCTRL(228, "Right Control"),
-    RSHIFT(229, "RIght Shift"),
+    RSHIFT(229, "Right Shift"),
     RALT(230, "Right Alt"),
     RGUI(231, "Right GUI"),
 
@@ -375,6 +376,6 @@ public enum ScanCode
     
     public String toString()
     {
-        return "ScanCode " + value + "(" + label + ")";
+        return label;
     }
 }

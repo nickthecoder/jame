@@ -24,7 +24,7 @@ public abstract class AbstractTest implements Test
 
     protected void keyboardEvent(TestController controller, KeyboardEvent ke) throws JameException
     {
-        if ( (ke.isPressed()) && (ke.getSymbol() == Symbol.ESCAPE ) ) {
+        if ( (ke.pressed) && (ke.keySymbol == Symbol.ESCAPE ) ) {
             this.end( controller );
         }
     }

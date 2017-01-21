@@ -156,6 +156,8 @@ public class TestController implements Test
         addMenuItem("Mouse", new MouseTest(10, angryTexture, laughTexture));
 
         addMenuItem("Drop File", new DropTest(smallFont));
+        
+        addMenuItem("Text Editing", new TextEditingTest( renderer, smallFont ));
     }
 
     @Override

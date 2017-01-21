@@ -97,6 +97,8 @@ JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_native_1poll
             fid = (*env)->GetFieldID(env,subClass,"repeated","Z");
             (*env)->SetBooleanField(env,jevent,fid,e.key.repeat != 0);
             
+            //printf( "JNI KeyboardEvent symbol=%d scancode=%d\n", e.key.keysym.sym, e.key.keysym.scancode );
+            
             return jevent;
 
         } else if ( (type == SDL_MOUSEBUTTONDOWN) || (type == SDL_MOUSEBUTTONUP) ) {
@@ -226,8 +228,49 @@ JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_native_1poll
             // So, for now, I'll free the text to prevent the memory leak from future SDL_DROPTEXT events.
 
             SDL_free(e.drop.file);
-        }
+
+        } else if ( type == SDL_TEXTEDITING ) {
         
+            jclass subClass = (*env)->FindClass( env, "uk/co/nickthecoder/jame/event/TextEditingEvent" );
+            //printf( "Found class %p\n", subClass );
+            jobject jevent = (*env)->AllocObject( env, subClass );
+            //printf( "Created instance %p\n", jevent );
+
+            jfieldID fid;
+
+            fid = (*env)->GetFieldID(env,subClass,"timestamp","I");
+            (*env)->SetIntField(env,jevent,fid, e.common.timestamp);
+
+            jstring jtext = (*env)->NewStringUTF(env, e.edit.text);
+            fid = (*env)->GetFieldID(env,subClass,"text","Ljava/lang/String;");
+            (*env)->SetObjectField(env,jevent,fid, jtext);
+            
+            fid = (*env)->GetFieldID(env,subClass,"start","I");
+            (*env)->SetIntField(env,jevent,fid, e.edit.start);
+
+            fid = (*env)->GetFieldID(env,subClass,"length","I");
+            (*env)->SetIntField(env,jevent,fid, e.edit.length);
+
+            return jevent;
+
+        } else if ( type == SDL_TEXTINPUT ) {
+        
+            jclass subClass = (*env)->FindClass( env, "uk/co/nickthecoder/jame/event/TextEditingEvent" );
+            //printf( "Found class %p\n", subClass );
+            jobject jevent = (*env)->AllocObject( env, subClass );
+            //printf( "Created instance %p\n", jevent );
+
+            jfieldID fid;
+
+            fid = (*env)->GetFieldID(env,subClass,"timestamp","I");
+            (*env)->SetIntField(env,jevent,fid, e.common.timestamp);
+
+            jstring jtext = (*env)->NewStringUTF(env, e.text.text);
+            fid = (*env)->GetFieldID(env,subClass,"text","Ljava/lang/String;");
+            (*env)->SetObjectField(env,jevent,fid, jtext);
+            
+            return jevent;
+        }    
     }
 }
 

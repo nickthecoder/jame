@@ -41,7 +41,7 @@ public class KeyboardFilter extends AbstractEventFilter<KeyboardEvent>
     @Override
     public boolean accept(KeyboardEvent event)
     {
-        if ((expectedPress != null) && (event.isPressed() != expectedPress)) {
+        if ((expectedPress != null) && (event.pressed != expectedPress)) {
             return false;
         }
 
