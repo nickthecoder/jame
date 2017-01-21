@@ -7,52 +7,43 @@
  ******************************************************************************/
 package uk.co.nickthecoder.jame.event;
 
-import uk.co.nickthecoder.jame.Window;
-
+/**
+ * 
+ * Note that mouse wheel events are now sent as {@link MouseWheelEvent}s, so there
+ */
 public class MouseButtonEvent extends MouseEvent
 {
-    public static final int BUTTON_LEFT = 1;
-    public static final int BUTTON_MIDDLE = 2;
-    public static final int BUTTON_RIGHT = 3;
-    public static final int BUTTON_WHEEL_UP = 4;
-    public static final int BUTTON_WHEEL_DOWN = 5;
-    public static final int BUTTON_WHEEL_LEFT = 6;
-    public static final int BUTTON_WHEEL_RIGHT = 7;
-
     /**
-     * The input device index
-     */
-    public int which;
-
-    /**
-     * The mouse button index (BUTTON_LEFT, BUTTON_MIDDLE, BUTTON_RIGHT, BUTTON_WHEELUP, BUTTON_WHEELDOWN)
+     * The mouse button index (currently in the range 1..5). Note that the mouse wheel are NOT button events any more,
+     * so 4 and 5 are NOT mouse wheel events.
      */
     public int button;
 
     /**
-     * SDL_PRESSED or SDL_RELEASED. You can also use isPressed and/or isReleased for brevity
+     * true if the button was pressed, false if it was released.
      */
-    public int state;
+    public boolean pressed;
 
-    private MouseButton mouseButton;
+    /**
+     * A typed ({@link MouseButton}) version of the integer {@link #button}.
+     */
+    public MouseButton mouseButton;
 
     @Override
     public void postConstruct()
     {
-        Window window = getWindow();
-        if (window != null) {
-            window.onMouseButtonEvent(this);
-        }
+        super.postConstruct();
+        this.mouseButton = MouseButton.findButton(button);
     }
 
     public boolean isPressed()
     {
-        return this.state == STATE_PRESSED;
+        return this.pressed;
     }
 
     public boolean isReleased()
     {
-        return this.state == STATE_RELEASED;
+        return !this.pressed;
     }
 
     public MouseButton getMouseButton()
@@ -66,7 +57,8 @@ public class MouseButtonEvent extends MouseEvent
     @Override
     public String toString()
     {
-        return "MouseButtonEven{ which=" + which + ", button=" + button + ", state=" + state + ", x=" + x + ", y=" + y
-            + " }";
+        return "MouseButtonEven{ windowID=" + windowID + " mouseID=" + mouseID +
+            ", button=" + mouseButton + ", pressed=" + pressed +
+            ", x=" + x + ", y=" + y + " }";
     }
 }

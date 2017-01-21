@@ -9,10 +9,6 @@ package uk.co.nickthecoder.jame.event;
 
 public class Event
 {
-    public static final int STATE_RELEASED = 0;
-
-    public static final int STATE_PRESSED = 1;
-
     public int timestamp;
 
     /**

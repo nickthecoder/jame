@@ -4,8 +4,8 @@ Converting JAME to SDL2
 ToDo
 ====
 
-Rebuild all JNI headers, and check that the .c files haven't missed any functions.
-    Order the function in the .c files in the same order as the .h
+Mouse events to have "pressed" rather than "state".
+    Remove the static final ints  PRESSED and RELEASED.
 
 Refactor Texture.getPixel into Renderer?
 

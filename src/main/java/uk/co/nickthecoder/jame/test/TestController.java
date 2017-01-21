@@ -17,7 +17,7 @@ import uk.co.nickthecoder.jame.TrueTypeFont;
 import uk.co.nickthecoder.jame.Window;
 import uk.co.nickthecoder.jame.event.Event;
 import uk.co.nickthecoder.jame.event.KeyboardEvent;
-import uk.co.nickthecoder.jame.event.MouseButtonEvent;
+import uk.co.nickthecoder.jame.event.MouseEvent;
 import uk.co.nickthecoder.jame.event.QuitEvent;
 import uk.co.nickthecoder.jame.event.StopPropagation;
 import uk.co.nickthecoder.jame.event.WindowEvent;
@@ -352,7 +352,7 @@ public class TestController implements Test
         }
 
         @Override
-        public void onMouseButtonEvent(MouseButtonEvent mbe)
+        public void onMouseEvent(MouseEvent me)
         {
             // System.out.println("ControllerWindow " + mbe);
         }

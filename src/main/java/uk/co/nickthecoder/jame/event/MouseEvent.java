@@ -7,16 +7,17 @@
  ******************************************************************************/
 package uk.co.nickthecoder.jame.event;
 
-import uk.co.nickthecoder.jame.Window;
-
 /**
- * Holds the common stuff from MouseMotionEvent and MouseButtonEvent
- * 
- * @author nick
+ * Holds the common data from {@link MouseMotionEvent}, {@link MouseButtonEvent} and {@link MouseWheelEvent}.
  * 
  */
-public class MouseEvent extends Event
+public class MouseEvent extends EventForWindow
 {
+    /**
+     * The input device identifier (this is called "which" in SDL).
+     */
+    public int mouseID;
+
     /**
      * The X coordinates of the mouse at press/release time
      */
@@ -27,16 +28,11 @@ public class MouseEvent extends Event
      */
     public int y;
 
-    public int windowID;
-
-    /**
-     * The unique id for the window or 0.
-     */
-    public int windowId;
-
-    public Window getWindow()
+    @Override
+    public void postConstruct()
     {
-        return Window.getWindowById(windowID);
+        if (window != null) {
+            window.onMouseEvent(this);
+        }
     }
-
 }

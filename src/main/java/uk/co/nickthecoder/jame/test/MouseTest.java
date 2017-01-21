@@ -7,11 +7,14 @@ import uk.co.nickthecoder.jame.Texture;
 import uk.co.nickthecoder.jame.event.Event;
 import uk.co.nickthecoder.jame.event.MouseButtonEvent;
 import uk.co.nickthecoder.jame.event.MouseMotionEvent;
+import uk.co.nickthecoder.jame.event.MouseWheelEvent;
 
 /**
- * Draws sprites, and allows then to be dragged.
+ * Draws sprites, and allows then to be dragged with the mouse. Use the scroll wheel(s) to move all the sprites.
+ * Uses bounding rectangle and then pixel based detection to know when the mouse is over the visible part of a sprite.
  * 
- * Tests {@link MouseButtonEvent} and {@link MouseMotionEvent}, as well as {@link Texture#getPixel(Renderer, int, int)}.
+ * Tests {@link MouseButtonEvent}, {@link MouseMotionEvent} and {@link MouseWheelEvent}, as well as
+ * {@link Texture#getPixel(Renderer, int, int)}.
  */
 public class MouseTest extends AbstractSpriteTest
 {
@@ -69,6 +72,14 @@ public class MouseTest extends AbstractSpriteTest
                 dragX = mme.x;
                 dragY = mme.y;
                 dragging.moveBy(dx, dy);
+            }
+
+        } else if (event instanceof MouseWheelEvent) {
+            System.out.println(event);
+            MouseWheelEvent mwe = (MouseWheelEvent) event;
+
+            for (Sprite sprite : sprites) {
+                sprite.moveBy(mwe.x, mwe.y);
             }
 
         } else {

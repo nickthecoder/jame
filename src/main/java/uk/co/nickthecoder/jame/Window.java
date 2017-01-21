@@ -5,7 +5,7 @@ import java.util.Map;
 
 import uk.co.nickthecoder.jame.Texture.Access;
 import uk.co.nickthecoder.jame.event.KeyboardEvent;
-import uk.co.nickthecoder.jame.event.MouseButtonEvent;
+import uk.co.nickthecoder.jame.event.MouseEvent;
 import uk.co.nickthecoder.jame.event.MouseMotionEvent;
 import uk.co.nickthecoder.jame.event.WindowEvent;
 
@@ -413,20 +413,20 @@ public class Window
     {
         // Do nothing - sub classes can override this method.
     }
-    
+
     /**
-     * Automatically called by a MouseButtonEvent. Override the Window class to handle this event as you see fit,
+     * Automatically called by a {@link MouseEvent}s. Override the Window class to handle this event as you see fit,
      * and call {@link WindowEvent#stopPropagation()} to prevent the event from being returned from
      * {@link Events#poll()}.
      * 
-     * @param we
-     *            The keyboard event.
+     * @param me
+     *            The mouse event.
      */
-    public void onMouseButtonEvent(MouseButtonEvent mbe)
+    public void onMouseEvent(MouseEvent me)
     {
         // Do nothing - sub classes can override this method.
     }
-    
+
     /**
      * Automatically called by a MouseMotionEvent. Override the Window class to handle this event as you see fit,
      * and call {@link WindowEvent#stopPropagation()} to prevent the event from being returned from

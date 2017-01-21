@@ -8,6 +8,7 @@
 #include <jni.h>
 #include <SDL.h>
 #include <SDL_events.h>
+#include <SDL_mouse.h>
 #include "include/uk_co_nickthecoder_jame_Events.h"
 
 
@@ -107,14 +108,14 @@ JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_native_1poll
             fid = (*env)->GetFieldID(env,subClass,"windowID","I");
             (*env)->SetIntField(env,jevent,fid, e.button.windowID);
 
-            fid = (*env)->GetFieldID(env,subClass,"which","I");
+            fid = (*env)->GetFieldID(env,subClass,"mouseID","I");
             (*env)->SetIntField(env,jevent,fid, e.button.which);
 
             fid = (*env)->GetFieldID(env,subClass,"button","I");
             (*env)->SetIntField(env,jevent,fid, e.button.button);
 
-            fid = (*env)->GetFieldID(env,subClass,"state","I");
-            (*env)->SetIntField(env,jevent,fid, e.button.state);
+            fid = (*env)->GetFieldID(env,subClass,"pressed","Z");
+            (*env)->SetBooleanField(env,jevent,fid, e.button.state != 0);
 
             fid = (*env)->GetFieldID(env,subClass,"x","I");
             (*env)->SetIntField(env,jevent,fid, e.button.x);
@@ -123,7 +124,34 @@ JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_native_1poll
             (*env)->SetIntField(env,jevent,fid, e.button.y);
 
             return jevent;
+            
+        } else if ( type == SDL_MOUSEWHEEL ) {
+        
+            jclass subClass = (*env)->FindClass( env, "uk/co/nickthecoder/jame/event/MouseWheelEvent" );
+            //printf( "Found class %p\n", subClass );
+            jobject jevent = (*env)->AllocObject( env, subClass );
+            //printf( "Created instance %p\n", jevent );
 
+            jfieldID fid;
+
+            fid = (*env)->GetFieldID(env,subClass,"timestamp","I");
+            (*env)->SetIntField(env,jevent,fid, e.common.timestamp);
+
+            fid = (*env)->GetFieldID(env,subClass,"windowID","I");
+            (*env)->SetIntField(env,jevent,fid, e.wheel.windowID);
+
+            fid = (*env)->GetFieldID(env,subClass,"x","I");
+            (*env)->SetIntField(env,jevent,fid, e.wheel.x);
+
+            fid = (*env)->GetFieldID(env,subClass,"y","I");
+            (*env)->SetIntField(env,jevent,fid, e.wheel.y);
+
+            /*
+            fid = (*env)->GetFieldID(env,subClass,"flipped","Z");
+            (*env)->SetBooleanField(env,jevent,fid, e.wheel.direction != 0);
+            */
+            
+            return jevent;
 
         } else if ( type == SDL_MOUSEMOTION ) {
 
@@ -139,9 +167,6 @@ JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_native_1poll
 
             fid = (*env)->GetFieldID(env,subClass,"windowID","I");
             (*env)->SetIntField(env,jevent,fid, e.motion.windowID);
-
-            fid = (*env)->GetFieldID(env,subClass,"state","I");
-            (*env)->SetIntField(env,jevent,fid, e.motion.state);
 
             fid = (*env)->GetFieldID(env,subClass,"x","I");
             (*env)->SetIntField(env,jevent,fid, e.motion.x);
