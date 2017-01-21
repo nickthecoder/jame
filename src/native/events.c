@@ -11,6 +11,8 @@
 #include <SDL_mouse.h>
 #include "include/uk_co_nickthecoder_jame_Events.h"
 
+// A bodge (see below for details).
+int lastWindowID = 0;
 
 JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_native_1poll
   (JNIEnv *env, jclass eventsClass )
@@ -58,6 +60,10 @@ JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_native_1poll
             fid = (*env)->GetFieldID(env,subClass,"windowID","I");
             (*env)->SetIntField(env,jevent,fid, e.window.windowID);
 
+            // This is a BODGE, because the version of SDL2 that I'm using does NOT have the windowID on
+            // the SDL_DropEvent. Grr. See below for how it is used when handling drop events.
+            lastWindowID = e.window.windowID;
+            
             return jevent;
         
         } else if ( (type == SDL_KEYDOWN) || (type == SDL_KEYUP) ) {
@@ -181,7 +187,45 @@ JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_native_1poll
             (*env)->SetIntField(env,jevent,fid, e.motion.yrel);
 
             return jevent;
+            
+        } else if ( type == SDL_DROPFILE ) {
+        
+            jclass subClass = (*env)->FindClass( env, "uk/co/nickthecoder/jame/event/DropFileEvent" );
+            //printf( "Found class %p\n", subClass );
+            jobject jevent = (*env)->AllocObject( env, subClass );
+            //printf( "Created instance %p\n", jevent );
 
+            jstring jfilename = (*env)->NewStringUTF(env, e.drop.file);
+            SDL_free(e.drop.file);
+            
+            jfieldID fid;
+
+            fid = (*env)->GetFieldID(env,subClass,"timestamp","I");
+            (*env)->SetIntField(env,jevent,fid, e.common.timestamp);
+
+            fid = (*env)->GetFieldID(env,subClass,"windowID","I");
+            // This is what the code SHOULD look like :
+            //(*env)->SetIntField(env,jevent,fid, e.drop.windowID);
+            // but my version of SDL2 doesn't have the windowID on the SDL_DropEvent structure.
+            // So instead...
+            (*env)->SetIntField(env,jevent,fid, lastWindowID);
+            // Fingers crossed, this will be the correct windowID, because a mouse entering the window
+            // will set lastWindowID ;-)
+
+            fid = (*env)->GetFieldID(env,subClass,"filename","Ljava/lang/String;");
+            (*env)->SetObjectField(env,jevent,fid, jfilename);
+
+            return jevent;
+            
+        } else if ( type == SDL_DROPFILE + 1 ) {
+            // NOTE, the version of SDL2 that I am using only supprts SDL_DROPFILE, but future versions
+            // have 3 other events, SDL_DROPTEXT, SDL_DROPBEGIN and SDL_DROPCOMPLETE
+            // IMHO, the design is BAD, because the documentation says that the events are enabled by default, and
+            // you must free the "file". This means that anybody coding for SDL2.0 will automatically have
+            // memory leaks when they upgrade.
+            // So, for now, I'll free the text from SDL_DROPTEXT and ignore the event.
+
+            SDL_free(e.drop.file);
         }
         
     }

@@ -16,7 +16,7 @@ import uk.co.nickthecoder.jame.util.KeyboardFilter;
  * Consider using {@link KeyboardFilter} to test if a given key combination has been pressed/released, as it is much
  * easier than trying to test the modifiers manually.
  */
-public class KeyboardEvent extends Event
+public class KeyboardEvent extends EventForWindow
 {
     public final boolean pressed;
 
@@ -75,15 +75,6 @@ public class KeyboardEvent extends Event
     public KeyboardEvent()
     {
         pressed = false;
-    }
-
-    @Override
-    public void postConstruct()
-    {
-        Window window = getWindow();
-        if (window != null) {
-            window.onKeyboardEvent(this);
-        }
     }
 
     public boolean isPressed()

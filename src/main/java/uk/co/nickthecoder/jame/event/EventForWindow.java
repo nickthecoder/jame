@@ -12,6 +12,9 @@ public abstract class EventForWindow extends Event
     public void postConstruct()
     {
         window = getWindow();
+        if ( window != null ) {
+            window.onEvent( this );
+        }
     }
     
     public Window getWindow()

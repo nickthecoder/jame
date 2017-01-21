@@ -16,11 +16,10 @@ import uk.co.nickthecoder.jame.Texture;
 import uk.co.nickthecoder.jame.TrueTypeFont;
 import uk.co.nickthecoder.jame.Window;
 import uk.co.nickthecoder.jame.event.Event;
+import uk.co.nickthecoder.jame.event.EventForWindow;
 import uk.co.nickthecoder.jame.event.KeyboardEvent;
-import uk.co.nickthecoder.jame.event.MouseEvent;
 import uk.co.nickthecoder.jame.event.QuitEvent;
 import uk.co.nickthecoder.jame.event.StopPropagation;
-import uk.co.nickthecoder.jame.event.WindowEvent;
 import uk.co.nickthecoder.jame.util.KeyboardFilter;
 
 /**
@@ -150,6 +149,8 @@ public class TestController implements Test
 
         addMenuItem("Keyboard Events", new KeyboardEventTest(this));
         addMenuItem("Mouse", new MouseTest(10, angryTexture, laughTexture));
+
+        addMenuItem("Drop File", new DropTest(smallFont));
     }
 
     @Override
@@ -181,7 +182,7 @@ public class TestController implements Test
             int value = ke.symbol;
 
             if (KeyboardFilter.ctrlPress.accept(ke)) {
-                System.out.println( "!!! YES ctrl key pressed" );
+                System.out.println("!!! YES ctrl key pressed");
                 if (ke.symbol == 'f') {
                     fullscreen = !fullscreen;
                     window.setFullScreen(fullscreen ? Window.FULLSCREEN : 0);
@@ -191,7 +192,7 @@ public class TestController implements Test
                     window.setFullScreen(fullscreen ? Window.FULLSCREEN_DESKTOP : 0);
                 }
             }
-            
+
             if (KeyboardFilter.regularPress.accept(ke)) {
                 for (MenuItem menuItem : menuItems) {
                     if (menuItem.letter == value) {
@@ -340,21 +341,9 @@ public class TestController implements Test
         }
 
         @Override
-        public void onWindowEvent(WindowEvent we)
+        public void onEvent(EventForWindow event)
         {
-            // System.out.println("ControllerWindow " + we);
-        }
-
-        @Override
-        public void onKeyboardEvent(KeyboardEvent ke)
-        {
-            // System.out.println("ControllerWindow " + ke);
-        }
-
-        @Override
-        public void onMouseEvent(MouseEvent me)
-        {
-            // System.out.println("ControllerWindow " + mbe);
+            // System.out.println("ControllerWindow " + event);
         }
     }
 

@@ -6,7 +6,9 @@
 package uk.co.nickthecoder.jame;
 
 import uk.co.nickthecoder.jame.event.Event;
+import uk.co.nickthecoder.jame.event.QuitEvent;
 import uk.co.nickthecoder.jame.event.StopPropagation;
+import uk.co.nickthecoder.jame.event.EventForWindow;
 
 public class Events
 {
@@ -24,6 +26,11 @@ public class Events
     /**
      * Within your game loop, call poll repeatedly until it returns null. See the subclasses of {@link Event} for all of
      * the possible events that are generated.
+     * <p>
+     * All events other than {@link QuitEvent}, will be passed to {@link Window#onEvent(EventForWindow)}), and if the
+     * event is handled (by calling {@link Event#stopPropagation()}), then it will NOT be returned from this poll
+     * method.
+     * </p>
      * 
      * @return <code>null</code> if there are no more events.
      */

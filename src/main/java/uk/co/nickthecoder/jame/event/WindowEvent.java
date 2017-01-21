@@ -6,7 +6,7 @@ package uk.co.nickthecoder.jame.event;
 
 import uk.co.nickthecoder.jame.Window;
 
-public class WindowEvent extends Event
+public class WindowEvent extends EventForWindow
 {
 
     public WindowEventType windowEventType;
@@ -17,10 +17,6 @@ public class WindowEvent extends Event
      */
     int windowEventTypeInt;
 
-    /**
-     * A unique identifier for this window.
-     */
-    public int windowID;
     /**
      * The meaning of this depends on the type of window event. See {@link #windowEventType}.
      */
@@ -41,21 +37,12 @@ public class WindowEvent extends Event
     public void postConstruct()
     {
         windowEventType = WindowEventType.values()[windowEventTypeInt];
-
-        Window window = this.getWindow();
-        if (window != null) {
-            window.onWindowEvent(this);
-        }
+        super.postConstruct();
     }
 
     public WindowEventType getType()
     {
         return this.windowEventType;
-    }
-
-    public Window getWindow()
-    {
-        return Window.getWindowById(this.windowID);
     }
 
     public boolean gainedInputFocus()
@@ -110,7 +97,7 @@ public class WindowEvent extends Event
     
     public String toString()
     {
-        return "WindowEvent " + windowEventType;
+        return "WindowEvent windowID=" + windowID + " type=" + windowEventType;
     }
 
 }

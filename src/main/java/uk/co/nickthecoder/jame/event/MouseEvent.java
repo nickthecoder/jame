@@ -28,11 +28,4 @@ public class MouseEvent extends EventForWindow
      */
     public int y;
 
-    @Override
-    public void postConstruct()
-    {
-        if (window != null) {
-            window.onMouseEvent(this);
-        }
-    }
 }
