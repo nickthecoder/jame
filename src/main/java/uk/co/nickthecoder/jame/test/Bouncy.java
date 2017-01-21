@@ -33,19 +33,28 @@ public abstract class Bouncy
         x += dx;
         y += dy;
 
-        if ((x < 0) && (dx < 0)) {
+        if ((x < getWidth()/2) && (dx < 0)) {
             dx = -dx;
+            bounced();
         }
-        if ((y < 0) && (dy < 0)) {
+        if ((y < getWidth()/2) && (dy < 0)) {
             dy = -dy;
+            bounced();
         }
 
-        if ((x + getWidth() > windowWidth) && (dx > 0)) {
+        if ((x + getWidth()/2 > windowWidth) && (dx > 0)) {
             dx = -dx;
+            bounced();
         }
-        if ((y + getHeight() > windowHeight) && (dy > 0)) {
+        if ((y + getHeight()/2 > windowHeight) && (dy > 0)) {
             dy = -dy;
+            bounced();
         }
     }
 
+    public void bounced()
+    {
+        // Do nothing
+    }
+    
 }

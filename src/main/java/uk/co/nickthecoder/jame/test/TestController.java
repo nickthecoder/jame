@@ -124,6 +124,9 @@ public class TestController implements Test
         Surface angrySurface = new Surface("resources/face-angry.png");
         SizedTexture angryTexture = new SizedTexture(renderer, angrySurface);
 
+        Surface twinsSurface = new Surface("resources/face-twins.png");
+        SizedTexture twinsTexture = new SizedTexture(renderer, twinsSurface);
+
         Surface laughSurface = new Surface("resources/face-laugh.png");
         SizedTexture laughTexture = new SizedTexture(renderer, laughSurface);
 
@@ -146,6 +149,8 @@ public class TestController implements Test
 
         addMenuItem("Texture Clip", new ClippingTest(5, angryTexture, laughTexture));
         addMenuItem("Surface Clip", new ClippingTest(5, angrySurface, laughSurface));
+
+        addMenuItem("Rotate & Scale", new RotateAndScaleTest(10, twinsTexture, angryTexture));
 
         addMenuItem("Keyboard Events", new KeyboardEventTest(this));
         addMenuItem("Mouse", new MouseTest(10, angryTexture, laughTexture));

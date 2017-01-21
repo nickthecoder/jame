@@ -210,7 +210,7 @@ JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_native_1poll
             // So instead...
             (*env)->SetIntField(env,jevent,fid, lastWindowID);
             // Fingers crossed, this will be the correct windowID, because a mouse entering the window
-            // will set lastWindowID ;-)
+            // will set lastWindowID (See handling of SDL_WINDOWEVENT above) ;-)
 
             fid = (*env)->GetFieldID(env,subClass,"filename","Ljava/lang/String;");
             (*env)->SetObjectField(env,jevent,fid, jfilename);
@@ -223,7 +223,7 @@ JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_native_1poll
             // IMHO, the design is BAD, because the documentation says that the events are enabled by default, and
             // you must free the "file". This means that anybody coding for SDL2.0 will automatically have
             // memory leaks when they upgrade.
-            // So, for now, I'll free the text from SDL_DROPTEXT and ignore the event.
+            // So, for now, I'll free the text to prevent the memory leak from future SDL_DROPTEXT events.
 
             SDL_free(e.drop.file);
         }

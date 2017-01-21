@@ -44,13 +44,17 @@ public abstract class AbstractSpriteTest extends AbstractTest
     @Override
     public void begin(TestController controller) throws JameException
     {
-        System.out.println("ABT.Begin");
         this.controller = controller;
         sprites = new ArrayList<Sprite>();
         for (int i = 0; i < count; i++) {
-            createSprite();
+            addSprite();
         }
 
+    }
+    
+    public void addSprite()
+    {
+        sprites.add(createSprite());
     }
     
     public Sprite createSprite()
@@ -61,7 +65,6 @@ public abstract class AbstractSpriteTest extends AbstractTest
         } else {
             sprite = new Sprite(controller, textures[random.nextInt(textures.length)]);        
         }
-        sprites.add(sprite);
         
         return sprite;
     }

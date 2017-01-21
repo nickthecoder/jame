@@ -24,6 +24,7 @@ public class SpriteTest extends AbstractSpriteTest
             Sprite sprite = createSprite();
             sprite.dx = random.nextInt( 5 ) - 2;
             sprite.dy = random.nextInt( 5 ) - 2;
+            sprites.add(sprite);
         }
         
         for (Sprite sprite : sprites) {

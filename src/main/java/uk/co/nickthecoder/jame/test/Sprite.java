@@ -31,9 +31,9 @@ public class Sprite extends Bouncy
     @Override
     public void move()
     {
-        rect.x = x;
-        rect.y = y;
         super.move();
+        rect.x = x-getWidth()/2;
+        rect.y = y-getHeight()/2;
     }
 
     public void draw(Renderer renderer)
