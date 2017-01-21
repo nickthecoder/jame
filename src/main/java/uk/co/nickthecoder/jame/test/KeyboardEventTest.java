@@ -10,10 +10,10 @@ import uk.co.nickthecoder.jame.Surface;
 import uk.co.nickthecoder.jame.event.Event;
 import uk.co.nickthecoder.jame.event.KeyboardEvent;
 import uk.co.nickthecoder.jame.event.ModifierKey;
-import uk.co.nickthecoder.jame.event.ModifierKeyFilter;
 import uk.co.nickthecoder.jame.event.ScanCode;
 import uk.co.nickthecoder.jame.event.Symbol;
 import uk.co.nickthecoder.jame.util.KeyboardFilter;
+import uk.co.nickthecoder.jame.util.ModifierKeyFilter;
 
 public class KeyboardEventTest extends AbstractTest
 {

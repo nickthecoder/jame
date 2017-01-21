@@ -2,7 +2,6 @@ package uk.co.nickthecoder.jame.util;
 
 import uk.co.nickthecoder.jame.event.KeyboardEvent;
 import uk.co.nickthecoder.jame.event.ModifierKey;
-import uk.co.nickthecoder.jame.event.ModifierKeyFilter;
 import uk.co.nickthecoder.jame.event.ScanCode;
 import uk.co.nickthecoder.jame.event.Symbol;
 

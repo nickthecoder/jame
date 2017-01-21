@@ -5,12 +5,13 @@
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
  ******************************************************************************/
-package uk.co.nickthecoder.jame.event;
+package uk.co.nickthecoder.jame.util;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import uk.co.nickthecoder.jame.util.AbstractEventFilter;
+import uk.co.nickthecoder.jame.event.KeyboardEvent;
+import uk.co.nickthecoder.jame.event.ModifierKey;
 
 /**
  * Accepts or rejects the keyboard modifiers given to it. A simple example, would test just for the left shift key.

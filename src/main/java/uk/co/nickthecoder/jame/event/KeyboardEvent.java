@@ -10,6 +10,7 @@ package uk.co.nickthecoder.jame.event;
 import uk.co.nickthecoder.jame.Events;
 import uk.co.nickthecoder.jame.Window;
 import uk.co.nickthecoder.jame.util.KeyboardFilter;
+import uk.co.nickthecoder.jame.util.ModifierKeyFilter;
 
 /**
  * Fired when a key is pressed, released, and also fired with "fake" presses for keyboard auto-repeat features.

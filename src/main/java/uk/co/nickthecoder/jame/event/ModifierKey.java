@@ -4,6 +4,8 @@
  ******************************************************************************/
 package uk.co.nickthecoder.jame.event;
 
+import uk.co.nickthecoder.jame.util.ModifierKeyFilter;
+
 /**
  * Modifier keys, the common ones are SHIFT, CTRL, ALT, but also include number lock, caps lock.
  * <p>
