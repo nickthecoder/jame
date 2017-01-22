@@ -255,7 +255,7 @@ JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_native_1poll
 
         } else if ( type == SDL_TEXTINPUT ) {
         
-            jclass subClass = (*env)->FindClass( env, "uk/co/nickthecoder/jame/event/TextEditingEvent" );
+            jclass subClass = (*env)->FindClass( env, "uk/co/nickthecoder/jame/event/TextInputEvent" );
             //printf( "Found class %p\n", subClass );
             jobject jevent = (*env)->AllocObject( env, subClass );
             //printf( "Created instance %p\n", jevent );
@@ -280,4 +280,16 @@ JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Events_native_1keyboardRepea
 	SDL_EnableKeyRepeat( delay, repeat );
 }
 
+
+JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Events_startTextInput
+  (JNIEnv *env, jclass klass)
+{
+    SDL_StartTextInput();
+}
+
+JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Events_stopTextInput
+  (JNIEnv *env, jclass klass)
+{
+    SDL_StopTextInput();
+}
 

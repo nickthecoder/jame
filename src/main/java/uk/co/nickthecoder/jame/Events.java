@@ -121,4 +121,9 @@ public class Events
     }
 
     private static native void native_keyboardRepeat(int delay, int interval);
+    
+    public static native void startTextInput();
+
+    public static native void stopTextInput();
+
 }

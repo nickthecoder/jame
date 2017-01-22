@@ -8,11 +8,13 @@ Change keyScanCode to scanCode and scanCode to scanCodeValue
     Same for symbol
     Requires JNI changes too.
 
+
+Joystick / Game Controller Input
+
 Tests / Examples
 
-    TextInputEvent and TextEditingEvent
+    TextEditingEvent
     Sound
-    Joystick input
 
 Last
 ====

@@ -1,5 +1,6 @@
 package uk.co.nickthecoder.jame.test;
 
+import uk.co.nickthecoder.jame.Events;
 import uk.co.nickthecoder.jame.JameException;
 import uk.co.nickthecoder.jame.RGBA;
 import uk.co.nickthecoder.jame.Rect;
@@ -20,17 +21,16 @@ import uk.co.nickthecoder.jame.util.ModifierKeyFilter;
  * Move the caret with the arrow keys, HOME and END.
  * Make a selection by holding down SHIFT while using the arrow keys, HOME or END.
  * <p>
- * Currently, the mouse cannot be used to move the caret, or make selections.
- * Also, it would be nice for SHIFT+CTRL+ arrow keys to change the selection a word at a time.
- * Copy and paste are not supported.
+ * Currently, the mouse cannot be used to move the caret, or make selections. Also, it would be nice for SHIFT+CTRL+
+ * arrow keys to change the selection a word at a time. Copy and paste are not supported.
  * </p>
  */
 public class TextEditingTest extends AbstractTest
 {
     public static final RGBA CARET_COLOR = new RGBA(255, 50, 50);
 
-    public static final RGBA SELECTION_COLOR = new RGBA(90,90,200);
-    
+    public static final RGBA SELECTION_COLOR = new RGBA(90, 90, 200);
+
     public Renderer renderer;
 
     public TrueTypeFont font;
@@ -40,11 +40,11 @@ public class TextEditingTest extends AbstractTest
     public int position;
 
     public Texture texture;
-    
+
     public int flashCounter = 0;
-    
+
     public int selectStart;
-    
+
     public int selectEnd;
 
     public TextEditingTest(Renderer renderer, TrueTypeFont font)
@@ -61,24 +61,46 @@ public class TextEditingTest extends AbstractTest
         selectStart = -1;
         selectEnd = -1;
         updateTexture();
+
+        // Call this whenever the focus is given to a text input field.
+        Events.stopTextInput();
+        Events.startTextInput();
+    }
+
+    @Override
+    public void end(TestController controller) throws JameException
+    {
+        // Your code should call this when focus is away from the text input field.
+        Events.stopTextInput();
+        super.end(controller);
     }
 
     @Override
     public void event(TestController controller, Event event) throws JameException
     {
         if (event instanceof TextEditingEvent) {
-            System.out.println(event);
-            TextEditingEvent tee = (TextEditingEvent) event;
             // TODO Add TextEditingEvent handler
             // I can't work out how to type foreign languages in Gnome3, and without that, I can't test this code.
             // When I change my input source to Japanese Kana, and then follow the instructions here:
             // http://www-archive.mozilla.org/projects/intl/input-method-spec.html
             // nothing happens.
 
+            TextEditingEvent tee = (TextEditingEvent) event;
+            System.out.println("*** " + tee);
+
         } else if (event instanceof TextInputEvent) {
-            System.out.println(event);
+
             TextInputEvent tie = (TextInputEvent) event;
-            // TODO Add TextInputEvent handler
+            System.out.println(tie);
+
+            if (selectStart != selectEnd) {
+                deleteSelection();
+            }
+
+            text = text.substring(0, position) + tie.text + text.substring(position);
+            position += tie.text.length();
+            clearSelection();
+            updateTexture();
 
         } else if (event instanceof KeyboardEvent) {
 
@@ -88,7 +110,7 @@ public class TextEditingTest extends AbstractTest
 
                 if (ke.keyScanCode == ScanCode.LEFT) {
                     if (ModifierKeyFilter.SHIFT.accept(ke)) {
-                        changeSelection( -1 );
+                        changeSelection(-1);
                     } else {
                         clearSelection();
                     }
@@ -100,7 +122,7 @@ public class TextEditingTest extends AbstractTest
 
                 } else if (ke.keyScanCode == ScanCode.RIGHT) {
                     if (ModifierKeyFilter.SHIFT.accept(ke)) {
-                        changeSelection( 1 );
+                        changeSelection(1);
                     } else {
                         clearSelection();
                     }
@@ -112,7 +134,7 @@ public class TextEditingTest extends AbstractTest
 
                 } else if (ke.keyScanCode == ScanCode.HOME) {
                     if (ModifierKeyFilter.SHIFT.accept(ke)) {
-                        changeSelection( -text.length() );
+                        changeSelection(-text.length());
                     } else {
                         clearSelection();
                     }
@@ -121,7 +143,7 @@ public class TextEditingTest extends AbstractTest
 
                 } else if (ke.keyScanCode == ScanCode.END) {
                     if (ModifierKeyFilter.SHIFT.accept(ke)) {
-                        changeSelection( text.length() );
+                        changeSelection(text.length());
                     } else {
                         clearSelection();
                     }
@@ -149,26 +171,14 @@ public class TextEditingTest extends AbstractTest
                         }
                     }
 
-                } else {
-                    char c = (char) ke.symbol;
-                    if (ke.keySymbol.printable) {
-                        if (ModifierKeyFilter.SHIFT.accept(ke.modifiers)) {
-                            c = Character.toUpperCase(c);
-                        }
-                        text = text.substring(0, position) + c + text.substring(position);
-                        position++;
-                        clearSelection();
-                        updateTexture();
-                    }
                 }
-
             }
         }
 
         super.event(controller, event);
     }
 
-    public void changeSelection( int delta )
+    public void changeSelection(int delta)
     {
         if (selectStart == -1) {
             selectStart = position;
@@ -181,27 +191,26 @@ public class TextEditingTest extends AbstractTest
         if (selectEnd < 0) {
             selectEnd = 0;
         }
-        System.out.println( "Selection " + selectStart + ".." + selectEnd + " postion " + position );
     }
-    
+
     public void deleteSelection()
     {
-        int start = selectStart < selectEnd ? selectStart : selectEnd; 
+        int start = selectStart < selectEnd ? selectStart : selectEnd;
         int end = selectStart > selectEnd ? selectStart : selectEnd;
-        
-        text = text.substring(0,start) + text.substring(end);
+
+        text = text.substring(0, start) + text.substring(end);
         position = start;
-        
+
         clearSelection();
         updateTexture();
     }
-    
+
     public void clearSelection()
     {
         selectStart = -1;
         selectEnd = -1;
     }
-    
+
     public boolean isPrintableChar(char c)
     {
         Character.UnicodeBlock block = Character.UnicodeBlock.of(c);
@@ -238,18 +247,18 @@ public class TextEditingTest extends AbstractTest
 
             // Selection background
             if (selectStart >= 0) {
-                int startX = selectStart == 0 ? 0 : font.sizeText(text.substring(0,selectStart));
-                int endX = selectEnd == 0 ? 0 : font.sizeText(text.substring(0,selectEnd));
+                int startX = selectStart == 0 ? 0 : font.sizeText(text.substring(0, selectStart));
+                int endX = selectEnd == 0 ? 0 : font.sizeText(text.substring(0, selectEnd));
                 renderer.setDrawColor(SELECTION_COLOR);
-                renderer.fillRect( new Rect( x + startX, y, endX - startX, caretHeight));
+                renderer.fillRect(new Rect(x + startX, y, endX - startX, caretHeight));
             }
 
             // The text
             controller.renderer.copy(texture, x, y);
 
             // The caret
-            flashCounter ++;
-            if ( flashCounter > 20 ) {
+            flashCounter++;
+            if (flashCounter > 20) {
                 renderer.setDrawColor(CARET_COLOR);
                 renderer.drawLine(x + caretX, y, x + caretX, y + caretHeight);
                 if (flashCounter > 50) {
