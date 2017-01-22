@@ -14,6 +14,7 @@ public class MouseWheelEvent extends MouseEvent
     @Override
     public String toString()
     {
-        return "MouseWheelEven{ windowID=" + windowID + " mouseID=" + mouseID + ", x=" + x + ", y=" + y + " }";
+        return "MouseWheelEven{ windowID=" + windowID + " mouseID=" + mouseID + ", x=" + x + ", y=" + y +
+            " modifiers=" + modifiers + " }";
     }
 }

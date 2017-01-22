@@ -2,9 +2,10 @@ package uk.co.nickthecoder.jame.util;
 
 import uk.co.nickthecoder.jame.event.Event;
 
-public abstract class AbstractEventFilter<T extends Event> implements EventFilter<T>
+public abstract class AbstractEventFilter<T extends Event> implements GenericEventFilter<T>
 {
 
+    @Override
     @SuppressWarnings("unchecked")
     public boolean acceptEvent(Event event)
     {

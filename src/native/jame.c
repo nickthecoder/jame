@@ -8,12 +8,13 @@
 #include <jni.h>
 #include <SDL.h>
 #include <SDL_video.h>
+#include <SDL_joystick.h>
 #include "include/uk_co_nickthecoder_jame_Jame.h"
 
 JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Jame_native_1init
   (JNIEnv *env, jclass class )
 {
-    return SDL_Init( 0 );
+    return SDL_Init( SDL_INIT_JOYSTICK );
 }
 
 JNIEXPORT jint JNICALL Java_uk_co_nickthecoder_jame_Jame_native_1initSubsystem

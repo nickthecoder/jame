@@ -10,10 +10,14 @@ import uk.co.nickthecoder.jame.Surface;
 import uk.co.nickthecoder.jame.event.Event;
 import uk.co.nickthecoder.jame.event.KeyboardEvent;
 import uk.co.nickthecoder.jame.event.ModifierKey;
+import uk.co.nickthecoder.jame.event.MouseButton;
+import uk.co.nickthecoder.jame.event.MouseButtonEvent;
 import uk.co.nickthecoder.jame.event.ScanCode;
 import uk.co.nickthecoder.jame.event.Symbol;
+import uk.co.nickthecoder.jame.util.EventFilter;
 import uk.co.nickthecoder.jame.util.KeyboardFilter;
 import uk.co.nickthecoder.jame.util.ModifierKeyFilter;
+import uk.co.nickthecoder.jame.util.MouseButtonFilter;
 
 public class KeyboardEventTest extends AbstractTest
 {
@@ -48,10 +52,9 @@ public class KeyboardEventTest extends AbstractTest
         
         add("Press ctrl+shift+A", new KeyboardFilter().pressed().modifiers(ModifierKeyFilter.SHIFT.and(ModifierKeyFilter.CTRL)).symbol(Symbol.a));
 
-        add("Press shift+A without Num Lock", new KeyboardFilter().pressed().modifiers(ModifierKeyFilter.SHIFT.forbid(ModifierKey.NUM_LOCK)).symbol(Symbol.a));
-        add("Press shift+A without Caps Lock", new KeyboardFilter().pressed().modifiers(ModifierKeyFilter.SHIFT.forbid(ModifierKey.CAPS_LOCK)).symbol(Symbol.a));
+        add("Press shift+A without Num Lock", new KeyboardFilter().pressed().modifiers(ModifierKeyFilter.SHIFT.forbid(ModifierKey.NUMLOCK)).symbol(Symbol.a));
+        add("Press shift+A without Caps Lock", new KeyboardFilter().pressed().modifiers(ModifierKeyFilter.SHIFT.forbid(ModifierKey.CAPSLOCK)).symbol(Symbol.a));
 
-        nextColumn();
         add("Press A (any mods - include repeats)", new KeyboardFilter().pressed().includeRepeats().symbol(Symbol.a));
         add("Release A (any mods)", new KeyboardFilter().released().symbol(Symbol.a));
         add("Release A (no mods)", new KeyboardFilter().released().modifiers(ModifierKeyFilter.NONE).symbol(Symbol.a));
@@ -64,14 +67,22 @@ public class KeyboardEventTest extends AbstractTest
         // These are the other versions of the two items above.
         add("Non US Backslash Scan Code", new KeyboardFilter().pressed().scanCode(ScanCode.NONUSBACKSLASH));
         add("Hash Symbol", new KeyboardFilter().pressed().symbol(Symbol.HASH));
+        
+        add("Left Mouse Button Press", new MouseButtonFilter().button(1).pressed() );
+        add("Left Mouse Button Release", new MouseButtonFilter().button(1).released() );
+        add("Left Mouse Button Either", new MouseButtonFilter().button(1) );
+        add("Shift + Left Mouse", new MouseButtonFilter().button(1).pressed().modifiers(ModifierKeyFilter.SHIFT) );
+        add("Ctrl + Right Mouse", new MouseButtonFilter().button(MouseButton.RIGHT).pressed().modifiers(ModifierKeyFilter.CTRL) );
+        add("Middle Mouse", new MouseButtonFilter().button(MouseButton.MIDDLE).pressed() );
     }
 
     private void nextColumn()
     {
         this.x += 320;
-        this.y = 30;        
+        this.y = 30;
     }
-    private void add(String label, KeyboardFilter filter)
+
+    private void add(String label, EventFilter filter)
     {
         Indicator indicator = new Indicator(label, filter, this.x, this.y);
         this.y += 30;
@@ -89,10 +100,10 @@ public class KeyboardEventTest extends AbstractTest
 
     public void event(TestController controller, Event event) throws JameException
     {
-        if ( event instanceof KeyboardEvent) {
-            System.out.println( event );
+        if ( (event instanceof KeyboardEvent) || (event instanceof MouseButtonEvent)) {
+            System.out.println(event);
         }
-        
+
         for (Indicator indicator : indicators) {
             indicator.event(event);
         }
@@ -113,16 +124,16 @@ public class KeyboardEventTest extends AbstractTest
     public class Indicator
     {
         private static final double MAX_SCALE = 1.6;
-        
+
         SizedTexture texture;
         int x;
         int y;
         boolean activated;
         double scale = 1;
-        KeyboardFilter filter;
+        EventFilter filter;
         Rect srcRect;
 
-        public Indicator(String label, KeyboardFilter filter, int x, int y)
+        public Indicator(String label, EventFilter filter, int x, int y)
         {
             this.filter = filter;
             this.x = x;
@@ -151,7 +162,7 @@ public class KeyboardEventTest extends AbstractTest
             }
             if (this.scale > MAX_SCALE) {
                 this.scale = MAX_SCALE;
-                this.activated = false; 
+                this.activated = false;
             }
 
             int width = (int) (texture.width * this.scale);

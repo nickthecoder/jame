@@ -6,9 +6,11 @@
 package uk.co.nickthecoder.jame;
 
 import uk.co.nickthecoder.jame.event.Event;
+import uk.co.nickthecoder.jame.event.EventForWindow;
+import uk.co.nickthecoder.jame.event.KeyboardEvent;
+import uk.co.nickthecoder.jame.event.ModifierKey;
 import uk.co.nickthecoder.jame.event.QuitEvent;
 import uk.co.nickthecoder.jame.event.StopPropagation;
-import uk.co.nickthecoder.jame.event.EventForWindow;
 
 public class Events
 {
@@ -39,14 +41,65 @@ public class Events
         while (true) {
             Event event = native_poll();
             if (event != null) {
+
                 try {
                     event.postConstruct();
                 } catch (StopPropagation sp) {
                     // The event has already been handled, so prevent it from being handled again, by not returning it.
                     continue;
+                } finally {
+                    if (event instanceof KeyboardEvent) {
+                        rememberModifiers((KeyboardEvent) event);
+                    }
                 }
             }
             return event;
+        }
+    }
+
+    /**
+     * Used by {@link #rememberModifiers(KeyboardEvent)}.
+     */
+    private static int modifiers;
+
+    /**
+     * Returns which modifier keys are down (or locked in the case of Caps Lock and Number Lock).
+     * 
+     * @return A bitwise OR of all modifiers that are currently pressed/locked.
+     */
+    public static int getKeyboardModifiers()
+    {
+        return modifiers;
+    }
+
+    /**
+     * Modifier keys (shift, ctrl, alt) are sent as part of KeyboardEvents, however, they are NOT sent with
+     * MouseButtonEvents. This is annoying because, when creating a GUI, it is often useful to have the mouse button
+     * behave differently depending on the state of the modifier keys. Therefore Jame intercepts all KeyboardEvents,
+     * remembers which modifier keys are down, and includes them in future MouseButtonEvents.
+     * 
+     * @param ke
+     */
+    private static void rememberModifiers(KeyboardEvent ke)
+    {
+        modifiers = ke.modifiers;
+        ModifierKey mk = ke.keyScanCode.modifierKey; 
+        if ( mk != null ) {
+            
+            if (mk.isLock) {
+                // Toggle the value on when it is pressed
+                if (ke.pressed) {
+                    modifiers ^= mk.code;
+                }
+            } else {
+                if (ke.pressed) {
+                    // Add the modifier
+                    modifiers |= mk.code;
+                } else {
+                    // Remove the modifier
+                    modifiers &= ~mk.code;
+                }
+            }
         }
     }
 

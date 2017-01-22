@@ -7,11 +7,12 @@
  ******************************************************************************/
 package uk.co.nickthecoder.jame.event;
 
+
 /**
  * 
  * Note that mouse wheel events are now sent as {@link MouseWheelEvent}s, so there
  */
-public class MouseButtonEvent extends MouseEvent
+public class MouseButtonEvent extends MouseEvent implements WithModifiers
 {
     /**
      * The mouse button index (currently in the range 1..5). Note that the mouse wheel are NOT button events any more,
@@ -28,6 +29,8 @@ public class MouseButtonEvent extends MouseEvent
      * A typed ({@link MouseButton}) version of the integer {@link #button}.
      */
     public MouseButton mouseButton;
+
+ 
 
     @Override
     public void postConstruct()
@@ -53,12 +56,13 @@ public class MouseButtonEvent extends MouseEvent
         }
         return this.mouseButton;
     }
-
+    
     @Override
     public String toString()
     {
         return "MouseButtonEven{ windowID=" + windowID + " mouseID=" + mouseID +
             ", button=" + mouseButton + ", pressed=" + pressed +
-            ", x=" + x + ", y=" + y + " }";
+            ", x=" + x + ", y=" + y + " modifiers=" + modifiers + " }";
     }
+
 }

@@ -14,8 +14,8 @@ import java.util.HashMap;
  * For example, the ScanCode {@link #Q}, will be used for the "A" key on an azerty keyboard.
  * This makes it ideal to use for games, because usually care more about the position of the key than its label.
  * <p>
- * The values are based on SDL2's SDL_scancode.h, which was based on the
- * <a href="http://www.usb.org/developers/devclass_docs/Hut1_12v2.pdf">USB usage page standard</a>
+ * The values are based on SDL2's SDL_scancode.h, which was based on the <a
+ * href="http://www.usb.org/developers/devclass_docs/Hut1_12v2.pdf">USB usage page standard</a>
  * </p>
  */
 public enum ScanCode
@@ -105,7 +105,7 @@ public enum ScanCode
     PERIOD(55, "Period"),
     SLASH(56, "Slash"),
 
-    CAPSLOCK(57, "Caps Lock"),
+    CAPSLOCK(57, "Caps Lock", ModifierKey.CAPSLOCK),
 
     F1(58, "F1"),
     F2(59, "F2"),
@@ -140,7 +140,7 @@ public enum ScanCode
     /**
      * num lock on PC , ""), clear on Mac keyboards
      */
-    NUMLOCKCLEAR(83, "Number Lock Clear"),
+    NUMLOCK(83, "Number Lock Clear", ModifierKey.NUMLOCK),
     KP_DIVIDE(84, "KP Divide"),
     KP_MULTIPLY(85, "KP Multiply"),
     KP_MINUS(86, "KP Minus"),
@@ -303,21 +303,20 @@ public enum ScanCode
     KP_DECIMAL(220, "KP Decial"),
     KP_HEXADECIMAL(221, "KP Hexadecimal"),
 
-    LCTRL(224, "Left Ctrl"),
-    LSHIFT(225, "Left Shift"),
-    
-    LALT(226, "Left Alt"),
+    LCTRL(224, "Left Ctrl", ModifierKey.LCTRL),
+    LSHIFT(225, "Left Shift", ModifierKey.LSHIFT),
+    LALT(226, "Left Alt", ModifierKey.LALT),
     LGUI(227, "Left GUI"),
-    RCTRL(228, "Right Control"),
-    RSHIFT(229, "Right Shift"),
-    RALT(230, "Right Alt"),
+    RCTRL(228, "Right Control", ModifierKey.RCTRL),
+    RSHIFT(229, "Right Shift", ModifierKey.RSHIFT),
+    RALT(230, "Right Alt", ModifierKey.RALT),
     RGUI(231, "Right GUI"),
 
     /**
      * < I'm not sure if this is really not covered by any of the above , ""), but since there's a
      * special KMOD_MODE for it I'm adding it here
      */
-    MODE(257, "Mode"),
+    MODE(257, "Mode", ModifierKey.MODE),
 
     AUDIONEXT(258, "Audio Next"),
     AUDIOPREV(259, "Audio Prev"),
@@ -367,13 +366,25 @@ public enum ScanCode
     public final int value;
 
     public final String label;
-   
+
+    /**
+     * For shift, ctrl etc, is the ModifierKey that this ScanCode refers to. For non-modifier keys, this will be null.
+     */
+    public final ModifierKey modifierKey;
+
     private ScanCode(int value, String label)
+    {
+        this(value, label, null);
+    }
+
+    private ScanCode(int value, String label, ModifierKey modifierKey)
     {
         this.value = value;
         this.label = label;
+        this.modifierKey = modifierKey;
     }
-    
+
+    @Override
     public String toString()
     {
         return label;

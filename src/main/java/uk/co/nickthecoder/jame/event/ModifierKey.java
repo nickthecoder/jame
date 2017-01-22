@@ -22,15 +22,26 @@ public enum ModifierKey
     RCTRL(0x0080),
     LALT(0x0100),
     RALT(0x0200),
-    NUM_LOCK(0x1000),
-    CAPS_LOCK(0x2000),
+    NUMLOCK(0x1000, true),
+    CAPSLOCK(0x2000, true),
     MODE(0x4000);
 
     public final int code;
 
+    /**
+     * Is this a lock button (caps lock and number lock).
+     */
+    public boolean isLock;
+
     ModifierKey(int code)
     {
+        this(code, false);
+    }
+
+    ModifierKey(int code, boolean toggle)
+    {
         this.code = code;
+        this.isLock = toggle;
     }
 
     public boolean pressed(int flags)

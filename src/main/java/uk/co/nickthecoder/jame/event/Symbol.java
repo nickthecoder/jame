@@ -119,7 +119,7 @@ public enum Symbol
     DOWN(ScanCode.DOWN),
     UP(ScanCode.UP),
     
-    NUMLOCKCLEAR(ScanCode.NUMLOCKCLEAR),
+    NUMLOCKCLEAR(ScanCode.NUMLOCK),
     KP_DIVIDE(ScanCode.KP_DIVIDE),
     KP_MULTIPLY(ScanCode.KP_MULTIPLY),
     KP_MINUS(ScanCode.KP_MINUS),

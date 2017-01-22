@@ -13,6 +13,7 @@ import java.util.List;
 import uk.co.nickthecoder.jame.event.Event;
 import uk.co.nickthecoder.jame.event.KeyboardEvent;
 import uk.co.nickthecoder.jame.event.ModifierKey;
+import uk.co.nickthecoder.jame.event.WithModifiers;
 
 /**
  * Accepts or rejects the keyboard modifiers given to it. A simple example, would test just for the left shift key.
@@ -110,7 +111,7 @@ public final class ModifierKeyFilter extends AbstractEventFilter<KeyboardEvent>
      * </p>
      * 
      * @param modifierKeys
-     *            One or more of : {@link ModifierKey#NUM_LOCK}, {@link ModifierKey#NUM_LOCK}, {@link ModifierKey#MODE}
+     *            One or more of : {@link ModifierKey#NUMLOCK}, {@link ModifierKey#NUMLOCK}, {@link ModifierKey#MODE}
      * @return A new ModifierKeyFilter, similar to this one, which rejects the extra modifier keys specified.
      */
     public ModifierKeyFilter forbid(ModifierKey... modifierKeys)
@@ -123,14 +124,19 @@ public final class ModifierKeyFilter extends AbstractEventFilter<KeyboardEvent>
         return result;
     }
 
+    public boolean acceptWithModifiers(WithModifiers wm)
+    {
+        return accept( wm.getModifiers() );
+    }
+
     /**
      * Rejects all non {@link KeyboardEvent}s, and accepts/rejects KeyboardEvents based upon which modifier keys are
      * down.
      */
     public boolean acceptEvent(Event event)
     {
-        if (event instanceof KeyboardEvent) {
-            return accept((KeyboardEvent) event);
+        if (event instanceof WithModifiers) {
+            return acceptWithModifiers((WithModifiers) event);
         }
         return false;
     }

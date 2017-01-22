@@ -4,6 +4,10 @@ Converting JAME to SDL2
 ToDo
 ====
 
+Change keyScanCode to scanCode and scanCode to scanCodeValue    
+    Same for symbol
+    Requires JNI changes too.
+
 Tests / Examples
 
     TextInputEvent and TextEditingEvent

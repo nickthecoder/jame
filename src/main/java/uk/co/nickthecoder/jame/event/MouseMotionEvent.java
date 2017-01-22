@@ -32,11 +32,11 @@ public class MouseMotionEvent extends MouseEvent
     {
         return ( button & ( 1 << ( button - 1 ) ) ) != 0;
     }
-
+    
     public String toString()
     {
         return "MouseMotionEvent{ state=" + state + ", x=" + x + ", y=" + y + ", relativeX=" + relativeX
-            + ", relativeY=" + relativeY + " }";
+            + ", relativeY=" + relativeY + " modifiers=" + modifiers + " }";
     }
 
 }

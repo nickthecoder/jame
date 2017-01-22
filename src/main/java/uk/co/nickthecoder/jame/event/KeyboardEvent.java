@@ -17,7 +17,7 @@ import uk.co.nickthecoder.jame.util.ModifierKeyFilter;
  * Consider using {@link KeyboardFilter} to test if a given key combination has been pressed/released, as it is much
  * easier than trying to test the modifiers manually.
  */
-public class KeyboardEvent extends EventForWindow
+public class KeyboardEvent extends EventForWindow implements WithModifiers
 {
     public boolean pressed;
 
@@ -97,10 +97,17 @@ public class KeyboardEvent extends EventForWindow
     }
 
     @Override
+    public int getModifiers()
+    {
+        return modifiers;
+    }
+    
+    @Override
     public String toString()
     {
         return "KeyboardEvent{ " + (this.pressed ? "Pressed" : "Released") +
             ", scanCode=" + keyScanCode + "(" + scanCode + ") symbol=" + keySymbol + "(" + symbol + ")" +
             ", modifiers=" + this.modifiers + " repeated=" + this.repeated + " }";
     }
+
 }

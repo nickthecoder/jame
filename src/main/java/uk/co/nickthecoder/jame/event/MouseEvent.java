@@ -7,11 +7,13 @@
  ******************************************************************************/
 package uk.co.nickthecoder.jame.event;
 
+import uk.co.nickthecoder.jame.Events;
+
 /**
  * Holds the common data from {@link MouseMotionEvent}, {@link MouseButtonEvent} and {@link MouseWheelEvent}.
  * 
  */
-public class MouseEvent extends EventForWindow
+public class MouseEvent extends EventForWindow implements WithModifiers
 {
     /**
      * The input device identifier (this is called "which" in SDL).
@@ -28,4 +30,25 @@ public class MouseEvent extends EventForWindow
      */
     public int y;
 
+    /**
+     * The keyboard modifiers that are down/locked when this mouse button event occurred.
+     * This is the bitwise or of {@link ModifierKey#code} for each modifier key pressed/locked.
+     * <p>
+     * Note, this is implemented by Jame, there is no such field in SDL.
+     * </p>
+     */
+    public int modifiers;
+    
+    @Override
+    public void postConstruct()
+    {
+        super.postConstruct();
+        this.modifiers = Events.getKeyboardModifiers();
+    }
+    
+    @Override
+    public int getModifiers()
+    {
+        return modifiers;
+    }
 }
