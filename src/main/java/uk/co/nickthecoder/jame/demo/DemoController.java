@@ -186,15 +186,15 @@ public class DemoController implements Demo
         if (event instanceof KeyboardEvent) {
 
             KeyboardEvent ke = (KeyboardEvent) event;
-            int value = ke.symbol;
+            int value = ke.symbolValue;
 
             if (KeyboardFilter.ctrlPress.accept(ke)) {
                 System.out.println("!!! YES ctrl key pressed");
-                if (ke.symbol == 'f') {
+                if (ke.symbolValue == 'f') {
                     fullscreen = !fullscreen;
                     window.setFullScreen(fullscreen ? Window.FULLSCREEN : 0);
                 }
-                if (ke.symbol == 'g') {
+                if (ke.symbolValue == 'g') {
                     fullscreen = !fullscreen;
                     window.setFullScreen(fullscreen ? Window.FULLSCREEN_DESKTOP : 0);
                 }

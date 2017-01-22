@@ -48,11 +48,11 @@ public class KeyboardFilter extends AbstractEventFilter<KeyboardEvent>
             return false;
         }
 
-        if ((this.scanCode != null) && (event.scanCode != this.scanCode)) {
+        if ((this.scanCode != null) && (event.scanCodeValue != this.scanCode)) {
             return false;
         }
 
-        if ((this.symbol != null) && (event.symbol != this.symbol)) {
+        if ((this.symbol != null) && (event.symbolValue != this.symbol)) {
             return false;
         }
 

@@ -15,7 +15,7 @@ package uk.co.nickthecoder.jame.event;
 public class MouseButtonEvent extends MouseEvent implements WithModifiers
 {
     /**
-     * The mouse button index (currently in the range 1..5). Note that the mouse wheel are NOT button events any more,
+     * The mouse button (currently in the range 1..5). Note that the mouse wheel are NOT button events any more,
      * so 4 and 5 are NOT mouse wheel events.
      */
     public int button;

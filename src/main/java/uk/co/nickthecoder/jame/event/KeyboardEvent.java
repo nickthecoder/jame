@@ -29,7 +29,7 @@ public class KeyboardEvent extends EventForWindow implements WithModifiers
      * Use this when you care about the position of a key on the keyboard, as opposed to what the label is on that key.
      * <p>
      */
-    public int scanCode;
+    public int scanCodeValue;
 
     /**
      * Which virtual key has been pressed or released. This is "virtual" because the value will depend on keyboard
@@ -43,7 +43,7 @@ public class KeyboardEvent extends EventForWindow implements WithModifiers
      * Use this when you care about the label of the key, rather than the position of a key on the keyboard.
      * <p>
      */
-    public int symbol;
+    public int symbolValue;
 
     /**
      * Which combination of Shift, Ctrl, and Alt key were held down when this KeyboardEvent was fired.
@@ -64,9 +64,9 @@ public class KeyboardEvent extends EventForWindow implements WithModifiers
     /**
      * Maps the key's symbol to a Key. Lazily evaluated.
      */
-    public Symbol keySymbol;
+    public Symbol symbol;
 
-    public ScanCode keyScanCode;
+    public ScanCode scanCode;
 
     /**
      * The unique id for the window with keyboard focus, or 0, if there is none.
@@ -77,13 +77,13 @@ public class KeyboardEvent extends EventForWindow implements WithModifiers
     public void postConstruct()
     {
         super.postConstruct();
-        keyScanCode = ScanCode.findKey(scanCode);
-        if (keyScanCode == null) {
-            keyScanCode = ScanCode.NONE;
+        scanCode = ScanCode.findKey(scanCodeValue);
+        if (scanCode == null) {
+            scanCode = ScanCode.NONE;
         }
-        this.keySymbol = Symbol.findKey(symbol);
-        if (keySymbol == null) {
-            keySymbol = Symbol.NONE;
+        this.symbol = Symbol.findKey(symbolValue);
+        if (symbol == null) {
+            symbol = Symbol.NONE;
         }
     }
 
@@ -106,7 +106,7 @@ public class KeyboardEvent extends EventForWindow implements WithModifiers
     public String toString()
     {
         return "KeyboardEvent{ " + (this.pressed ? "Pressed" : "Released") +
-            ", scanCode=" + keyScanCode + "(" + scanCode + ") symbol=" + keySymbol + "(" + symbol + ")" +
+            ", scanCode=" + scanCode + "(" + scanCodeValue + ") symbol=" + symbol + "(" + symbolValue + ")" +
             ", modifiers=" + this.modifiers + " repeated=" + this.repeated + " }";
     }
 

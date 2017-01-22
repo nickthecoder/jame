@@ -24,7 +24,7 @@ public abstract class AbstractDemo implements Demo
 
     protected void keyboardEvent(DemoController controller, KeyboardEvent ke) throws JameException
     {
-        if ( (ke.pressed) && (ke.keySymbol == Symbol.ESCAPE ) ) {
+        if ( (ke.pressed) && (ke.symbol == Symbol.ESCAPE ) ) {
             this.end( controller );
         }
     }

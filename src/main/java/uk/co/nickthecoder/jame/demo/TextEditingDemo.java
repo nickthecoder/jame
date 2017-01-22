@@ -108,7 +108,7 @@ public class TextEditingDemo extends AbstractDemo
             if (ke.pressed) {
                 System.out.println(ke);
 
-                if (ke.keyScanCode == ScanCode.LEFT) {
+                if (ke.scanCode == ScanCode.LEFT) {
                     if (ModifierKeyFilter.SHIFT.accept(ke)) {
                         changeSelection(-1);
                     } else {
@@ -120,7 +120,7 @@ public class TextEditingDemo extends AbstractDemo
                     }
                     updateTexture();
 
-                } else if (ke.keyScanCode == ScanCode.RIGHT) {
+                } else if (ke.scanCode == ScanCode.RIGHT) {
                     if (ModifierKeyFilter.SHIFT.accept(ke)) {
                         changeSelection(1);
                     } else {
@@ -132,7 +132,7 @@ public class TextEditingDemo extends AbstractDemo
                     }
                     updateTexture();
 
-                } else if (ke.keyScanCode == ScanCode.HOME) {
+                } else if (ke.scanCode == ScanCode.HOME) {
                     if (ModifierKeyFilter.SHIFT.accept(ke)) {
                         changeSelection(-text.length());
                     } else {
@@ -141,7 +141,7 @@ public class TextEditingDemo extends AbstractDemo
                     position = 0;
                     updateTexture();
 
-                } else if (ke.keyScanCode == ScanCode.END) {
+                } else if (ke.scanCode == ScanCode.END) {
                     if (ModifierKeyFilter.SHIFT.accept(ke)) {
                         changeSelection(text.length());
                     } else {
@@ -150,7 +150,7 @@ public class TextEditingDemo extends AbstractDemo
                     position = text.length();
                     updateTexture();
 
-                } else if (ke.keyScanCode == ScanCode.BACKSPACE) {
+                } else if (ke.scanCode == ScanCode.BACKSPACE) {
                     if (selectStart != selectEnd) {
                         deleteSelection();
                     } else {
@@ -161,7 +161,7 @@ public class TextEditingDemo extends AbstractDemo
                         }
                     }
 
-                } else if (ke.keyScanCode == ScanCode.DELETE) {
+                } else if (ke.scanCode == ScanCode.DELETE) {
                     if (selectStart != selectEnd) {
                         deleteSelection();
                     } else {

@@ -85,10 +85,10 @@ JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_native_1poll
             fid = (*env)->GetFieldID(env,subClass,"pressed","Z");
             (*env)->SetBooleanField(env,jevent,fid, e.key.state !=0);
 
-            fid = (*env)->GetFieldID(env,subClass,"scanCode","I");
+            fid = (*env)->GetFieldID(env,subClass,"scanCodeValue","I");
             (*env)->SetIntField(env,jevent,fid, e.key.keysym.scancode);
 
-            fid = (*env)->GetFieldID(env,subClass,"symbol","I");
+            fid = (*env)->GetFieldID(env,subClass,"symbolValue","I");
             (*env)->SetIntField(env,jevent,fid, e.key.keysym.sym);
 
             fid = (*env)->GetFieldID(env,subClass,"modifiers","I");

@@ -22,7 +22,7 @@ public abstract class RectanglesDemo extends AbstractDemo
 
     protected void keyboardEvent(DemoController controller, KeyboardEvent ke) throws JameException
     {
-        if (ke.pressed && (ke.symbol == '1')) {
+        if (ke.pressed && (ke.symbolValue == '1')) {
             useAlpha = !useAlpha;
             System.out.println("Using alpha : " + useAlpha);
             return;

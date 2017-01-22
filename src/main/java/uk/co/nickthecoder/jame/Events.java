@@ -83,7 +83,7 @@ public class Events
     private static void rememberModifiers(KeyboardEvent ke)
     {
         modifiers = ke.modifiers;
-        ModifierKey mk = ke.keyScanCode.modifierKey; 
+        ModifierKey mk = ke.scanCode.modifierKey; 
         if ( mk != null ) {
             
             if (mk.isLock) {
