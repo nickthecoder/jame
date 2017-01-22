@@ -1,4 +1,4 @@
-package uk.co.nickthecoder.jame.test;
+package uk.co.nickthecoder.jame.demo;
 
 import uk.co.nickthecoder.jame.Renderer;
 import uk.co.nickthecoder.jame.Surface;

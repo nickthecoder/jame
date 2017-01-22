@@ -1,4 +1,4 @@
-package uk.co.nickthecoder.jame.test;
+package uk.co.nickthecoder.jame.demo;
 
 import java.util.Random;
 

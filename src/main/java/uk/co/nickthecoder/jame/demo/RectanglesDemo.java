@@ -1,4 +1,4 @@
-package uk.co.nickthecoder.jame.test;
+package uk.co.nickthecoder.jame.demo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,19 +8,19 @@ import uk.co.nickthecoder.jame.RGBA;
 import uk.co.nickthecoder.jame.Rect;
 import uk.co.nickthecoder.jame.event.KeyboardEvent;
 
-public abstract class RectanglesTest extends AbstractTest
+public abstract class RectanglesDemo extends AbstractDemo
 {
     List<BouncyRectangle> rectangles;
 
     boolean useAlpha = false;
 
     @Override
-    public void begin(TestController controller) throws JameException
+    public void begin(DemoController controller) throws JameException
     {
         rectangles = new ArrayList<BouncyRectangle>(1000);
     }
 
-    protected void keyboardEvent(TestController controller, KeyboardEvent ke) throws JameException
+    protected void keyboardEvent(DemoController controller, KeyboardEvent ke) throws JameException
     {
         if (ke.pressed && (ke.symbol == '1')) {
             useAlpha = !useAlpha;
@@ -31,7 +31,7 @@ public abstract class RectanglesTest extends AbstractTest
     }
 
     @Override
-    public void display(TestController controller) throws JameException
+    public void display(DemoController controller) throws JameException
     {
         if (rectangles.size() < 10000) {
             rectangles.add(new BouncyRectangle());
@@ -40,15 +40,15 @@ public abstract class RectanglesTest extends AbstractTest
         drawRectangles(controller);
     }
 
-    protected abstract void drawRectangles(TestController controller);
+    protected abstract void drawRectangles(DemoController controller);
 
-    public void showInfo(TestController controller) throws JameException
+    public void showInfo(DemoController controller) throws JameException
     {
         super.showInfo(controller);
         System.out.println("Rectangle Count : " + this.rectangles.size());
     }
 
-    public void end(TestController controller) throws JameException
+    public void end(DemoController controller) throws JameException
     {
         super.end(controller);
         this.rectangles.clear();

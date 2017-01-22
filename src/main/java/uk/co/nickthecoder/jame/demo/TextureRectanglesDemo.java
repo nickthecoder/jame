@@ -1,12 +1,12 @@
-package uk.co.nickthecoder.jame.test;
+package uk.co.nickthecoder.jame.demo;
 
 import uk.co.nickthecoder.jame.BlendMode;
 import uk.co.nickthecoder.jame.RGBA;
 
-public class TextureRectanglesTest extends RectanglesTest
+public class TextureRectanglesDemo extends RectanglesDemo
 {
 
-    protected void drawRectangles(TestController controller)
+    protected void drawRectangles(DemoController controller)
     {
         controller.renderer.setDrawColor(RGBA.BLACK);
         controller.renderer.clear();

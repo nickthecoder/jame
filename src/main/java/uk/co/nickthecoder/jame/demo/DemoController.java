@@ -2,7 +2,7 @@
  * Copyright (c) 2013 Nick Robinson All rights reserved. This program and the accompanying materials are made available under the terms of
  * the GNU Public License v3.0 which accompanies this distribution, and is available at http://www.gnu.org/licenses/gpl.html
  ******************************************************************************/
-package uk.co.nickthecoder.jame.test;
+package uk.co.nickthecoder.jame.demo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,19 +23,19 @@ import uk.co.nickthecoder.jame.event.StopPropagation;
 import uk.co.nickthecoder.jame.util.KeyboardFilter;
 
 /**
- * Interactive tests of Jame API.
+ * Interactive demos.
  * <p>
  * Keys :
  * </p>
  * <ul>
  * <li>ctrl+F = Toggle Fullscreen with mode change</li>
  * <li>ctrl+G = Toggle Fullscreen Desktop</li>
- * <li>1 = Toggle Alpha (only used by some tests).</li>
+ * <li>1 = Toggle Alpha (only used by some demos).</li>
  * </ul>
  */
-public class TestController implements Test
+public class DemoController implements Demo
 {
-    public Test currentTest;
+    public Demo currentDemo;
 
     public Window window;
 
@@ -78,7 +78,7 @@ public class TestController implements Test
     public boolean fullscreen = false;
     /**
      * Increments each frame, until it reaches {@link #INFO_TICKS}, at which point, statistic are displayed
-     * and infoCounter is reset. See {@link #showInfo(TestController)}.
+     * and infoCounter is reset. See {@link #showInfo(DemoController)}.
      */
     public int infoCounter;
 
@@ -87,12 +87,12 @@ public class TestController implements Test
      */
     public static final int INFO_TICKS = 100;
 
-    public TestController()
+    public DemoController()
     {
     }
 
     @Override
-    public void begin(TestController controller)
+    public void begin(DemoController controller)
         throws JameException
     {
         Window.init();
@@ -139,29 +139,29 @@ public class TestController implements Test
         smallFont = new TrueTypeFont("resources/Vera.ttf", 16);
 
         menuItems = new ArrayList<MenuItem>();
-        addMenuItem("Texture Empty Rectangles", new TextureRectanglesTest());
-        addMenuItem("Texture Filled Rectangles", new TextureFilledRectanglesTest());
-        addMenuItem("Surface Filled Rectangles", new SurfaceFilledRectanglesTest());
+        addMenuItem("Texture Empty Rectangles", new TextureRectanglesDemo());
+        addMenuItem("Texture Filled Rectangles", new TextureFilledRectanglesDemo());
+        addMenuItem("Surface Filled Rectangles", new SurfaceFilledRectanglesDemo());
 
-        addMenuItem("Texture Sprites", new SpriteTest(iconTexture));
-        addMenuItem("Surface Sprites", new SpriteTest(iconSurface));
-        addMenuItem("Larger Textures", new SpriteTest(angryTexture, laughTexture));
+        addMenuItem("Texture Sprites", new SpriteDemo(iconTexture));
+        addMenuItem("Surface Sprites", new SpriteDemo(iconSurface));
+        addMenuItem("Larger Textures", new SpriteDemo(angryTexture, laughTexture));
 
-        addMenuItem("Texture Clip", new ClippingTest(5, angryTexture, laughTexture));
-        addMenuItem("Surface Clip", new ClippingTest(5, angrySurface, laughSurface));
+        addMenuItem("Texture Clip", new ClippingDemo(5, angryTexture, laughTexture));
+        addMenuItem("Surface Clip", new ClippingDemo(5, angrySurface, laughSurface));
 
-        addMenuItem("Rotate & Scale", new RotateAndScaleTest(10, twinsTexture, angryTexture));
+        addMenuItem("Rotate & Scale", new RotateAndScaleDemo(10, twinsTexture, angryTexture));
 
-        addMenuItem("Keyboard Events", new KeyboardEventTest(this));
-        addMenuItem("Mouse", new MouseTest(10, angryTexture, laughTexture));
+        addMenuItem("Keyboard Events", new KeyboardEventDemo(this));
+        addMenuItem("Mouse", new MouseDemo(10, angryTexture, laughTexture));
 
-        addMenuItem("Drop File", new DropTest(smallFont));
+        addMenuItem("Drop File", new DropDemo(smallFont));
         
-        addMenuItem("Text Editing", new TextEditingTest( renderer, smallFont ));
+        addMenuItem("Text Editing", new TextEditingDemo( renderer, smallFont ));
     }
 
     @Override
-    public void end(TestController controller)
+    public void end(DemoController controller)
         throws JameException
     {
         renderer.destroy();
@@ -169,18 +169,18 @@ public class TestController implements Test
     }
 
     /**
-     * Notified by a Test that it has ended (and therefore the menu should be displayed again).
+     * Notified by a {@link Demo} that the demo has ended (and therefore the menu should be displayed again).
      * 
-     * @param test
+     * @param demo
      */
-    public void ended(Test test)
+    public void ended(Demo demo)
     {
-        System.out.println("Ended test : " + test);
-        currentTest = this;
+        System.out.println("Ended demo : " + demo);
+        currentDemo = this;
     }
 
     @Override
-    public void event(TestController controller, Event event)
+    public void event(DemoController controller, Event event)
         throws JameException
     {
         if (event instanceof KeyboardEvent) {
@@ -203,10 +203,10 @@ public class TestController implements Test
             if (KeyboardFilter.regularPress.accept(ke)) {
                 for (MenuItem menuItem : menuItems) {
                     if (menuItem.letter == value) {
-                        Test test = menuItem.test;
+                        Demo demo = menuItem.demo;
 
-                        this.currentTest = test;
-                        test.begin(this);
+                        this.currentDemo = demo;
+                        demo.begin(this);
                         return;
                     }
                 }
@@ -216,7 +216,7 @@ public class TestController implements Test
     }
 
     @Override
-    public void display(TestController controller)
+    public void display(DemoController controller)
         throws JameException
     {
         renderer.setDrawColor(RGBA.BLACK);
@@ -238,7 +238,7 @@ public class TestController implements Test
         if (infoCounter > INFO_TICKS) {
             infoCounter = 0;
             try {
-                currentTest.showInfo(this);
+                currentDemo.showInfo(this);
             } catch (JameException e) {
                 e.printStackTrace();
             }
@@ -246,7 +246,7 @@ public class TestController implements Test
     }
 
     @Override
-    public void showInfo(TestController controller)
+    public void showInfo(DemoController controller)
     {
         long millis = System.currentTimeMillis() - lastMillis;
         long fps = INFO_TICKS * 1000 / millis;
@@ -259,12 +259,12 @@ public class TestController implements Test
     public void go()
         throws JameException
     {
-        currentTest = this;
+        currentDemo = this;
 
         this.begin(this);
 
         while (!quitting) {
-            currentTest.display(this);
+            currentDemo.display(this);
 
             while (true) {
                 Event event = Events.poll();
@@ -274,10 +274,10 @@ public class TestController implements Test
                 if (event instanceof QuitEvent) {
                     System.out.println("Ok, I'll quit");
                     quitting = true;
-                    currentTest.end(this);
+                    currentDemo.end(this);
                 } else {
                     try {
-                        currentTest.event(this, event);
+                        currentDemo.event(this, event);
                     } catch (StopPropagation sp) {
                         // Do nothing.
                     }
@@ -292,10 +292,10 @@ public class TestController implements Test
         System.out.println("Ended");
     }
 
-    public void addMenuItem(String label, Test test)
+    public void addMenuItem(String label, Demo demo)
     {
         int n = menuItems.size();
-        MenuItem menuItem = new MenuItem((char) ('a' + n), label, test);
+        MenuItem menuItem = new MenuItem((char) ('a' + n), label, demo);
         menuItem.x = 20;
         menuItem.y = 20 + n * 30;
 
@@ -322,12 +322,12 @@ public class TestController implements Test
         public int x = 0;
         public int y = 0;
         public char letter;
-        public Test test;
+        public Demo demo;
 
-        public MenuItem(char letter, String label, Test test)
+        public MenuItem(char letter, String label, Demo demo)
         {
             this.letter = letter;
-            this.test = test;
+            this.demo = demo;
 
             Surface surface = smallFont.renderBlended(letter + ") " + label, RGBA.WHITE);
             texture = new Texture(renderer, surface);
@@ -344,7 +344,7 @@ public class TestController implements Test
 
         public ControllerWindow()
         {
-            super("Jame Tests", 640, 480, true, 0);
+            super("Jame Demos", 640, 480, true, 0);
         }
 
         @Override
@@ -356,7 +356,7 @@ public class TestController implements Test
 
     public static void main(String[] argv) throws Exception
     {
-        TestController controller = new TestController();
+        DemoController controller = new DemoController();
         controller.go();
         System.out.println("End of Main");
     }

@@ -1,4 +1,4 @@
-package uk.co.nickthecoder.jame.test;
+package uk.co.nickthecoder.jame.demo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import uk.co.nickthecoder.jame.JameException;
 import uk.co.nickthecoder.jame.RGBA;
 import uk.co.nickthecoder.jame.Surface;
 
-public abstract class AbstractSpriteTest extends AbstractTest
+public abstract class AbstractSpriteDemo extends AbstractDemo
 {
     public SizedTexture[] textures;
 
@@ -16,33 +16,33 @@ public abstract class AbstractSpriteTest extends AbstractTest
 
     public List<Sprite> sprites;
 
-    public TestController controller;
+    public DemoController controller;
 
     public int count;
 
     public static final Random random = new Random();
 
-    public AbstractSpriteTest(int count, SizedTexture... textures)
+    public AbstractSpriteDemo(int count, SizedTexture... textures)
     {
         this.count = count;
         this.textures = textures;
     }
 
-    public AbstractSpriteTest(int count, Surface... surfaces)
+    public AbstractSpriteDemo(int count, Surface... surfaces)
     {
         this.count = count;
         this.surfaces = surfaces;
     }
 
     @Override
-    public void showInfo(TestController controller) throws JameException
+    public void showInfo(DemoController controller) throws JameException
     {
         super.showInfo(controller);
         System.out.println("Sprite Count : " + this.sprites.size());
     }
 
     @Override
-    public void begin(TestController controller) throws JameException
+    public void begin(DemoController controller) throws JameException
     {
         this.controller = controller;
         sprites = new ArrayList<Sprite>();
@@ -85,7 +85,7 @@ public abstract class AbstractSpriteTest extends AbstractTest
     }
 
     @Override
-    public void display(TestController controller) throws JameException
+    public void display(DemoController controller) throws JameException
     {
 
         if (textures == null) {

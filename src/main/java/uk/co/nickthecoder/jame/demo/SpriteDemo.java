@@ -1,24 +1,24 @@
-package uk.co.nickthecoder.jame.test;
+package uk.co.nickthecoder.jame.demo;
 
 import uk.co.nickthecoder.jame.JameException;
 import uk.co.nickthecoder.jame.Surface;
 
-public class SpriteTest extends AbstractSpriteTest
+public class SpriteDemo extends AbstractSpriteDemo
 {
-    public SpriteTest(SizedTexture... textures)
+    public SpriteDemo(SizedTexture... textures)
         throws JameException
     {
         super(0, textures);
     }
 
-    public SpriteTest(Surface... surfaces)
+    public SpriteDemo(Surface... surfaces)
         throws JameException
     {
         super(0, surfaces);
     }
 
     @Override
-    public void display(TestController controller) throws JameException
+    public void display(DemoController controller) throws JameException
     {
         if (sprites.size() < 10000) {
             Sprite sprite = createSprite();

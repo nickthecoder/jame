@@ -1,19 +1,19 @@
-package uk.co.nickthecoder.jame.test;
+package uk.co.nickthecoder.jame.demo;
 
 import uk.co.nickthecoder.jame.JameException;
 import uk.co.nickthecoder.jame.RGBA;
 import uk.co.nickthecoder.jame.Rect;
 import uk.co.nickthecoder.jame.Surface;
 
-public class ClippingTest extends AbstractSpriteTest
+public class ClippingDemo extends AbstractSpriteDemo
 {
 
-    public ClippingTest(int count, Surface... surfaces)
+    public ClippingDemo(int count, Surface... surfaces)
     {
         super(count, surfaces);
     }
 
-    public ClippingTest(int count, SizedTexture... textures)
+    public ClippingDemo(int count, SizedTexture... textures)
     {
         super(count, textures);
     }
@@ -72,7 +72,7 @@ public class ClippingTest extends AbstractSpriteTest
         displayClippedSprites(new Rect(150, -40, 40, 200));
     }
 
-    public void end(TestController controller) throws JameException
+    public void end(DemoController controller) throws JameException
     {
         controller.renderer.setClip(null);
         super.end(controller);

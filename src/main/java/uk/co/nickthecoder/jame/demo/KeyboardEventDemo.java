@@ -1,4 +1,4 @@
-package uk.co.nickthecoder.jame.test;
+package uk.co.nickthecoder.jame.demo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,16 +19,16 @@ import uk.co.nickthecoder.jame.util.KeyboardFilter;
 import uk.co.nickthecoder.jame.util.ModifierKeyFilter;
 import uk.co.nickthecoder.jame.util.MouseButtonFilter;
 
-public class KeyboardEventTest extends AbstractTest
+public class KeyboardEventDemo extends AbstractDemo
 {
-    TestController controller;
+    DemoController controller;
 
     public List<Indicator> indicators;
 
     int x = 150;
     int y = 30;
 
-    public KeyboardEventTest(TestController controller)
+    public KeyboardEventDemo(DemoController controller)
     {
         this.controller = controller;
 
@@ -94,11 +94,11 @@ public class KeyboardEventTest extends AbstractTest
     }
 
     @Override
-    public void begin(TestController controller)
+    public void begin(DemoController controller)
     {
     }
 
-    public void event(TestController controller, Event event) throws JameException
+    public void event(DemoController controller, Event event) throws JameException
     {
         if ( (event instanceof KeyboardEvent) || (event instanceof MouseButtonEvent)) {
             System.out.println(event);
@@ -111,7 +111,7 @@ public class KeyboardEventTest extends AbstractTest
     }
 
     @Override
-    public void display(TestController controller) throws JameException
+    public void display(DemoController controller) throws JameException
     {
         controller.renderer.setDrawColor(RGBA.BLACK);
         controller.renderer.clear();

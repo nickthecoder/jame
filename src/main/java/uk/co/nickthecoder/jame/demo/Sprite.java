@@ -1,4 +1,4 @@
-package uk.co.nickthecoder.jame.test;
+package uk.co.nickthecoder.jame.demo;
 
 import uk.co.nickthecoder.jame.RGBA;
 import uk.co.nickthecoder.jame.Rect;
@@ -9,19 +9,19 @@ import uk.co.nickthecoder.jame.Texture;
 
 public class Sprite extends Bouncy
 {
-    public TestController controller;
+    public DemoController controller;
     public Texture texture;
     public Surface surface;
     public Rect rect;
 
-    public Sprite(TestController controller, Surface surface)
+    public Sprite(DemoController controller, Surface surface)
     {
         this.controller = controller;
         this.surface = surface;
         rect = new Rect(random.nextInt(400), random.nextInt(300), surface.getWidth(), surface.getHeight());
     }
 
-    public Sprite(TestController controller, SizedTexture texture)
+    public Sprite(DemoController controller, SizedTexture texture)
     {
         this.controller = controller;
         this.texture = texture;

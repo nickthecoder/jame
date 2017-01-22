@@ -1,12 +1,12 @@
-package uk.co.nickthecoder.jame.test;
+package uk.co.nickthecoder.jame.demo;
 
 import uk.co.nickthecoder.jame.Rect;
 import uk.co.nickthecoder.jame.Renderer;
 
-public class RotateAndScaleTest extends AbstractSpriteTest
+public class RotateAndScaleDemo extends AbstractSpriteDemo
 {
 
-    public RotateAndScaleTest(int count, SizedTexture... textures)
+    public RotateAndScaleDemo(int count, SizedTexture... textures)
     {
         super(count, textures);
     }
@@ -26,7 +26,7 @@ public class RotateAndScaleTest extends AbstractSpriteTest
         public Rect srcRect;
         public int bounceCount = 0;
 
-        public RotateSprite(TestController controller, SizedTexture texture)
+        public RotateSprite(DemoController controller, SizedTexture texture)
         {
             super(controller, texture);
             this.rotate = random.nextDouble();

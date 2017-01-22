@@ -1,4 +1,4 @@
-package uk.co.nickthecoder.jame.test;
+package uk.co.nickthecoder.jame.demo;
 
 import uk.co.nickthecoder.jame.JameException;
 import uk.co.nickthecoder.jame.RGBA;
@@ -11,24 +11,24 @@ import uk.co.nickthecoder.jame.event.Event;
 /**
  * Uses {@link DropFileEvent} to show the filename of files dropped onto the window.
  */
-public class DropTest extends AbstractTest
+public class DropDemo extends AbstractDemo
 {
     public TrueTypeFont font;
 
     public Texture texture;
 
-    public DropTest( TrueTypeFont font )
+    public DropDemo( TrueTypeFont font )
     {
         this.texture = null;
         this.font = font;
     }
     
     @Override
-    public void begin(TestController controller) throws JameException
+    public void begin(DemoController controller) throws JameException
     {
     }
 
-    public void event(TestController controller, Event event) throws JameException
+    public void event(DemoController controller, Event event) throws JameException
     {
         if ( event instanceof DropFileEvent ) {
             System.out.println( event );
@@ -41,7 +41,7 @@ public class DropTest extends AbstractTest
     }
 
     @Override
-    public void display(TestController controller) throws JameException
+    public void display(DemoController controller) throws JameException
     {
         controller.renderer.setDrawColor(RGBA.BLACK);
         controller.renderer.clear();

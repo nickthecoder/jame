@@ -1,4 +1,4 @@
-package uk.co.nickthecoder.jame.test;
+package uk.co.nickthecoder.jame.demo;
 
 import uk.co.nickthecoder.jame.JameException;
 import uk.co.nickthecoder.jame.RGBA;
@@ -16,16 +16,16 @@ import uk.co.nickthecoder.jame.event.MouseWheelEvent;
  * Tests {@link MouseButtonEvent}, {@link MouseMotionEvent} and {@link MouseWheelEvent}, as well as
  * {@link Texture#getPixel(Renderer, int, int)}.
  */
-public class MouseTest extends AbstractSpriteTest
+public class MouseDemo extends AbstractSpriteDemo
 {
 
-    public MouseTest(int count, SizedTexture... textures)
+    public MouseDemo(int count, SizedTexture... textures)
     {
         super(count, textures);
     }
 
     @Override
-    public void display(TestController controller) throws JameException
+    public void display(DemoController controller) throws JameException
     {
         controller.renderer.setClip(null);
         controller.renderer.setDrawColor(RGBA.BLACK);
@@ -43,7 +43,7 @@ public class MouseTest extends AbstractSpriteTest
     public int dragY;
 
     @Override
-    public void event(TestController controller, Event event) throws JameException
+    public void event(DemoController controller, Event event) throws JameException
     {
 
         if (event instanceof MouseButtonEvent) {

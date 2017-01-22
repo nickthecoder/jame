@@ -1,4 +1,4 @@
-package uk.co.nickthecoder.jame.test;
+package uk.co.nickthecoder.jame.demo;
 
 import uk.co.nickthecoder.jame.Events;
 import uk.co.nickthecoder.jame.JameException;
@@ -25,7 +25,7 @@ import uk.co.nickthecoder.jame.util.ModifierKeyFilter;
  * arrow keys to change the selection a word at a time. Copy and paste are not supported.
  * </p>
  */
-public class TextEditingTest extends AbstractTest
+public class TextEditingDemo extends AbstractDemo
 {
     public static final RGBA CARET_COLOR = new RGBA(255, 50, 50);
 
@@ -47,14 +47,14 @@ public class TextEditingTest extends AbstractTest
 
     public int selectEnd;
 
-    public TextEditingTest(Renderer renderer, TrueTypeFont font)
+    public TextEditingDemo(Renderer renderer, TrueTypeFont font)
     {
         this.renderer = renderer;
         this.font = font;
     }
 
     @Override
-    public void begin(TestController controller) throws JameException
+    public void begin(DemoController controller) throws JameException
     {
         text = "Type!";
         position = text.length() - 1;
@@ -68,7 +68,7 @@ public class TextEditingTest extends AbstractTest
     }
 
     @Override
-    public void end(TestController controller) throws JameException
+    public void end(DemoController controller) throws JameException
     {
         // Your code should call this when focus is away from the text input field.
         Events.stopTextInput();
@@ -76,7 +76,7 @@ public class TextEditingTest extends AbstractTest
     }
 
     @Override
-    public void event(TestController controller, Event event) throws JameException
+    public void event(DemoController controller, Event event) throws JameException
     {
         if (event instanceof TextEditingEvent) {
             // TODO Add TextEditingEvent handler
@@ -232,7 +232,7 @@ public class TextEditingTest extends AbstractTest
     }
 
     @Override
-    public void display(TestController controller) throws JameException
+    public void display(DemoController controller) throws JameException
     {
         controller.renderer.setDrawColor(RGBA.BLACK);
         controller.renderer.clear();
