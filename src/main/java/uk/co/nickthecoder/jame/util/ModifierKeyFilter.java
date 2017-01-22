@@ -10,6 +10,7 @@ package uk.co.nickthecoder.jame.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import uk.co.nickthecoder.jame.event.Event;
 import uk.co.nickthecoder.jame.event.KeyboardEvent;
 import uk.co.nickthecoder.jame.event.ModifierKey;
 
@@ -66,6 +67,12 @@ public final class ModifierKeyFilter extends AbstractEventFilter<KeyboardEvent>
         this.forbiddenMask &= ~mask;
     }
 
+    public ModifierKeyFilter(ModifierKeyFilter from)
+    {
+        this.forbiddenMask = from.forbiddenMask;
+        this.requiredMasks.addAll(from.requiredMasks);
+    }
+
     public ModifierKeyFilter and(ModifierKeyFilter... filters)
     {
         ModifierKeyFilter result = new ModifierKeyFilter();
@@ -75,7 +82,6 @@ public final class ModifierKeyFilter extends AbstractEventFilter<KeyboardEvent>
             result.forbiddenMask |= filter.forbiddenMask;
         }
         result.forbiddenMask |= this.forbiddenMask;
-
 
         for (int mask : this.requiredMasks) {
             result.requiredMasks.add(mask);
@@ -92,16 +98,46 @@ public final class ModifierKeyFilter extends AbstractEventFilter<KeyboardEvent>
         return result;
     }
 
-    /*
-     * public ModifierKeyFilter forbid(ModifierKey... modifierKeys)
-     * {
-     * for (ModifierKey key : modifierKeys) {
-     * this.forbiddenMask |= key.code;
-     * }
-     * return this;
-     * }
+    /**
+     * Used if you want to reject when the Caps Lock, Number Lock or Mode being down.
+     * The default behaviour of ModifierKeyFilter, is to ignore those modifier keys.
+     * I can't imagine a reason for wanting to do this, but it is included for completeness.
+     * <p>
+     * Note, you should not assume that caps lock or number lock are available on all computers (nor "mode", which I
+     * have no clue what it is!). Caps Lock is sometimes disabled (I hate caps lock, and have disabled it on all of my
+     * computers). Number lock doesn't behave the same on a laptop keyboard as a regular one. It will NOT act as a
+     * modifier key on my laptop (and presumably many others).
+     * </p>
+     * 
+     * @param modifierKeys
+     *            One or more of : {@link ModifierKey#NUM_LOCK}, {@link ModifierKey#NUM_LOCK}, {@link ModifierKey#MODE}
+     * @return A new ModifierKeyFilter, similar to this one, which rejects the extra modifier keys specified.
      */
+    public ModifierKeyFilter forbid(ModifierKey... modifierKeys)
+    {
+        ModifierKeyFilter result = new ModifierKeyFilter(this);
+        for (ModifierKey mk : modifierKeys) {
+            result.forbiddenMask |= mk.code;
+        }
 
+        return result;
+    }
+
+    /**
+     * Rejects all non {@link KeyboardEvent}s, and accepts/rejects KeyboardEvents based upon which modifier keys are
+     * down.
+     */
+    public boolean acceptEvent(Event event)
+    {
+        if (event instanceof KeyboardEvent) {
+            return accept((KeyboardEvent) event);
+        }
+        return false;
+    }
+
+    /**
+     * Accepts/rejects a {@link KeyboardEvent} based on which modifier keys are down.
+     */
     public boolean accept(KeyboardEvent ke)
     {
         return accept(ke.modifiers);

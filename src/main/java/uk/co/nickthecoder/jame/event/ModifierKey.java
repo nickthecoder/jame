@@ -22,8 +22,8 @@ public enum ModifierKey
     RCTRL(0x0080),
     LALT(0x0100),
     RALT(0x0200),
-    NUM(0x1000),
-    CAPS(0x2000),
+    NUM_LOCK(0x1000),
+    CAPS_LOCK(0x2000),
     MODE(0x4000);
 
     public final int code;

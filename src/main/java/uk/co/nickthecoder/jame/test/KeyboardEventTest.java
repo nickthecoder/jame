@@ -48,6 +48,9 @@ public class KeyboardEventTest extends AbstractTest
         
         add("Press ctrl+shift+A", new KeyboardFilter().pressed().modifiers(ModifierKeyFilter.SHIFT.and(ModifierKeyFilter.CTRL)).symbol(Symbol.a));
 
+        add("Press shift+A without Num Lock", new KeyboardFilter().pressed().modifiers(ModifierKeyFilter.SHIFT.forbid(ModifierKey.NUM_LOCK)).symbol(Symbol.a));
+        add("Press shift+A without Caps Lock", new KeyboardFilter().pressed().modifiers(ModifierKeyFilter.SHIFT.forbid(ModifierKey.CAPS_LOCK)).symbol(Symbol.a));
+
         nextColumn();
         add("Press A (any mods - include repeats)", new KeyboardFilter().pressed().includeRepeats().symbol(Symbol.a));
         add("Release A (any mods)", new KeyboardFilter().released().symbol(Symbol.a));

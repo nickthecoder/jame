@@ -4,11 +4,11 @@ Converting JAME to SDL2
 ToDo
 ====
 
-Implement Text events
-
 Tests / Examples
 
-    Text events. Display what is being typed in. Try unicode characters such as °.
+    TextInputEvent and TextEditingEvent
+    Sound
+    Joystick input
 
 Last
 ====
