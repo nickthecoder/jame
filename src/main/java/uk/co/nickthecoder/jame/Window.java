@@ -95,8 +95,9 @@ public class Window
      */
     public static final int ALLOW_HIGHDPI = 0x2000;
 
-    public static final int POS_CENTERED = 0;
-    public static final int POS_UNDEFINED = 0;
+    public static final int POS_CENTERED = 0x2FFF0000;
+    
+    public static final int POS_UNDEFINED = 0x1FFF0000;
 
     /**
      * A C pointer to the SDL_Window object.
@@ -135,6 +136,12 @@ public class Window
         return alpha ? recommendedPixelFormatAlpha : recommendedPixelFormat;
     }
 
+    public Window(String title, int width, int height, boolean centered, int flags)
+    {
+        this(title, (centered ? POS_CENTERED : POS_UNDEFINED), (centered ? POS_CENTERED : POS_UNDEFINED), width,
+            height, flags);
+    }
+
     /**
      * @param x
      *            The x position of the window, or {@link #POS_CENTERED} or {@link #POS_UNDEFINED}.
@@ -160,20 +167,12 @@ public class Window
 
     private native int native_getWindowID(long pWindow);
 
-    public Window(String title, int width, int height, boolean centered, int flags)
-    {
-        this(title, (centered ? POS_CENTERED : POS_UNDEFINED), (centered ? POS_CENTERED : POS_UNDEFINED), width,
-            height, flags);
-    }
-
     private void updateRecommendedPixelFormats()
     {
         recommendedPixelFormat = getPixelFormat();
         try {
             recommendedPixelFormatAlpha = recommendedPixelFormat.withAlpha();
         } catch (Exception e) {
-            // TODO Remove debug output
-            System.err.println("Failed to get PixelFormat with alpha channel from " + recommendedPixelFormat);
             // Ignore, keep to the default.
         }
     }
@@ -279,8 +278,17 @@ public class Window
     {
         native_maximize(pWindow);
     }
-
     private native void native_maximize(long pWindow);
+    
+    /**
+     * Minimises the window, see also {@link #restore()}.
+     */
+    public void minimize()
+    {
+        native_minimize(pWindow);
+    }
+
+    private native void native_minimize(long pWindow);
 
     /**
      * Restore the window to normal size after it has been maximised, or minimized.
@@ -343,13 +351,6 @@ public class Window
 
     private native void native_setPosition(long pWindow, int x, int y);
 
-    public void setResizable(boolean value)
-    {
-        native_setResizable(pWindow, value);
-    }
-
-    private native void native_setResizable(long pWindow, boolean value);
-
     public void setSize(int width, int height)
     {
         native_setSize(pWindow, width, height);
@@ -403,6 +404,6 @@ public class Window
 
     public String toString()
     {
-        return "Window(" + width + "," + height + ") " + getPixelFormat();
+        return "Window " + windowID + " (" + width + "," + height + ") " + getPixelFormat();
     }
 }

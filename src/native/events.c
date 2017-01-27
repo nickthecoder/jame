@@ -60,6 +60,12 @@ JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_native_1poll
             fid = (*env)->GetFieldID(env,subClass,"windowID","I");
             (*env)->SetIntField(env,jevent,fid, e.window.windowID);
 
+            fid = (*env)->GetFieldID(env,subClass,"data1","I");
+            (*env)->SetIntField(env,jevent,fid, e.window.data1);
+
+            fid = (*env)->GetFieldID(env,subClass,"data2","I");
+            (*env)->SetIntField(env,jevent,fid, e.window.data2);
+
             // This is a BODGE, because the version of SDL2 that I'm using does NOT have the windowID on
             // the SDL_DropEvent. Grr. See below for how it is used when handling drop events.
             lastWindowID = e.window.windowID;
@@ -273,13 +279,6 @@ JNIEXPORT jobject JNICALL Java_uk_co_nickthecoder_jame_Events_native_1poll
         }    
     }
 }
-
-JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Events_native_1keyboardRepeat
-  (JNIEnv *env, jclass jevents, jint delay, jint repeat )
-{
-	SDL_EnableKeyRepeat( delay, repeat );
-}
-
 
 JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Events_startTextInput
   (JNIEnv *env, jclass klass)

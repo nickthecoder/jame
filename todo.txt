@@ -4,18 +4,15 @@ Converting JAME to SDL2
 ToDo
 ====
 
-Change keyScanCode to scanCode and scanCode to scanCodeValue    
-    Same for symbol
-    Requires JNI changes too.
-
 
 Joystick / Game Controller Input
+Force Feedback / Haptic effects
 
 Tests / Examples
 
     TextEditingEvent
     Sound
-
+    
 Last
 ====
 

@@ -104,23 +104,6 @@ public class Events
     }
 
     private static native Event native_poll();
-
-    /**
-     * When typing, if you hold down a key long enough, you will get it to auto-repeat, that is, it
-     * will fire multiple KeyboardEvents.
-     * 
-     * @param delay
-     *            The time in milliseconds you need to hold the key down for, in order to start generating
-     *            these extra keyboard events.
-     * @param interval
-     *            This is the time in milliseconds between each of the additional KeyboardEvents.
-     */
-    public static void keyboardRepeat(int delay, int interval)
-    {
-        native_keyboardRepeat(delay, interval);
-    }
-
-    private static native void native_keyboardRepeat(int delay, int interval);
     
     public static native void startTextInput();
 

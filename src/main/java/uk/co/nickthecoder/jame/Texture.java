@@ -36,6 +36,12 @@ public class Texture
 
     private native long native_create(long pRenderer, int format, int access, int width, int height);
 
+    /**
+     * Create a Texture, from Surface. Converts a software (RAM based) surface into a hardware (GPU) texture.
+     * 
+     * @param renderer
+     * @param surface
+     */
     public Texture(Renderer renderer, Surface surface)
     {
         pTexture = native_createFromSurface(renderer.getPointer(), surface.getPointer());
@@ -124,7 +130,6 @@ public class Texture
 
     private RGBA colorMod;
 
-    // TODO Check that the byte casts work, despite bytes being SIGNED in java.
     public void setColorMod(RGBA color)
     {
         Jame.checkRuntimeStatus(native_setColorMod(pTexture, (byte) color.r, (byte) color.g, (byte) color.b));
@@ -175,9 +180,9 @@ public class Texture
 
             RGBA result = new RGBA(0, 0, 0);
 
-            Jame.checkRuntimeStatus( native_getPixel(renderer.getPointer(), pixelFormat.value, result) );
+            Jame.checkRuntimeStatus(native_getPixel(renderer.getPointer(), pixelFormat.value, result));
             return result;
-            
+
         } finally {
             try {
                 renderer.setTarget(null);

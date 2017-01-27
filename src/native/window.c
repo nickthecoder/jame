@@ -79,6 +79,12 @@ JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Window_native_1maximize
     SDL_MaximizeWindow( (SDL_Window*) pWindow );
 }
 
+JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Window_native_1minimize
+  (JNIEnv *env, jobject jobj, jlong pWindow)
+{
+    SDL_MinimizeWindow( (SDL_Window*) pWindow );
+}
+
 JNIEXPORT void JNICALL Java_uk_co_nickthecoder_jame_Window_native_1restore
   (JNIEnv *env, jobject jobj, jlong pWindow)
 {

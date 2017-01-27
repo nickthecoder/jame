@@ -113,7 +113,7 @@ public enum Symbol
     PAGEUP(ScanCode.PAGEUP),
     DELETE(127, "DELETE"),
     END(ScanCode.END),
-    PAGEODWN(ScanCode.PAGEDOWN),
+    PAGEDOWN(ScanCode.PAGEDOWN),
     RIGHT(ScanCode.RIGHT),
     LEFT(ScanCode.LEFT),
     DOWN(ScanCode.DOWN),
