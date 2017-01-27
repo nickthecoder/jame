@@ -150,7 +150,8 @@ public final class Surface
         throws JameRuntimeException
     {
         this();
-        Jame.checkRuntimeStatus(this.native_create(width, height, alpha));
+        
+        Jame.checkRuntimeStatus(this.native_create(width, height, Window.recommendedPixelFormat(alpha).value));
         this.hasAlpha = alpha;
     }
 
@@ -716,6 +717,7 @@ public final class Surface
         Surface result = new Surface(this.width, this.height, this.hasAlpha);
         this.blit(result);
         return result;
+        //return this;
     }
 
     public Surface zoom(double zoomX, double zoomY, boolean smooth)

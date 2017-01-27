@@ -122,6 +122,9 @@ public class DemoController implements Demo
         window.setIcon(iconSurface);
 
         Surface angrySurface = new Surface("resources/face-angry.png");
+        System.out.println( "Unconverted angry " + angrySurface );
+        angrySurface = angrySurface.convert();
+        System.out.println( "Converted angry " + angrySurface.hasAlphaChannel() + " " + angrySurface );
         SizedTexture angryTexture = new SizedTexture(renderer, angrySurface);
 
         Surface twinsSurface = new Surface("resources/face-twins.png");
